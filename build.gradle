@@ -34,6 +34,7 @@ buildscript {
 
     ext.lottie_version = "3.4.1"
 
+    ext.firebase_version ="19.5.1"
     repositories {
         google()
         jcenter()
@@ -41,6 +42,7 @@ buildscript {
     dependencies {
         classpath 'com.android.tools.build:gradle:4.1.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
+        classpath 'com.google.gms:google-services:4.3.4'
 
         // NOTE: Do not place your application dependencies here; they belong
         // in the individual module build.gradle files

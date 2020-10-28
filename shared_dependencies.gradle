@@ -1,3 +1,5 @@
+apply plugin: 'com.google.gms.google-services'
+
 dependencies {
     implementation "androidx.appcompat:appcompat:$appcompat_version"
     implementation "androidx.core:core-ktx:$core_ktx_version"
@@ -20,4 +22,6 @@ dependencies {
     debugImplementation "com.squareup.leakcanary:leakcanary-android:$leakcanary_version"
 
     implementation "com.airbnb.android:lottie:$lottie_version"
+
+    implementation "com.google.firebase:firebase-database:$firebase_version"
 }
