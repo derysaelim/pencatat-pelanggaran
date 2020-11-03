@@ -1,9 +1,9 @@
 package com.adriandery.catatpelanggaran
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import androidx.appcompat.app.AppCompatActivity
 
 @Suppress("DEPRECATION")
 class MainActivity : AppCompatActivity() {
@@ -14,7 +14,8 @@ class MainActivity : AppCompatActivity() {
         Handler().postDelayed({
             val intent = Intent(this, LoginActivity::class.java)
             startActivity(intent)
-        }, 2500)
+            finish()
+        }, 1500)
 
     }
 }

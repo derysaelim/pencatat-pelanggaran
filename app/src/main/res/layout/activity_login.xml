@@ -1,7 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
@@ -29,11 +27,11 @@
             android:layout_height="wrap_content"
             android:layout_weight="1"
             android:text="@string/login_title"
-            android:textSize="28sp"
+            android:textSize="24sp"
             android:textStyle="bold"
             android:layout_gravity="center_vertical"
             android:fontFamily="@font/roboto"
-            android:textColor="@color/colorPrimaryDark"/>
+            android:textColor="@color/colorPrimaryDark" />
 
     </LinearLayout>
 
@@ -41,35 +39,41 @@
         android:id="@+id/white_space"
         android:layout_width="match_parent"
         android:layout_height="12dp"
-        android:layout_centerInParent="true"/>
+        android:layout_centerInParent="true" />
 
-    <EditText
-        android:id="@+id/username_login"
+    <!--  Use material design dude  -->
+
+    <com.google.android.material.textfield.TextInputEditText
+        android:id="@+id/nip_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_below="@id/white_space"
+        android:background="@drawable/custom_edittext"
+        android:padding="8dp"
         android:inputType="textPersonName"
-        android:hint="Username"
-        android:fontFamily="@font/roboto"/>
+        android:hint="@string/NIP"
+        android:fontFamily="@font/roboto" />
 
     <EditText
         android:id="@+id/password_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_below="@id/username_login"
-        android:layout_marginTop="8dp"
+        android:layout_below="@id/nip_login"
+        android:background="@drawable/custom_edittext"
+        android:padding="8dp"
+        android:layout_marginTop="12dp"
         android:inputType="textPassword"
-        android:hint="Password"
-        android:fontFamily="@font/roboto"/>
+        android:hint="@string/password"
+        android:fontFamily="@font/roboto" />
 
     <Button
         android:id="@+id/login_button"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="40dp"
         android:layout_below="@id/password_login"
-        android:layout_marginTop="8dp"
-        android:background="@color/colorPrimaryDark"
-        android:text="Login"
+        android:layout_marginTop="12dp"
+        android:background="@drawable/button_login"
+        android:text="@string/login"
         android:textColor="@android:color/white" />
 
     <TextView
@@ -78,7 +82,6 @@
         android:layout_height="wrap_content"
         android:text="@string/smkncimahi"
         android:fontFamily="@font/roboto"
-        android:textColor="@android:color/black"
         android:layout_marginBottom="12dp"
         android:layout_centerHorizontal="true"
         android:layout_alignParentBottom="true"/>

@@ -3,4 +3,8 @@
     <string name="image_decs">image decs</string>
     <string name="login_title">Pencatat \nPelanggaran \nSiswa</string>
     <string name="smkncimahi">SMK Negeri 1 Cimahi</string>
+    <string name="NIP">NIP</string>
+    <string name="password">Password</string>
+    <string name="login">Login</string>
+    <string name="admin">Admin</string>
 </resources>
