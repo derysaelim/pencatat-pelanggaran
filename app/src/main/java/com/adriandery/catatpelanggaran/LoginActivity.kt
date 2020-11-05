@@ -16,59 +16,77 @@ class LoginActivity : AppCompatActivity() {
         setContentView(R.layout.activity_login)
 
         login_button.setOnClickListener {
-//            Toast.makeText(this, "$nip and $password", Toast.LENGTH_SHORT).show()
 
-            val databaseReference: DatabaseReference = FirebaseDatabase.getInstance().reference
-            databaseReference.child("Login").addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    val nip = nip_login.text.toString()
-                    val password = password_login.text.toString()
+            val nip = nip_login.text.toString()
+            val password = password_login.text.toString()
+
+            if (nip.isEmpty() || password.isEmpty()) {
+                if (nip.isEmpty()) {
+                    nip_login.error = "Mohon isi"
+                }
+
+                if (password.isEmpty()) {
+                    password_login.error = "Mohon isi"
+                }
+            } else {
+                val databaseReference: DatabaseReference = FirebaseDatabase.getInstance().reference
+                databaseReference.child("Login").addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
 //                        cek NIP didatabase
-                    if (snapshot.child(nip).exists()) {
+                        if (snapshot.child(nip).exists()) {
 //                        cek password didatabase
-                        if (snapshot.child(nip).child("password").getValue(String::class.java)
-                                .equals(password)
-                        ) {
-//                            cek apakah admin
-                            if (snapshot.child(nip).child("role").getValue(String::class.java)
-                                    .equals("admin")
+                            if (snapshot.child(nip).child("password").getValue(String::class.java)
+                                    .equals(password)
                             ) {
+//                            cek apakah admin
+                                if (snapshot.child(nip).child("role").getValue(String::class.java)
+                                        .equals("admin")
+                                ) {
 
 //                                set user sudah login
-                                SharedPreferences.setDataLogin(this@LoginActivity, true)
+                                    SharedPreferences.setDataLogin(this@LoginActivity, true)
 
 //                                set login sebagai admin
-                                SharedPreferences.setDataAs(this@LoginActivity, "admin")
-                                val intent = Intent(this@LoginActivity, AdminActivity::class.java)
-                                startActivity(intent)
-                                finish()
-                            } else {
+                                    SharedPreferences.setDataAs(this@LoginActivity, "admin")
+                                    val intent =
+                                        Intent(this@LoginActivity, AdminActivity::class.java)
+                                    startActivity(intent)
+                                    finish()
+                                } else {
 
 //                                set user sudah login
-                                SharedPreferences.setDataLogin(this@LoginActivity, true)
+                                    SharedPreferences.setDataLogin(this@LoginActivity, true)
 
 //                                set login sebagai guru bk
-                                SharedPreferences.setDataAs(this@LoginActivity, "gurubk")
-                                val intent = Intent(this@LoginActivity, GurubkActivity::class.java)
-                                startActivity(intent)
-                                finish()
+                                    SharedPreferences.setDataAs(this@LoginActivity, "gurubk")
+                                    val intent =
+                                        Intent(this@LoginActivity, GurubkActivity::class.java)
+                                    startActivity(intent)
+                                    finish()
+                                }
+                            } else {
+                                Toast.makeText(
+                                    this@LoginActivity,
+                                    "Password salah",
+                                    Toast.LENGTH_LONG
+                                )
+                                    .show()
                             }
                         } else {
-                            Toast.makeText(this@LoginActivity, "Password salah", Toast.LENGTH_LONG)
+                            Toast.makeText(this@LoginActivity, "Belum terdaftar", Toast.LENGTH_LONG)
                                 .show()
                         }
-                    } else {
+
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
                         Toast.makeText(this@LoginActivity, "Belum terdaftar", Toast.LENGTH_LONG)
                             .show()
                     }
 
-                }
+                })
 
-                override fun onCancelled(error: DatabaseError) {
-                    Toast.makeText(this@LoginActivity, "Belum terdaftar", Toast.LENGTH_LONG).show()
-                }
-
-            })
+            }
         }
     }
 
