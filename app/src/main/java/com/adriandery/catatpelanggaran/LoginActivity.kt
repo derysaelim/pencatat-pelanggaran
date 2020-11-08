@@ -58,9 +58,8 @@ class LoginActivity : AppCompatActivity() {
 
 //                                set login sebagai guru bk
                                     SharedPreferences.setDataAs(this@LoginActivity, "gurubk")
-                                    val intent =
-                                        Intent(this@LoginActivity, GurubkActivity::class.java)
-                                    startActivity(intent)
+                                    goToModule("gurubk")
+                                    finish()
                                     finish()
                                 }
                             } else {
@@ -99,8 +98,7 @@ class LoginActivity : AppCompatActivity() {
                 goToModule("admin")
                 finish()
             } else {
-                val intent = Intent(this@LoginActivity, GurubkActivity::class.java)
-                startActivity(intent)
+                goToModule("gurubk")
                 finish()
             }
         }
@@ -118,7 +116,12 @@ class LoginActivity : AppCompatActivity() {
                     )
                 )
             } else {
-                startActivity(Intent(this, Class.forName("com.adrian.guru.GuruActivity")))
+                startActivity(
+                    Intent(
+                        this,
+                        Class.forName("com.catatpelanggaran.gurubk.GurubkActivity")
+                    )
+                )
             }
         }
 

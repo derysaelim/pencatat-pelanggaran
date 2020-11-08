@@ -1,3 +1,4 @@
+include ':gurubk'
 include ':admin'
 include ':app'
 rootProject.name = "Catat Pelanggaran"

@@ -1,13 +1,13 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:dist="http://schemas.android.com/apk/distribution"
-    package="com.catatpelanggaran.admin">
+    package="com.catatpelanggaran.gurubk">
 
     <uses-permission android:name="android.permission.INTERNET" />
 
     <dist:module
         dist:instant="false"
-        dist:title="@string/title_admin">
+        dist:title="@string/title_gurubk">
         <dist:delivery>
             <dist:install-time />
         </dist:delivery>
@@ -16,7 +16,7 @@
     </dist:module>
 
     <application android:theme="@style/NoBorder">
-        <activity android:name=".AdminActivity" />
+        <activity android:name=".GurubkActivity" />
     </application>
 
 </manifest>
