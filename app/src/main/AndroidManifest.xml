@@ -11,7 +11,7 @@
         android:roundIcon="@drawable/logo_smk"
         android:supportsRtl="true"
         android:theme="@style/NoBorder">
-        <activity android:name=".gurubk.GurubkActivity"></activity>
+        <activity android:name=".gurubk.GurubkActivity" />
         <activity android:name=".admin.AdminActivity" />
         <activity
             android:name=".LoginActivity"

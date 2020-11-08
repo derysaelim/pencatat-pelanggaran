@@ -6,6 +6,7 @@ import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.adriandery.catatpelanggaran.admin.AdminActivity
 import com.adriandery.catatpelanggaran.gurubk.GurubkActivity
+import com.google.android.play.core.splitinstall.SplitInstallManagerFactory
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.activity_login.*
 
@@ -48,9 +49,7 @@ class LoginActivity : AppCompatActivity() {
 
 //                                set login sebagai admin
                                     SharedPreferences.setDataAs(this@LoginActivity, "admin")
-                                    val intent =
-                                        Intent(this@LoginActivity, AdminActivity::class.java)
-                                    startActivity(intent)
+                                    goToModule("admin")
                                     finish()
                                 } else {
 
@@ -97,8 +96,7 @@ class LoginActivity : AppCompatActivity() {
 
         if (SharedPreferences.getDataLogin(this)) {
             if (SharedPreferences.getDataAs(this).equals("admin")) {
-                val intent = Intent(this@LoginActivity, AdminActivity::class.java)
-                startActivity(intent)
+                goToModule("admin")
                 finish()
             } else {
                 val intent = Intent(this@LoginActivity, GurubkActivity::class.java)
@@ -107,4 +105,23 @@ class LoginActivity : AppCompatActivity() {
             }
         }
     }
+
+    private fun goToModule(moduleName: String) {
+        val splitInstallManager = SplitInstallManagerFactory.create(this)
+        if (splitInstallManager.installedModules.contains(moduleName)) {
+
+            if (moduleName == "admin") {
+                startActivity(
+                    Intent(
+                        this,
+                        Class.forName("com.catatpelanggaran.admin.AdminActivity")
+                    )
+                )
+            } else {
+                startActivity(Intent(this, Class.forName("com.adrian.guru.GuruActivity")))
+            }
+        }
+
+    }
+
 }
