@@ -1,14 +1,15 @@
 package com.adriandery.catatpelanggaran
 
+import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
-import com.adriandery.catatpelanggaran.admin.AdminActivity
-import com.adriandery.catatpelanggaran.gurubk.GurubkActivity
 import com.google.android.play.core.splitinstall.SplitInstallManagerFactory
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.activity_login.*
+
 
 class LoginActivity : AppCompatActivity() {
 
@@ -30,59 +31,75 @@ class LoginActivity : AppCompatActivity() {
                     password_login.error = "Mohon isi"
                 }
             } else {
-                val databaseReference: DatabaseReference = FirebaseDatabase.getInstance().reference
-                databaseReference.child("Login").addValueEventListener(object : ValueEventListener {
-                    override fun onDataChange(snapshot: DataSnapshot) {
+
+                if (isNetworkAvailable(this)) {
+                    val databaseReference: DatabaseReference =
+                        FirebaseDatabase.getInstance().reference
+                    databaseReference.child("Login").addValueEventListener(object :
+                        ValueEventListener {
+                        override fun onDataChange(snapshot: DataSnapshot) {
 //                        cek NIP didatabase
-                        if (snapshot.child(nip).exists()) {
+                            Toast.makeText(this@LoginActivity, "mau check nip", Toast.LENGTH_SHORT)
+                                .show()
+                            if (snapshot.child(nip).exists()) {
 //                        cek password didatabase
-                            if (snapshot.child(nip).child("password").getValue(String::class.java)
-                                    .equals(password)
-                            ) {
-//                            cek apakah admin
-                                if (snapshot.child(nip).child("role").getValue(String::class.java)
-                                        .equals("admin")
+                                if (snapshot.child(nip).child("password")
+                                        .getValue(String::class.java)
+                                        .equals(password)
                                 ) {
+//                            cek apakah admin
+                                    if (snapshot.child(nip).child("role")
+                                            .getValue(String::class.java)
+                                            .equals("admin")
+                                    ) {
 
 //                                set user sudah login
-                                    SharedPreferences.setDataLogin(this@LoginActivity, true)
+                                        SharedPreferences.setDataLogin(this@LoginActivity, true)
 
 //                                set login sebagai admin
-                                    SharedPreferences.setDataAs(this@LoginActivity, "admin")
-                                    goToModule("admin")
-                                    finish()
-                                } else {
+                                        SharedPreferences.setDataAs(this@LoginActivity, "admin")
+                                        goToModule("admin")
+                                        finish()
+                                    } else {
 
 //                                set user sudah login
-                                    SharedPreferences.setDataLogin(this@LoginActivity, true)
+                                        SharedPreferences.setDataLogin(this@LoginActivity, true)
 
 //                                set login sebagai guru bk
-                                    SharedPreferences.setDataAs(this@LoginActivity, "gurubk")
-                                    goToModule("gurubk")
-                                    finish()
-                                    finish()
+                                        SharedPreferences.setDataAs(this@LoginActivity, "gurubk")
+                                        goToModule("gurubk")
+                                        finish()
+                                        finish()
+                                    }
+                                } else {
+                                    Toast.makeText(
+                                        this@LoginActivity,
+                                        "Password salah",
+                                        Toast.LENGTH_LONG
+                                    )
+                                        .show()
                                 }
                             } else {
                                 Toast.makeText(
                                     this@LoginActivity,
-                                    "Password salah",
+                                    "Belum terdaftar",
                                     Toast.LENGTH_LONG
                                 )
                                     .show()
                             }
-                        } else {
+
+                        }
+
+                        override fun onCancelled(error: DatabaseError) {
                             Toast.makeText(this@LoginActivity, "Belum terdaftar", Toast.LENGTH_LONG)
                                 .show()
                         }
 
-                    }
-
-                    override fun onCancelled(error: DatabaseError) {
-                        Toast.makeText(this@LoginActivity, "Belum terdaftar", Toast.LENGTH_LONG)
-                            .show()
-                    }
-
-                })
+                    })
+                } else {
+                    Toast.makeText(this, "Check your internet connection", Toast.LENGTH_SHORT)
+                        .show()
+                }
 
             }
         }
@@ -125,6 +142,13 @@ class LoginActivity : AppCompatActivity() {
             }
         }
 
+    }
+
+    private fun isNetworkAvailable(context: Context): Boolean {
+        val connectivityManager =
+            context.getSystemService(CONNECTIVITY_SERVICE) as ConnectivityManager
+        return connectivityManager.activeNetworkInfo != null && connectivityManager.activeNetworkInfo!!
+            .isConnected
     }
 
 }
