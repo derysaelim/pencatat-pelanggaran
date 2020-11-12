@@ -1,7 +1,5 @@
 package com.catatpelanggaran.admin.adapter
 
-import android.content.Context
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -9,10 +7,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.catatpelanggaran.admin.R
 import com.catatpelanggaran.admin.model.Guru
 import kotlinx.android.synthetic.main.item_siswa.view.*
-import kotlin.math.log
 
-class AdapterGuru(context: Context, val guru: ArrayList<Guru>) :
+class AdapterGuru(val guru: ArrayList<Guru>) :
     RecyclerView.Adapter<AdapterGuru.ViewHolder>() {
+
+    var onItemClick: ((Guru) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AdapterGuru.ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_siswa, parent, false)
@@ -29,13 +28,19 @@ class AdapterGuru(context: Context, val guru: ArrayList<Guru>) :
         fun bind(guruData: Guru) {
             with(itemView) {
 
+                val absen = position + 1
+
                 nama_siswa.text = guruData.nama
                 nis_siswa.text = guruData.nip
+                no_absen.text = absen.toString()
+            }
+        }
 
-                Log.e("Adapter", "${guruData.nama}")
+        init {
+            itemView.setOnClickListener {
+                onItemClick?.invoke(guru[adapterPosition])
             }
         }
 
     }
-
 }

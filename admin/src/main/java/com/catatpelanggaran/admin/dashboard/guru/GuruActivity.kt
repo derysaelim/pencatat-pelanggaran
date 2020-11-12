@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.catatpelanggaran.admin.R
 import com.catatpelanggaran.admin.adapter.AdapterGuru
@@ -16,7 +17,6 @@ import kotlinx.android.synthetic.main.activity_guru.*
 
 class GuruActivity : AppCompatActivity(), View.OnClickListener {
 
-    lateinit var adapterGuru: AdapterGuru
     var listGuru: ArrayList<Guru>? = null
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -26,36 +26,6 @@ class GuruActivity : AppCompatActivity(), View.OnClickListener {
 
         back_button.setOnClickListener(this)
         add_button.setOnClickListener(this)
-
-        val database = FirebaseDatabase.getInstance().reference
-
-        list_guru.layoutManager = LinearLayoutManager(this)
-        list_guru.hasFixedSize()
-
-        progress_bar.visibility = View.VISIBLE
-
-        listGuru = arrayListOf<Guru>()
-        database.child("Guru").addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.exists()) {
-                    for (i in snapshot.children) {
-                        val guru = i.getValue(Guru::class.java)
-                        listGuru?.add(guru!!)
-                    }
-
-                    val adapter = AdapterGuru(applicationContext, listGuru!!)
-                    list_guru.adapter = adapter
-                    progress_bar.visibility = View.GONE
-                }
-            }
-
-            override fun onCancelled(error: DatabaseError) {
-                TODO("Not yet implemented")
-            }
-
-        })
-
-
     }
 
     override fun onClick(view: View) {
@@ -67,7 +37,6 @@ class GuruActivity : AppCompatActivity(), View.OnClickListener {
                 val intent = Intent(this, AddGuruActivity::class.java)
                 startActivity(intent)
             }
-
         }
     }
 
@@ -76,5 +45,44 @@ class GuruActivity : AppCompatActivity(), View.OnClickListener {
         finish()
     }
 
+    override fun onStart() {
+        super.onStart()
+        getData()
+    }
 
+    private fun getData() {
+        progress_bar.visibility = View.VISIBLE
+        list_guru.layoutManager = LinearLayoutManager(this)
+        list_guru.hasFixedSize()
+        val database = FirebaseDatabase.getInstance().reference
+        listGuru = arrayListOf<Guru>()
+        database.child("Guru").addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.exists()) {
+                    for (i in snapshot.children) {
+                        val guru = i.getValue(Guru::class.java)
+                        listGuru?.add(guru!!)
+                    }
+                    val adapter = AdapterGuru(listGuru!!)
+                    list_guru.adapter = adapter
+                    progress_bar.visibility = View.GONE
+                    guru_empty.visibility = View.GONE
+
+                    adapter.onItemClick = { selectedGuru ->
+                        val intent = Intent(this@GuruActivity, AddGuruActivity::class.java)
+                        intent.putExtra(AddGuruActivity.DATA_GURU, selectedGuru)
+                        startActivity(intent)
+                    }
+                } else {
+                    guru_empty.visibility = View.VISIBLE
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                progress_bar.visibility = View.GONE
+                Toast.makeText(this@GuruActivity, "Somethings wrong", Toast.LENGTH_SHORT).show()
+            }
+
+        })
+    }
 }

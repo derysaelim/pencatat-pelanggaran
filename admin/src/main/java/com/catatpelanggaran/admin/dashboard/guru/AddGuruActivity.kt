@@ -12,22 +12,51 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.activity_add_guru.*
 
-class AddGuruActivity : AppCompatActivity(), View.OnClickListener {
+class AddGuruActivity : AppCompatActivity() {
+
+    companion object {
+        const val DATA_GURU = "DATAGURU"
+    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_guru)
 
-        button_simpan.setOnClickListener(this)
+        val dataGuru = intent.getParcelableExtra<Guru>(DATA_GURU)
+        if (dataGuru != null) {
+            setText(dataGuru)
+            setStatus(true)
+        } else {
+            setStatus(false)
+        }
 
-    }
-
-    override fun onClick(view: View) {
-        when (view.id) {
-            R.id.button_simpan -> {
+        button_simpan.setOnClickListener {
+            if (dataGuru != null) {
+                editData()
+            } else {
                 insertData()
             }
         }
+    }
+
+    private fun setStatus(status: Boolean) {
+        if (status) {
+            button_simpan.text = "Edit"
+        } else {
+            button_simpan.text = "Simpan"
+        }
+    }
+
+    private fun setText(dataGuru: Guru?) {
+        dataGuru?.let {
+            input_nip.setText(dataGuru.nip)
+            input_nama.setText(dataGuru.nama)
+            input_nohp.setText(dataGuru.nohp)
+        }
+    }
+
+    private fun editData() {
+
     }
 
     private fun insertData() {
@@ -85,5 +114,11 @@ class AddGuruActivity : AppCompatActivity(), View.OnClickListener {
 
             })
         }
+        finish()
+    }
+
+    override fun onBackPressed() {
+        super.onBackPressed()
+        finish()
     }
 }
