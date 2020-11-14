@@ -26,6 +26,7 @@ class GuruActivity : AppCompatActivity(), View.OnClickListener {
 
         back_button.setOnClickListener(this)
         add_button.setOnClickListener(this)
+        getData()
     }
 
     override fun onClick(view: View) {
@@ -45,8 +46,8 @@ class GuruActivity : AppCompatActivity(), View.OnClickListener {
         finish()
     }
 
-    override fun onStart() {
-        super.onStart()
+    override fun onResume() {
+        super.onResume()
         getData()
     }
 
@@ -56,9 +57,10 @@ class GuruActivity : AppCompatActivity(), View.OnClickListener {
         list_guru.hasFixedSize()
         val database = FirebaseDatabase.getInstance().reference
         listGuru = arrayListOf<Guru>()
-        database.child("Guru").addListenerForSingleValueEvent(object : ValueEventListener {
+        database.child("Guru").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.exists()) {
+                    listGuru!!.clear()
                     for (i in snapshot.children) {
                         val guru = i.getValue(Guru::class.java)
                         listGuru?.add(guru!!)
