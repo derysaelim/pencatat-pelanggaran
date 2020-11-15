@@ -7,7 +7,10 @@ import android.os.Bundle
 import android.os.Handler
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 
 @Suppress("DEPRECATION")
 class MainActivity : AppCompatActivity() {
@@ -17,11 +20,22 @@ class MainActivity : AppCompatActivity() {
 
         if (isNetworkAvailable(this)) {
             val database = FirebaseDatabase.getInstance().reference
-            Handler().postDelayed({
-                val intent = Intent(this, LoginActivity::class.java)
-                startActivity(intent)
-                finish()
-            }, 1500)
+            database.addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        Handler().postDelayed({
+                            val intent = Intent(applicationContext, LoginActivity::class.java)
+                            startActivity(intent)
+                            finish()
+                        }, 1500)
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    TODO("Not yet implemented")
+                }
+
+            })
         } else {
             Toast.makeText(this, "no internet", Toast.LENGTH_SHORT).show()
         }

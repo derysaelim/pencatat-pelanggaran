@@ -4,6 +4,7 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import com.catatpelanggaran.admin.R
 import com.catatpelanggaran.admin.model.Guru
 import com.google.firebase.database.DataSnapshot
@@ -42,11 +43,43 @@ class AddGuruActivity : AppCompatActivity() {
         back_button.setOnClickListener {
             onBackPressed()
         }
+
+        delete_button.setOnClickListener {
+            deleteData(dataGuru)
+        }
+    }
+
+    private fun deleteData(dataGuru: Guru?) {
+        val database = FirebaseDatabase.getInstance().reference.child("Guru")
+        val builderdelete = AlertDialog.Builder(this)
+        builderdelete.setTitle("Warning!")
+        builderdelete.setMessage("Are you sure want to delete ${dataGuru?.nama} ?")
+        builderdelete.setPositiveButton("Delete") { i, _ ->
+            database.child("Guru").child(dataGuru?.nip!!).removeValue()
+                .addOnCompleteListener {
+                    Toast.makeText(
+                        this,
+                        "Berhasil dihapus",
+                        Toast.LENGTH_SHORT
+                    ).show()
+                    finish()
+                }
+        }
+        builderdelete.setNegativeButton("Cancel") { i, _ ->
+            Toast.makeText(
+                applicationContext,
+                "Data tidak jadi dihapus",
+                Toast.LENGTH_LONG
+            ).show()
+        }
+        val dialogdelete = builderdelete.create()
+        dialogdelete.show()
     }
 
     private fun setStatus(status: Boolean) {
         if (status) {
             input_nip.isEnabled = false
+            delete_button.visibility = View.VISIBLE
             button_simpan.text = "Edit"
             title_guru.text = "Edit Guru"
         } else {
@@ -82,6 +115,7 @@ class AddGuruActivity : AppCompatActivity() {
                 val update = Guru(dataGuru.nip, name, nohp)
                 database.child(nip).setValue(update).addOnSuccessListener {
                     Toast.makeText(this, "berhasil update", Toast.LENGTH_SHORT).show()
+                    finish()
                 }
                     .addOnFailureListener {
                         Toast.makeText(this, "gagal update", Toast.LENGTH_SHORT).show()
@@ -125,6 +159,7 @@ class AddGuruActivity : AppCompatActivity() {
                             database.child("Guru").child(nip).setValue(data).addOnCompleteListener {
                                 Toast.makeText(this@AddGuruActivity, "berhasil", Toast.LENGTH_SHORT)
                                     .show()
+                                finish()
                             }
                         } catch (e: Exception) {
                             Toast.makeText(
@@ -133,7 +168,6 @@ class AddGuruActivity : AppCompatActivity() {
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
-                        finish()
                     }
                 }
 

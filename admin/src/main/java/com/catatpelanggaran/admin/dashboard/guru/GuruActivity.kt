@@ -78,7 +78,6 @@ class GuruActivity : AppCompatActivity(), View.OnClickListener {
                     }
 
                     adapter.onItemDeleteClick = { selectedGuru ->
-
                         val builderdelete = AlertDialog.Builder(this@GuruActivity)
                         builderdelete.setTitle("Warning!")
                         builderdelete.setMessage("Are you sure want to delete ${selectedGuru.nama} ?")
