@@ -38,14 +38,20 @@ class AddGuruActivity : AppCompatActivity() {
                 insertData()
             }
         }
+
+        back_button.setOnClickListener {
+            onBackPressed()
+        }
     }
 
     private fun setStatus(status: Boolean) {
         if (status) {
             input_nip.isEnabled = false
             button_simpan.text = "Edit"
+            title_guru.text = "Edit Guru"
         } else {
             button_simpan.text = "Simpan"
+            title_guru.text = "Tambah Guru"
         }
     }
 
@@ -87,10 +93,6 @@ class AddGuruActivity : AppCompatActivity() {
         }
 
     }
-//
-//    private fun deleteData() {
-//        val database = FirebaseDatabase.getInstance().reference.child("Guru").child()
-//    }
 
     private fun insertData() {
         val nip = input_nip.text.toString()
@@ -118,7 +120,6 @@ class AddGuruActivity : AppCompatActivity() {
                     if (snapshot.child(nip).exists()) {
                         Toast.makeText(this@AddGuruActivity, "Sudah ada", Toast.LENGTH_SHORT).show()
                     } else {
-
                         try {
                             val data = Guru(nip, name, nohp)
                             database.child("Guru").child(nip).setValue(data).addOnCompleteListener {
@@ -132,7 +133,7 @@ class AddGuruActivity : AppCompatActivity() {
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
-
+                        finish()
                     }
                 }
 
@@ -146,7 +147,6 @@ class AddGuruActivity : AppCompatActivity() {
 
             })
         }
-        finish()
     }
 
     override fun onBackPressed() {

@@ -1,10 +1,11 @@
 package com.catatpelanggaran.admin.dashboard.guru
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.catatpelanggaran.admin.R
 import com.catatpelanggaran.admin.adapter.AdapterGuru
@@ -74,6 +75,32 @@ class GuruActivity : AppCompatActivity(), View.OnClickListener {
                         val intent = Intent(this@GuruActivity, AddGuruActivity::class.java)
                         intent.putExtra(AddGuruActivity.DATA_GURU, selectedGuru)
                         startActivity(intent)
+                    }
+
+                    adapter.onItemDeleteClick = { selectedGuru ->
+
+                        val builderdelete = AlertDialog.Builder(this@GuruActivity)
+                        builderdelete.setTitle("Warning!")
+                        builderdelete.setMessage("Are you sure want to delete ${selectedGuru.nama} ?")
+                        builderdelete.setPositiveButton("Delete") { i, _ ->
+                            database.child("Guru").child(selectedGuru.nip!!).removeValue()
+                                .addOnCompleteListener {
+                                    Toast.makeText(
+                                        this@GuruActivity,
+                                        "Berhasil dihapus",
+                                        Toast.LENGTH_SHORT
+                                    ).show()
+                                }
+                        }
+                        builderdelete.setNegativeButton("Cancel") { i, _ ->
+                            Toast.makeText(
+                                applicationContext,
+                                "Data tidak jadi dihapus",
+                                Toast.LENGTH_LONG
+                            ).show()
+                        }
+                        val dialogdelete = builderdelete.create()
+                        dialogdelete.show()
                     }
                 } else {
                     guru_empty.visibility = View.VISIBLE

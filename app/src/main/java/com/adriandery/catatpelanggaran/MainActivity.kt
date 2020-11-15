@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
+import com.google.firebase.database.FirebaseDatabase
 
 @Suppress("DEPRECATION")
 class MainActivity : AppCompatActivity() {
@@ -15,6 +16,7 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         if (isNetworkAvailable(this)) {
+            val database = FirebaseDatabase.getInstance().reference
             Handler().postDelayed({
                 val intent = Intent(this, LoginActivity::class.java)
                 startActivity(intent)
