@@ -116,10 +116,9 @@ class AddGuruActivity : AppCompatActivity() {
                 database.child(nip).setValue(update).addOnSuccessListener {
                     Toast.makeText(this, "berhasil update", Toast.LENGTH_SHORT).show()
                     finish()
+                }.addOnFailureListener {
+                    Toast.makeText(this, "gagal update", Toast.LENGTH_SHORT).show()
                 }
-                    .addOnFailureListener {
-                        Toast.makeText(this, "gagal update", Toast.LENGTH_SHORT).show()
-                    }
             } catch (e: Exception) {
                 Toast.makeText(this, "check your internet", Toast.LENGTH_SHORT).show()
             }
@@ -147,7 +146,6 @@ class AddGuruActivity : AppCompatActivity() {
 
         } else {
             val database = FirebaseDatabase.getInstance().reference
-
             database.child("Guru").addListenerForSingleValueEvent(object :
                 ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {

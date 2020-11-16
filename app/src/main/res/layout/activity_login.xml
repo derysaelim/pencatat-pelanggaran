@@ -38,8 +38,6 @@
         android:layout_height="12dp"
         android:layout_centerInParent="true" />
 
-    <!--  Use material design dude  -->
-
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/nip_login"
         android:layout_width="match_parent"
@@ -47,11 +45,11 @@
         android:layout_below="@id/white_space"
         android:background="@drawable/custom_edittext"
         android:padding="8dp"
-        android:inputType="textPersonName"
+        android:inputType="number"
         android:hint="@string/NIP"
         android:fontFamily="@font/roboto" />
 
-    <EditText
+    <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/password_login"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"

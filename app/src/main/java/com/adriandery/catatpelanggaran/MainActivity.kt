@@ -19,23 +19,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
 
         if (isNetworkAvailable(this)) {
-            val database = FirebaseDatabase.getInstance().reference
-            database.addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    if (snapshot.exists()) {
-                        Handler().postDelayed({
-                            val intent = Intent(applicationContext, LoginActivity::class.java)
-                            startActivity(intent)
-                            finish()
-                        }, 1500)
-                    }
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    TODO("Not yet implemented")
-                }
-
-            })
+            Handler().postDelayed({
+                val intent = Intent(applicationContext, LoginActivity::class.java)
+                startActivity(intent)
+                finish()
+            }, 1500)
         } else {
             Toast.makeText(this, "no internet", Toast.LENGTH_SHORT).show()
         }

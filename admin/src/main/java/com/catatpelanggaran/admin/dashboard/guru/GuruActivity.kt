@@ -1,11 +1,16 @@
 package com.catatpelanggaran.admin.dashboard.guru
 
+import android.app.SearchManager
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
+import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.catatpelanggaran.admin.R
 import com.catatpelanggaran.admin.adapter.AdapterGuru
@@ -16,30 +21,22 @@ import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.activity_guru.*
 
-class GuruActivity : AppCompatActivity(), View.OnClickListener {
+class GuruActivity : AppCompatActivity() {
 
     var listGuru: ArrayList<Guru>? = null
+
+    lateinit var searchManager: SearchManager
+    lateinit var searchView: SearchView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_guru)
         setSupportActionBar(toolbar_guru)
 
-        back_button.setOnClickListener(this)
-        add_button.setOnClickListener(this)
-        getData()
-    }
-
-    override fun onClick(view: View) {
-        when (view.id) {
-            R.id.back_button -> {
-                finish()
-            }
-            R.id.add_button -> {
-                val intent = Intent(this, AddGuruActivity::class.java)
-                startActivity(intent)
-            }
+        back_button.setOnClickListener {
+            finish()
         }
+        getData(null)
     }
 
     override fun onBackPressed() {
@@ -49,68 +46,168 @@ class GuruActivity : AppCompatActivity(), View.OnClickListener {
 
     override fun onResume() {
         super.onResume()
-        getData()
+        getData(null)
     }
 
-    private fun getData() {
+    private fun getData(name: String?) {
         progress_bar.visibility = View.VISIBLE
         list_guru.layoutManager = LinearLayoutManager(this)
         list_guru.hasFixedSize()
-        val database = FirebaseDatabase.getInstance().reference
-        listGuru = arrayListOf<Guru>()
-        database.child("Guru").addValueEventListener(object : ValueEventListener {
-            override fun onDataChange(snapshot: DataSnapshot) {
-                if (snapshot.exists()) {
-                    listGuru!!.clear()
-                    for (i in snapshot.children) {
-                        val guru = i.getValue(Guru::class.java)
-                        listGuru?.add(guru!!)
-                    }
-                    val adapter = AdapterGuru(listGuru!!)
-                    list_guru.adapter = adapter
-                    progress_bar.visibility = View.GONE
-                    guru_empty.visibility = View.GONE
 
-                    adapter.onItemClick = { selectedGuru ->
-                        val intent = Intent(this@GuruActivity, AddGuruActivity::class.java)
-                        intent.putExtra(AddGuruActivity.DATA_GURU, selectedGuru)
-                        startActivity(intent)
-                    }
+        if (name != null) {
+            val database = FirebaseDatabase.getInstance().reference
+            listGuru = arrayListOf<Guru>()
+            database.child("Guru").orderByChild("nama").startAt(name).endAt(name + "\uf8ff")
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        if (snapshot.exists()) {
+                            listGuru!!.clear()
+                            for (i in snapshot.children) {
+                                val guru = i.getValue(Guru::class.java)
+                                listGuru!!.add(guru!!)
+                            }
+                            val adapter = AdapterGuru(listGuru!!)
+                            list_guru.adapter = adapter
+                            progress_bar.visibility = View.GONE
+                            guru_empty.visibility = View.GONE
+                            list_guru.visibility = View.VISIBLE
 
-                    adapter.onItemDeleteClick = { selectedGuru ->
-                        val builderdelete = AlertDialog.Builder(this@GuruActivity)
-                        builderdelete.setTitle("Warning!")
-                        builderdelete.setMessage("Are you sure want to delete ${selectedGuru.nama} ?")
-                        builderdelete.setPositiveButton("Delete") { i, _ ->
-                            database.child("Guru").child(selectedGuru.nip!!).removeValue()
-                                .addOnCompleteListener {
+                            adapter.onItemClick = { selectedGuru ->
+                                val intent = Intent(this@GuruActivity, AddGuruActivity::class.java)
+                                intent.putExtra(AddGuruActivity.DATA_GURU, selectedGuru)
+                                startActivity(intent)
+                            }
+
+                            adapter.onItemDeleteClick = { selectedGuru ->
+                                val builderdelete = AlertDialog.Builder(this@GuruActivity)
+                                builderdelete.setTitle("Warning!")
+                                builderdelete.setMessage("Are you sure want to delete ${selectedGuru.nama} ?")
+                                builderdelete.setPositiveButton("Delete") { i, _ ->
+                                    database.child("Guru").child(selectedGuru.nip!!).removeValue()
+                                        .addOnCompleteListener {
+                                            Toast.makeText(
+                                                this@GuruActivity,
+                                                "Berhasil dihapus",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        }
+                                }
+                                builderdelete.setNegativeButton("Cancel") { i, _ ->
                                     Toast.makeText(
-                                        this@GuruActivity,
-                                        "Berhasil dihapus",
-                                        Toast.LENGTH_SHORT
+                                        applicationContext,
+                                        "Data tidak jadi dihapus",
+                                        Toast.LENGTH_LONG
                                     ).show()
                                 }
+                                val dialogdelete = builderdelete.create()
+                                dialogdelete.show()
+                            }
+                        } else {
+                            guru_empty.visibility = View.VISIBLE
+                            list_guru.visibility = View.GONE
                         }
-                        builderdelete.setNegativeButton("Cancel") { i, _ ->
-                            Toast.makeText(
-                                applicationContext,
-                                "Data tidak jadi dihapus",
-                                Toast.LENGTH_LONG
-                            ).show()
-                        }
-                        val dialogdelete = builderdelete.create()
-                        dialogdelete.show()
                     }
-                } else {
-                    guru_empty.visibility = View.VISIBLE
-                }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        progress_bar.visibility = View.GONE
+                        Toast.makeText(this@GuruActivity, "Somethings wrong", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+
+                })
+        } else {
+            val database = FirebaseDatabase.getInstance().reference
+            listGuru = arrayListOf<Guru>()
+            database.child("Guru").orderByChild("nama")
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        if (snapshot.exists()) {
+                            listGuru!!.clear()
+                            for (i in snapshot.children) {
+                                val guru = i.getValue(Guru::class.java)
+                                listGuru?.add(guru!!)
+                            }
+                            val adapter = AdapterGuru(listGuru!!)
+                            list_guru.adapter = adapter
+                            progress_bar.visibility = View.GONE
+                            guru_empty.visibility = View.GONE
+
+                            adapter.onItemClick = { selectedGuru ->
+                                val intent = Intent(this@GuruActivity, AddGuruActivity::class.java)
+                                intent.putExtra(AddGuruActivity.DATA_GURU, selectedGuru)
+                                startActivity(intent)
+                            }
+
+                            adapter.onItemDeleteClick = { selectedGuru ->
+                                val builderdelete = AlertDialog.Builder(this@GuruActivity)
+                                builderdelete.setTitle("Warning!")
+                                builderdelete.setMessage("Are you sure want to delete ${selectedGuru.nama} ?")
+                                builderdelete.setPositiveButton("Delete") { i, _ ->
+                                    database.child("Guru").child(selectedGuru.nip!!).removeValue()
+                                        .addOnCompleteListener {
+                                            Toast.makeText(
+                                                this@GuruActivity,
+                                                "Berhasil dihapus",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        }
+                                }
+                                builderdelete.setNegativeButton("Cancel") { i, _ ->
+                                    Toast.makeText(
+                                        applicationContext,
+                                        "Data tidak jadi dihapus",
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                }
+                                val dialogdelete = builderdelete.create()
+                                dialogdelete.show()
+                            }
+                        } else {
+                            guru_empty.visibility = View.VISIBLE
+                        }
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {
+                        progress_bar.visibility = View.GONE
+                        Toast.makeText(this@GuruActivity, "Somethings wrong", Toast.LENGTH_SHORT)
+                            .show()
+                    }
+
+                })
+        }
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.search_menu, menu)
+
+        searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        searchView = menu.findItem(R.id.search_bar).actionView as SearchView
+
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName))
+        searchView.queryHint = "Cari"
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                getData(query)
+                return true
             }
 
-            override fun onCancelled(error: DatabaseError) {
-                progress_bar.visibility = View.GONE
-                Toast.makeText(this@GuruActivity, "Somethings wrong", Toast.LENGTH_SHORT).show()
+            override fun onQueryTextChange(query: String): Boolean {
+                getData(query)
+                return true
             }
 
         })
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.add_button -> {
+                val intent = Intent(this, AddGuruActivity::class.java)
+                startActivity(intent)
+                true
+            }
+            else -> true
+        }
     }
 }
