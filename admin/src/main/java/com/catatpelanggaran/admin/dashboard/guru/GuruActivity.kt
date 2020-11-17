@@ -187,7 +187,7 @@ class GuruActivity : AppCompatActivity() {
         searchView.queryHint = "Cari"
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
-                getData(query)
+//                getData(query)
                 return true
             }
 

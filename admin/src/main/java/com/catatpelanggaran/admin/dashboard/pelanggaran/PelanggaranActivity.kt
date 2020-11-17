@@ -216,8 +216,8 @@ class PelanggaranActivity : AppCompatActivity() {
         searchView.queryHint = "Cari"
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
-                getData(query)
-                return true
+//                getData(query)
+                return false
             }
 
             override fun onQueryTextChange(query: String): Boolean {
