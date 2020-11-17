@@ -5,6 +5,10 @@ import android.os.Bundle
 import com.catatpelanggaran.admin.R
 import com.catatpelanggaran.admin.model.Kelas
 import kotlinx.android.synthetic.main.activity_add_guru.*
+import kotlinx.android.synthetic.main.activity_add_guru.back_button
+import kotlinx.android.synthetic.main.activity_add_guru.button_simpan
+import kotlinx.android.synthetic.main.activity_add_guru.delete_button
+import kotlinx.android.synthetic.main.activity_add_kelas.*
 
 class AddKelasActivity : AppCompatActivity() {
 
@@ -49,7 +53,6 @@ class AddKelasActivity : AppCompatActivity() {
 
     private fun insertData() {
 
-
     }
 
     private fun editData(dataKelas: Kelas) {
@@ -64,8 +67,22 @@ class AddKelasActivity : AppCompatActivity() {
         }
     }
 
-    private fun setText(dataKelas: Kelas) {
-        TODO("Not yet implemented")
+    private fun setText(dataKelas: Kelas?) {
+        dataKelas?.let {
+            input_tingkat.setText(dataKelas.tingkat)
+            input_jurusan.setText(dataKelas.jurusan)
+
+            if (dataKelas.kelas == "A") {
+                kelas_a.isChecked = true
+            } else if (dataKelas.kelas == "B") {
+                kelas_B.isChecked = true
+            } else if (dataKelas.kelas == "C") {
+                kelas_c.isChecked = true
+            } else {
+                kelas_d.isChecked = true
+            }
+
+        }
     }
 
     override fun onBackPressed() {
