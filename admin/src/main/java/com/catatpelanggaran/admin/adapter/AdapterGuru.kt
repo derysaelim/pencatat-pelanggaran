@@ -13,7 +13,6 @@ import com.catatpelanggaran.admin.model.Guru
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.item_siswa.view.*
 
-
 class AdapterGuru(val guru: ArrayList<Guru>) :
     RecyclerView.Adapter<AdapterGuru.ViewHolder>() {
 

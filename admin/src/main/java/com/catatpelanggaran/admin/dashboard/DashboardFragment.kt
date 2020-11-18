@@ -9,8 +9,10 @@ import android.view.ViewGroup
 import android.widget.Toast
 import com.catatpelanggaran.admin.R
 import com.catatpelanggaran.admin.dashboard.guru.GuruActivity
+import com.catatpelanggaran.admin.dashboard.gurubk.BkActivity
 import com.catatpelanggaran.admin.dashboard.kelas.KelasActivity
 import com.catatpelanggaran.admin.dashboard.pelanggaran.PelanggaranActivity
+import com.catatpelanggaran.admin.dashboard.petugas.PetugasActivity
 import com.catatpelanggaran.admin.dashboard.siswa.SiswaActivity
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 
@@ -30,6 +32,8 @@ class DashboardFragment : Fragment(), View.OnClickListener {
         button_guru.setOnClickListener(this)
         button_kelas.setOnClickListener(this)
         button_pelanggaran.setOnClickListener(this)
+        button_gurubk.setOnClickListener(this)
+        button_admin.setOnClickListener(this)
 
     }
 
@@ -50,8 +54,13 @@ class DashboardFragment : Fragment(), View.OnClickListener {
             R.id.button_pelanggaran -> {
                 intent = Intent(context, PelanggaranActivity::class.java)
             }
+            R.id.button_gurubk -> {
+                intent = Intent(context, BkActivity::class.java)
+            }
+            R.id.button_admin -> {
+                intent = Intent(context, PetugasActivity::class.java)
+            }
         }
-
         startActivity(intent)
     }
 

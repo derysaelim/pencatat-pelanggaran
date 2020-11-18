@@ -12,6 +12,13 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.activity_add_guru.*
+import kotlinx.android.synthetic.main.activity_add_guru.back_button
+import kotlinx.android.synthetic.main.activity_add_guru.button_simpan
+import kotlinx.android.synthetic.main.activity_add_guru.delete_button
+import kotlinx.android.synthetic.main.activity_add_guru.input_nip
+import kotlinx.android.synthetic.main.activity_add_guru.input_nohp
+import kotlinx.android.synthetic.main.activity_add_guru.title_guru
+import kotlinx.android.synthetic.main.activity_add_petugas.*
 import java.lang.Exception
 
 class AddGuruActivity : AppCompatActivity() {
@@ -138,7 +145,7 @@ class AddGuruActivity : AppCompatActivity() {
                 input_nip.error = "Isi Flish"
             }
             if (name.isEmpty()) {
-                input_nama.error = "Isi Flish"
+                input_namapetugas.error = "Isi Flish"
             }
             if (nohp.isEmpty()) {
                 input_nohp.error = "Isi Flish"

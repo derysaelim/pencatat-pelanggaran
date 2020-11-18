@@ -45,7 +45,7 @@ class LoginActivity : AppCompatActivity() {
                                 ) {
 //                            cek apakah admin
                                     if (snapshot.child(nip).child("role")
-                                            .getValue(String::class.java).equals("admin")
+                                            .getValue(String::class.java).equals("Admin")
                                     ) {
 
 //                                set user sudah login
@@ -118,7 +118,7 @@ class LoginActivity : AppCompatActivity() {
                     Intent(
                         this,
                         Class.forName("com.catatpelanggaran.admin.AdminActivity")
-                    ).putExtra("", "")
+                    )
                 )
             } else {
                 startActivity(

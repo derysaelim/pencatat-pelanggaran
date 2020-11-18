@@ -4,8 +4,8 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class AdminBK(
+data class Login(
     val nip: String? = null,
-    val nama: String? = null,
-    val nohp: String? = null
+    val password: String? = null,
+    val role: String? = null
 ) : Parcelable
