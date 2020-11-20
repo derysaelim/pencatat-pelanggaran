@@ -1,15 +1,12 @@
 package com.adriandery.catatpelanggaran
 
-import android.content.Context
 import android.content.Intent
-import android.net.ConnectivityManager
 import android.os.Bundle
 import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import com.google.android.play.core.splitinstall.SplitInstallManagerFactory
 import com.google.firebase.database.*
 import kotlinx.android.synthetic.main.activity_login.*
-
 
 class LoginActivity : AppCompatActivity() {
 
