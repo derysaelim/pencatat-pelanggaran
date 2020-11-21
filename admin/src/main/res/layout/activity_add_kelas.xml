@@ -44,13 +44,23 @@
                         android:textSize="18sp" />
 
                     <ImageButton
-                        android:id="@+id/delete_button"
+                        android:id="@+id/deletekelas_button"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_marginEnd="16dp"
                         android:visibility="gone"
                         android:background="@drawable/delete_icon"
+                        android:contentDescription="@string/image_decs" />
+
+                    <ImageButton
+                        android:id="@+id/edit_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toStartOf="@id/deletekelas_button"
+                        android:layout_marginEnd="16dp"
+                        android:visibility="gone"
+                        android:background="@drawable/edit_icon"
                         android:contentDescription="@string/image_decs" />
 
                 </RelativeLayout>
@@ -157,6 +167,17 @@
                 android:text="Walikelas"
                 android:textSize="20sp" />
 
+            <EditText
+                android:id="@+id/edit_walikelas"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:enabled="false"
+                android:visibility="gone"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/custom_edittext"
+                android:inputType="text"
+                android:padding="8dp" />
+
             <Spinner
                 android:id="@+id/walikelas"
                 android:layout_width="match_parent"
@@ -165,7 +186,7 @@
                 style="@style/Widget.AppCompat.DropDownItem.Spinner" />
 
             <Button
-                android:id="@+id/button_simpan"
+                android:id="@+id/button_simpankelas"
                 android:layout_marginTop="28dp"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
