@@ -58,29 +58,45 @@ class AddGuruActivity : AppCompatActivity() {
 
     private fun deleteData(dataGuru: Guru?) {
         val database = FirebaseDatabase.getInstance().reference.child("Guru")
-        val builderdelete = AlertDialog.Builder(this)
-        builderdelete.setTitle("Warning!")
-        builderdelete.setMessage("Are you sure want to delete ${dataGuru?.nama} ?")
-        builderdelete.setPositiveButton("Delete") { i, _ ->
-            database.child("Guru").child(dataGuru?.nip!!).removeValue()
-                .addOnCompleteListener {
-                    Toast.makeText(
-                        this,
-                        "Berhasil dihapus",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                    finish()
+        val builderdelete = AlertDialog.Builder(this@AddGuruActivity)
+        database.child("walikelas").addValueEventListener(object :
+            ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.child(dataGuru!!.nip!!).exists()) {
+                    builderdelete.setTitle("Warning!")
+                    builderdelete.setMessage("Tidak bisa menghapus ${dataGuru.nama} karena terdaftar sebagai walikelas")
+                    builderdelete.setPositiveButton("OK") { i, _ -> }
+                } else {
+                    builderdelete.setTitle("Warning!")
+                    builderdelete.setMessage("Are you sure want to delete ${dataGuru.nama} ?")
+                    builderdelete.setPositiveButton("Delete") { i, _ ->
+                        database.child("Guru").child(dataGuru.nip!!).removeValue()
+                            .addOnCompleteListener {
+                                Toast.makeText(
+                                    this@AddGuruActivity,
+                                    "Berhasil dihapus",
+                                    Toast.LENGTH_SHORT
+                                ).show()
+                            }
+                    }
+                    builderdelete.setNegativeButton("Cancel") { i, _ ->
+                        Toast.makeText(
+                            applicationContext,
+                            "Data tidak jadi dihapus",
+                            Toast.LENGTH_LONG
+                        ).show()
+                    }
                 }
-        }
-        builderdelete.setNegativeButton("Cancel") { i, _ ->
-            Toast.makeText(
-                applicationContext,
-                "Data tidak jadi dihapus",
-                Toast.LENGTH_LONG
-            ).show()
-        }
-        val dialogdelete = builderdelete.create()
-        dialogdelete.show()
+
+                val dialogdelete = builderdelete.create()
+                dialogdelete.show()
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(this@AddGuruActivity, "Something Wrong", Toast.LENGTH_SHORT).show()
+            }
+
+        })
     }
 
     private fun setStatus(status: Boolean) {
