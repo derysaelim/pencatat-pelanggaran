@@ -33,6 +33,7 @@
                         android:contentDescription="@string/image_decs" />
 
                     <TextView
+                        android:id="@+id/title_siswa"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
@@ -68,7 +69,8 @@
                 android:layout_height="wrap_content"
                 android:hint="NIS"
                 android:background="@drawable/custom_edittext"
-                android:padding="8dp" />
+                android:padding="8dp"
+                android:inputType="number" />
 
             <TextView
                 android:layout_marginTop="16dp"
@@ -83,9 +85,10 @@
                 android:layout_marginTop="8dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="NIS"
+                android:hint="Nama Lengkap"
                 android:background="@drawable/custom_edittext"
-                android:padding="8dp" />
+                android:padding="8dp"
+                android:inputType="textPersonName" />
 
             <TextView
                 android:layout_marginTop="16dp"
@@ -126,7 +129,7 @@
                 android:textSize="20sp" />
 
             <RadioGroup
-                android:id="@+id/radio_group"
+                android:id="@+id/radio_kelas"
                 android:layout_marginTop="8dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
@@ -162,6 +165,36 @@
                 android:layout_marginTop="16dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="Kelas"
+                android:fontFamily="@font/roboto"
+                android:textSize="20sp" />
+
+            <RadioGroup
+                android:id="@+id/radio_kelamin"
+                android:layout_marginTop="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/radio_laki"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Laki - Laki" />
+
+                <RadioButton
+                    android:id="@+id/radio_perempuan"
+                    android:layout_marginStart="8dp"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:text="Perempuan" />
+
+            </RadioGroup>
+
+            <TextView
+                android:layout_marginTop="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:text="Alamat"
                 android:fontFamily="@font/roboto"
                 android:textSize="20sp" />
@@ -171,9 +204,10 @@
                 android:layout_marginTop="8dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="NIS"
+                android:hint="Alamat"
                 android:background="@drawable/custom_edittext"
-                android:padding="8dp" />
+                android:padding="8dp"
+                android:inputType="textMultiLine" />
 
             <TextView
                 android:layout_marginTop="16dp"
@@ -188,9 +222,10 @@
                 android:layout_marginTop="8dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="NIS"
+                android:hint="No HP Orang Tua"
                 android:background="@drawable/custom_edittext"
-                android:padding="8dp" />
+                android:padding="8dp"
+                android:inputType="number" />
 
             <Button
                 android:id="@+id/button_simpan"

@@ -7,6 +7,11 @@ import com.catatpelanggaran.admin.R
 import kotlinx.android.synthetic.main.activity_add_siswa.*
 
 class AddSiswaActivity : AppCompatActivity(), View.OnClickListener {
+
+    companion object {
+        const val DATA_SISWA = "dataSiswa"
+    }
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_siswa)

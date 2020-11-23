@@ -325,6 +325,7 @@ class AddKelasActivity : AppCompatActivity() {
             deletekelas_button.visibility = View.VISIBLE
             edit_button.visibility = View.VISIBLE
             button_simpankelas.text = "Edit"
+            title_kelas.text = "Edit Kelas"
         }
     }
 
