@@ -9,6 +9,7 @@ import android.view.Menu
 import android.view.MenuItem
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.catatpelanggaran.admin.R
@@ -41,50 +42,17 @@ class SiswaActivity : AppCompatActivity() {
         getData(null)
     }
 
-    override fun onCreateOptionsMenu(menu: Menu): Boolean {
-        menuInflater.inflate(R.menu.search_menu, menu)
-
-        searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
-        searchView = menu.findItem(R.id.search_bar).actionView as SearchView
-
-        searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName))
-        searchView.queryHint = "Cari"
-        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
-            override fun onQueryTextSubmit(query: String): Boolean {
-//                getData(query)
-                return true
-            }
-
-            override fun onQueryTextChange(query: String): Boolean {
-                getData(query)
-                return true
-            }
-
-        })
-        return true
-    }
-
-    override fun onOptionsItemSelected(item: MenuItem): Boolean {
-        return when (item.itemId) {
-            R.id.add_button -> {
-                val intent = Intent(this, AddSiswaActivity::class.java)
-                startActivity(intent)
-                true
-            }
-            else -> true
-        }
-    }
-
     private fun getData(query: String?) {
+        progress_bar.visibility = View.VISIBLE
         list_siswa.layoutManager = LinearLayoutManager(this)
         list_siswa.hasFixedSize()
-        progress_bar.visibility = View.VISIBLE
         val database = FirebaseDatabase.getInstance().reference
+
         if (query != null) {
             listSiswa = arrayListOf<Siswa>()
             val search = query.replace("\\s".toRegex(), "")
-            database.child("Siswa").orderByChild("nama_siswa").startAt(search)
-                .endAt(search + "\uf8ff").addValueEventListener(object : ValueEventListener {
+            database.child("Siswa").orderByChild("nis").startAt(search).endAt(search + "\uf8ff")
+                .addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         if (snapshot.exists()) {
                             listSiswa!!.clear()
@@ -98,6 +66,46 @@ class SiswaActivity : AppCompatActivity() {
                             progress_bar.visibility = View.GONE
                             list_siswa.visibility = View.VISIBLE
                             siswa_empty.visibility = View.GONE
+
+                            adapter.onItemDeleteClick = { dataSiswa ->
+                                val builderdelete = AlertDialog.Builder(this@SiswaActivity)
+
+                                builderdelete.setTitle("Warning!")
+                                builderdelete.setMessage("Are you sure want to delete ${dataSiswa!!.nama_siswa} ?")
+                                builderdelete.setPositiveButton("Delete") { i, _ ->
+                                    database.child("Siswa").child(dataSiswa.nis!!).removeValue()
+                                        .addOnCompleteListener {
+                                            database.child("Siswa")
+                                                .addListenerForSingleValueEvent(object :
+                                                    ValueEventListener {
+                                                    override fun onDataChange(snapshot: DataSnapshot) {
+                                                        if (snapshot.child("id_kelas").value == dataSiswa.id_kelas) {
+
+                                                        } else {
+                                                            database.child("daftar_kelas")
+                                                                .child(dataSiswa.id_kelas!!)
+                                                                .removeValue()
+                                                        }
+                                                    }
+
+                                                    override fun onCancelled(error: DatabaseError) {
+                                                        TODO("Not yet implemented")
+                                                    }
+
+                                                })
+                                        }
+                                }
+                                builderdelete.setNegativeButton("Cancel") { i, _ ->
+                                    Toast.makeText(
+                                        applicationContext,
+                                        "Data tidak jadi dihapus",
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                }
+
+                                val dialogdelete = builderdelete.create()
+                                dialogdelete.show()
+                            }
 
                         } else {
                             list_siswa.visibility = View.GONE
@@ -127,6 +135,49 @@ class SiswaActivity : AppCompatActivity() {
                             list_siswa.visibility = View.VISIBLE
                             siswa_empty.visibility = View.GONE
 
+                            adapter.onItemDeleteClick = { dataSiswa ->
+                                val builderdelete = AlertDialog.Builder(this@SiswaActivity)
+
+                                builderdelete.setTitle("Warning!")
+                                builderdelete.setMessage("Are you sure want to delete ${dataSiswa!!.nama_siswa} ?")
+                                builderdelete.setPositiveButton("Delete") { _, _ ->
+                                    database.child("Siswa").child(dataSiswa.nis!!).removeValue()
+                                        .addOnCompleteListener {
+                                            database.child("Siswa").orderByChild("id_kelas")
+                                                .equalTo(dataSiswa.id_kelas).limitToLast(1)
+                                                .addValueEventListener(object : ValueEventListener {
+                                                    override fun onDataChange(snapshot: DataSnapshot) {
+                                                        val jumlahmurid =
+                                                            snapshot.childrenCount.toInt()
+
+                                                        if (snapshot.exists() && jumlahmurid > 1) {
+
+                                                        } else {
+                                                            database.child("daftar_kelas")
+                                                                .child(dataSiswa.id_kelas!!)
+                                                                .removeValue()
+                                                        }
+                                                    }
+
+                                                    override fun onCancelled(error: DatabaseError) {
+                                                        TODO("Not yet implemented")
+                                                    }
+
+                                                })
+                                        }
+                                }
+                                builderdelete.setNegativeButton("Cancel") { i, _ ->
+                                    Toast.makeText(
+                                        applicationContext,
+                                        "Data tidak jadi dihapus",
+                                        Toast.LENGTH_LONG
+                                    ).show()
+                                }
+
+                                val dialogdelete = builderdelete.create()
+                                dialogdelete.show()
+                            }
+
                         } else {
                             list_siswa.visibility = View.GONE
                             siswa_empty.visibility = View.VISIBLE
@@ -140,6 +191,39 @@ class SiswaActivity : AppCompatActivity() {
                 })
         }
 
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu): Boolean {
+        menuInflater.inflate(R.menu.search_menu, menu)
+
+        searchManager = getSystemService(Context.SEARCH_SERVICE) as SearchManager
+        searchView = menu.findItem(R.id.search_bar).actionView as SearchView
+
+        searchView.setSearchableInfo(searchManager.getSearchableInfo(componentName))
+        searchView.queryHint = "Cari"
+        searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
+            override fun onQueryTextSubmit(query: String): Boolean {
+                return true
+            }
+
+            override fun onQueryTextChange(query: String): Boolean {
+                getData(query)
+                return true
+            }
+
+        })
+        return true
+    }
+
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        return when (item.itemId) {
+            R.id.add_button -> {
+                val intent = Intent(this, AddSiswaActivity::class.java)
+                startActivity(intent)
+                true
+            }
+            else -> true
+        }
     }
 
     override fun onBackPressed() {
