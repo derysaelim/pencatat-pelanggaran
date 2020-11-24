@@ -37,14 +37,15 @@ class AddSiswaActivity : AppCompatActivity() {
             dataListKelas
         )
         kelas.adapter = adapterKelas
-        retrieveData()
 
         val dataSiswa = intent.getParcelableExtra<Siswa>(DATA_SISWA)
         if (dataSiswa != null) {
             setText(dataSiswa)
             setStatus(true)
+            retrieveData(true, dataSiswa)
         } else {
             setStatus(false)
+            retrieveData(false, null)
         }
 
         button_simpansiswa.setOnClickListener {
@@ -66,6 +67,7 @@ class AddSiswaActivity : AppCompatActivity() {
             kelas.visibility = View.VISIBLE
             button_simpansiswa.visibility = View.VISIBLE
             editsiswa_button.visibility = View.GONE
+            retrieveData(false, null)
 
             val test = dataSiswa!!.id_kelas.toString()
             val a = dataListKelas.indexOf(test)
@@ -183,31 +185,64 @@ class AddSiswaActivity : AppCompatActivity() {
 
             })
         }
-
     }
 
     private fun editData(dataSiswa: Siswa) {
     }
 
     private fun setStatus(status: Boolean) {
+        if (status) {
+            editsiswa_button.visibility = View.VISIBLE
+            deletesiswa_button.visibility = View.VISIBLE
+            edit_kelas.visibility = View.VISIBLE
+            kelas.visibility = View.GONE
+            input_nis.isEnabled = false
+            button_simpansiswa.text = "Edit"
+            title_siswa.text = "Edit Siswa"
+        }
     }
 
-    private fun setText(dataSiswa: Siswa) {
+    private fun setText(dataSiswa: Siswa?) {
+        dataSiswa?.let {
+
+            button_simpansiswa.visibility = View.GONE
+            kelas.visibility = View.GONE
+
+            input_nis.setText(dataSiswa.nis)
+            input_nama.setText(dataSiswa.nama_siswa)
+            input_alamat.setText(dataSiswa.alamat)
+            input_nohp.setText(dataSiswa.telp_ortu)
+            val jenkel = dataSiswa.jenkel.toString()
+
+            if (jenkel == "L") {
+                radio_laki.isChecked = true
+            } else {
+                radio_perempuan.isChecked = false
+            }
+        }
     }
 
-    private fun retrieveData() {
+    private fun retrieveData(status: Boolean, dataSiswa: Siswa?) {
         val database = FirebaseDatabase.getInstance().reference
-
         database.child("kelas").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                for (i in snapshot.children) {
-                    dataListKelas.add(
-                        i.child("tingkat").value.toString() + " " + i.child("jurusan").value.toString() + " " + i.child(
-                            "kelas"
-                        ).value.toString()
+                if (status) {
+                    edit_kelas.setText(
+                        snapshot.child(dataSiswa?.id_kelas!!)
+                            .child("tingkat").value.toString() + " " + snapshot.child(dataSiswa?.id_kelas!!)
+                            .child("jurusan").value.toString() + " " + snapshot.child(dataSiswa?.id_kelas!!)
+                            .child("kelas").value.toString()
                     )
+                } else {
+                    for (i in snapshot.children) {
+                        dataListKelas.add(
+                            i.child("tingkat").value.toString() + " " + i.child("jurusan").value.toString() + " " + i.child(
+                                "kelas"
+                            ).value.toString()
+                        )
+                    }
+                    adapterKelas.notifyDataSetChanged()
                 }
-                adapterKelas.notifyDataSetChanged()
             }
 
             override fun onCancelled(error: DatabaseError) {

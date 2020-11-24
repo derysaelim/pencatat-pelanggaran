@@ -67,6 +67,13 @@ class SiswaActivity : AppCompatActivity() {
                             list_siswa.visibility = View.VISIBLE
                             siswa_empty.visibility = View.GONE
 
+                            adapter.onItemClick = { dataSiswa ->
+                                val intent =
+                                    Intent(this@SiswaActivity, AddSiswaActivity::class.java)
+                                intent.putExtra(AddSiswaActivity.DATA_SISWA, dataSiswa)
+                                startActivity(intent)
+                            }
+
                             adapter.onItemDeleteClick = { dataSiswa ->
                                 val builderdelete = AlertDialog.Builder(this@SiswaActivity)
 
@@ -134,6 +141,13 @@ class SiswaActivity : AppCompatActivity() {
                             progress_bar.visibility = View.GONE
                             list_siswa.visibility = View.VISIBLE
                             siswa_empty.visibility = View.GONE
+
+                            adapter.onItemClick = { dataSiswa ->
+                                val intent =
+                                    Intent(this@SiswaActivity, AddSiswaActivity::class.java)
+                                intent.putExtra(AddSiswaActivity.DATA_SISWA, dataSiswa)
+                                startActivity(intent)
+                            }
 
                             adapter.onItemDeleteClick = { dataSiswa ->
                                 val builderdelete = AlertDialog.Builder(this@SiswaActivity)
