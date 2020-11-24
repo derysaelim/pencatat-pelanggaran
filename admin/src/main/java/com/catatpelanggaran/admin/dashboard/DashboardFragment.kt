@@ -2,6 +2,7 @@ package com.catatpelanggaran.admin.dashboard
 
 import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
@@ -17,11 +18,17 @@ import com.catatpelanggaran.admin.dashboard.siswa.SiswaActivity
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 
 class DashboardFragment : Fragment(), View.OnClickListener {
+
+    lateinit var nip: String
+
     override fun onCreateView(
-        inflater: LayoutInflater, container: ViewGroup?,
+        inflater: LayoutInflater,
+        container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+        nip = arguments?.getString("nip").toString()
+        Log.e("NIP", nip)
         return inflater.inflate(R.layout.fragment_dashboard, container, false)
     }
 

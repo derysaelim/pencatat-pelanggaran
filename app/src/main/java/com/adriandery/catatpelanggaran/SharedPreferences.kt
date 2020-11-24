@@ -10,6 +10,7 @@ class SharedPreferences {
     companion object {
         const val DATA_LOGIN = "status_login"
         const val DATA_AS = "as"
+        const val NIP = "nip"
 
         private fun getSharedPreferences(context: Context): SharedPreferences? {
             return PreferenceManager.getDefaultSharedPreferences(context)
@@ -22,8 +23,19 @@ class SharedPreferences {
             editor.apply()
         }
 
+        @SuppressLint("CommitPrefEdits")
+        fun setNIP(context: Context, nip: String) {
+            val editor: SharedPreferences.Editor = getSharedPreferences(context)!!.edit()
+            editor.putString(NIP, nip)
+            editor.apply()
+        }
+
         fun getDataAs(context: Context): String? {
             return getSharedPreferences(context)!!.getString(DATA_AS, "")
+        }
+
+        fun getNIP(context: Context): String? {
+            return getSharedPreferences(context)!!.getString(NIP, "")
         }
 
         fun setDataLogin(context: Context, status: Boolean) {
@@ -41,9 +53,8 @@ class SharedPreferences {
             val editor: SharedPreferences.Editor = getSharedPreferences(context)!!.edit()
             editor.remove(DATA_AS)
             editor.remove(DATA_LOGIN)
+            editor.remove(NIP)
             editor.apply()
         }
     }
-
-
 }

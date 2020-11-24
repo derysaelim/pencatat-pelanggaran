@@ -50,7 +50,8 @@ class LoginActivity : AppCompatActivity() {
 
 //                                set login sebagai admin
                                         SharedPreferences.setDataAs(this@LoginActivity, "admin")
-                                        goToModule("admin")
+                                        SharedPreferences.setNIP(this@LoginActivity, nip)
+                                        goToModule("admin", nip)
                                         finish()
                                     } else {
 
@@ -59,7 +60,8 @@ class LoginActivity : AppCompatActivity() {
 
 //                                set login sebagai guru bk
                                         SharedPreferences.setDataAs(this@LoginActivity, "gurubk")
-                                        goToModule("gurubk")
+                                        SharedPreferences.setNIP(this@LoginActivity, nip)
+                                        goToModule("gurubk", nip)
                                         finish()
                                     }
                                 } else {
@@ -95,28 +97,27 @@ class LoginActivity : AppCompatActivity() {
 
 //        akan dieksekusi apabila user sudah login dan tidak melakukan logout
 
+        val nip = SharedPreferences.getNIP(this).toString()
+
         if (SharedPreferences.getDataLogin(this)) {
             if (SharedPreferences.getDataAs(this).equals("admin")) {
-                goToModule("admin")
+                goToModule("admin", nip)
                 finish()
             } else {
-                goToModule("gurubk")
+                goToModule("gurubk", nip)
                 finish()
             }
         }
     }
 
-    private fun goToModule(moduleName: String) {
+    private fun goToModule(moduleName: String, nip: String) {
         val splitInstallManager = SplitInstallManagerFactory.create(this)
         if (splitInstallManager.installedModules.contains(moduleName)) {
 
             if (moduleName == "admin") {
-                startActivity(
-                    Intent(
-                        this,
-                        Class.forName("com.catatpelanggaran.admin.AdminActivity")
-                    )
-                )
+                val intent = Intent(this, Class.forName("com.catatpelanggaran.admin.AdminActivity"))
+                intent.putExtra("NIP", nip)
+                startActivity(intent)
             } else {
                 startActivity(
                     Intent(
@@ -126,6 +127,5 @@ class LoginActivity : AppCompatActivity() {
                 )
             }
         }
-
     }
 }
