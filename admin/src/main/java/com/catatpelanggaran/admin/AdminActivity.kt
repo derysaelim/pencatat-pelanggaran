@@ -84,9 +84,6 @@ class AdminActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
         when (item.itemId) {
             R.id.nav_dashboard -> {
                 fragment = DashboardFragment()
-                val data = Bundle()
-                data.putString("nip", "3500")
-                fragment.arguments = data
                 title = "Dashbpard"
             }
             R.id.nav_edit -> {

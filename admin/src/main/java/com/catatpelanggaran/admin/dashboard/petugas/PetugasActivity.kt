@@ -5,6 +5,7 @@ import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
@@ -22,13 +23,19 @@ import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.activity_petugas.*
 import kotlinx.android.synthetic.main.activity_petugas.back_button
 import kotlinx.android.synthetic.main.activity_petugas.progress_bar
+import kotlin.math.log
 
 class PetugasActivity : AppCompatActivity() {
+
+    companion object {
+        const val NIP_PETUGAS = "nippetugas"
+    }
 
     var listPetugas: ArrayList<Guru>? = null
 
     lateinit var searchManager: SearchManager
     lateinit var searchView: SearchView
+    lateinit var nip: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -36,6 +43,9 @@ class PetugasActivity : AppCompatActivity() {
         setSupportActionBar(toolbar_petugas)
 
         back_button.setOnClickListener { finish() }
+
+        nip = intent.getStringExtra(NIP_PETUGAS).toString()
+        Log.e("NIP", nip)
 
         getData(null)
     }
@@ -70,32 +80,43 @@ class PetugasActivity : AppCompatActivity() {
                                 startActivity(intent)
                             }
                             adapter.onItemDeleteClick = { selectedPetugas ->
-                                val builderdelete = AlertDialog.Builder(this@PetugasActivity)
-                                builderdelete.setTitle("Warning!")
-                                builderdelete.setMessage("Are you sure want to delete ${selectedPetugas.nama} ?")
-                                builderdelete.setPositiveButton("Delete") { i, _ ->
-                                    database.child("petugas").child(selectedPetugas.nip!!)
-                                        .removeValue()
-                                        .addOnCompleteListener {
-                                            database.child("Login").child(selectedPetugas.nip)
-                                                .removeValue().addOnCompleteListener {
-                                                    Toast.makeText(
-                                                        this@PetugasActivity,
-                                                        "Berhasil dihapus",
-                                                        Toast.LENGTH_SHORT
-                                                    ).show()
-                                                }
-                                        }
+
+                                if (selectedPetugas.nip == nip) {
+                                    val builderdelete = AlertDialog.Builder(this@PetugasActivity)
+                                    builderdelete.setTitle("Warning!")
+                                    builderdelete.setMessage("You cant delete your self ${selectedPetugas.nama} ")
+                                    builderdelete.setPositiveButton("OK") { _, _ -> }
+                                    val dialogdelete = builderdelete.create()
+                                    dialogdelete.show()
+                                } else {
+                                    val builderdelete = AlertDialog.Builder(this@PetugasActivity)
+                                    builderdelete.setTitle("Warning!")
+                                    builderdelete.setMessage("Are you sure want to delete ${selectedPetugas.nama} ?")
+                                    builderdelete.setPositiveButton("Delete") { i, _ ->
+                                        database.child("petugas").child(selectedPetugas.nip!!)
+                                            .removeValue()
+                                            .addOnCompleteListener {
+                                                database.child("Login").child(selectedPetugas.nip)
+                                                    .removeValue().addOnCompleteListener {
+                                                        Toast.makeText(
+                                                            this@PetugasActivity,
+                                                            "Berhasil dihapus",
+                                                            Toast.LENGTH_SHORT
+                                                        ).show()
+                                                    }
+                                            }
+                                    }
+                                    builderdelete.setNegativeButton("Cancel") { i, _ ->
+                                        Toast.makeText(
+                                            applicationContext,
+                                            "Data tidak jadi dihapus",
+                                            Toast.LENGTH_LONG
+                                        ).show()
+                                    }
+                                    val dialogdelete = builderdelete.create()
+                                    dialogdelete.show()
                                 }
-                                builderdelete.setNegativeButton("Cancel") { i, _ ->
-                                    Toast.makeText(
-                                        applicationContext,
-                                        "Data tidak jadi dihapus",
-                                        Toast.LENGTH_LONG
-                                    ).show()
-                                }
-                                val dialogdelete = builderdelete.create()
-                                dialogdelete.show()
+
                             }
 
                         } else {
@@ -129,35 +150,47 @@ class PetugasActivity : AppCompatActivity() {
                                 val intent =
                                     Intent(this@PetugasActivity, AddPetugasActivity::class.java)
                                 intent.putExtra(AddPetugasActivity.DATA_PETUGAS, it)
+                                intent.putExtra(AddPetugasActivity.NIP_PETUGAS, nip)
                                 startActivity(intent)
                             }
                             adapter.onItemDeleteClick = { selectedPetugas ->
-                                val builderdelete = AlertDialog.Builder(this@PetugasActivity)
-                                builderdelete.setTitle("Warning!")
-                                builderdelete.setMessage("Are you sure want to delete ${selectedPetugas.nama} ?")
-                                builderdelete.setPositiveButton("Delete") { i, _ ->
-                                    database.child("petugas").child(selectedPetugas.nip!!)
-                                        .removeValue()
-                                        .addOnCompleteListener {
-                                            database.child("Login").child(selectedPetugas.nip)
-                                                .removeValue().addOnCompleteListener {
-                                                    Toast.makeText(
-                                                        this@PetugasActivity,
-                                                        "Berhasil dihapus",
-                                                        Toast.LENGTH_SHORT
-                                                    ).show()
-                                                }
-                                        }
+
+                                if (selectedPetugas.nip == nip) {
+                                    val builderdelete = AlertDialog.Builder(this@PetugasActivity)
+                                    builderdelete.setTitle("Warning!")
+                                    builderdelete.setMessage("You cant delete your self ${selectedPetugas.nama} ")
+                                    builderdelete.setPositiveButton("OK") { _, _ -> }
+                                    val dialogdelete = builderdelete.create()
+                                    dialogdelete.show()
+                                } else {
+                                    val builderdelete = AlertDialog.Builder(this@PetugasActivity)
+                                    builderdelete.setTitle("Warning!")
+                                    builderdelete.setMessage("Are you sure want to delete ${selectedPetugas.nama} ?")
+                                    builderdelete.setPositiveButton("Delete") { i, _ ->
+                                        database.child("petugas").child(selectedPetugas.nip!!)
+                                            .removeValue()
+                                            .addOnCompleteListener {
+                                                database.child("Login").child(selectedPetugas.nip)
+                                                    .removeValue().addOnCompleteListener {
+                                                        Toast.makeText(
+                                                            this@PetugasActivity,
+                                                            "Berhasil dihapus",
+                                                            Toast.LENGTH_SHORT
+                                                        ).show()
+                                                    }
+                                            }
+                                    }
+                                    builderdelete.setNegativeButton("Cancel") { i, _ ->
+                                        Toast.makeText(
+                                            applicationContext,
+                                            "Data tidak jadi dihapus",
+                                            Toast.LENGTH_LONG
+                                        ).show()
+                                    }
+                                    val dialogdelete = builderdelete.create()
+                                    dialogdelete.show()
                                 }
-                                builderdelete.setNegativeButton("Cancel") { i, _ ->
-                                    Toast.makeText(
-                                        applicationContext,
-                                        "Data tidak jadi dihapus",
-                                        Toast.LENGTH_LONG
-                                    ).show()
-                                }
-                                val dialogdelete = builderdelete.create()
-                                dialogdelete.show()
+
                             }
 
                         } else {

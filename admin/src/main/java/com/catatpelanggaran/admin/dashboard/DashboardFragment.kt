@@ -27,8 +27,6 @@ class DashboardFragment : Fragment(), View.OnClickListener {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        nip = arguments?.getString("nip").toString()
-        Log.e("NIP", nip)
         return inflater.inflate(R.layout.fragment_dashboard, container, false)
     }
 
@@ -41,6 +39,8 @@ class DashboardFragment : Fragment(), View.OnClickListener {
         button_pelanggaran.setOnClickListener(this)
         button_gurubk.setOnClickListener(this)
         button_admin.setOnClickListener(this)
+
+        nip = activity?.intent?.getStringExtra("NIP").toString()
 
     }
 
@@ -66,6 +66,7 @@ class DashboardFragment : Fragment(), View.OnClickListener {
             }
             R.id.button_admin -> {
                 intent = Intent(context, PetugasActivity::class.java)
+                intent.putExtra(PetugasActivity.NIP_PETUGAS, nip)
             }
         }
         startActivity(intent)

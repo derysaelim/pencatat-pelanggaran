@@ -26,6 +26,7 @@
             android:layout_marginTop="8dp"
             android:background="@drawable/custom_edittext"
             android:hint="NIP"
+            android:enabled="false"
             android:inputType="number"
             android:padding="8dp" />
 
@@ -117,12 +118,12 @@
             android:entries="@array/role" />
 
         <Button
-            android:id="@+id/button_simpanpetugas"
+            android:id="@+id/button_editpetugas"
             android:layout_width="match_parent"
             android:layout_height="40dp"
             android:layout_marginTop="28dp"
             android:background="@drawable/button_login"
-            android:text="Simpan" />
+            android:text="Edit" />
 
     </LinearLayout>
 </ScrollView>

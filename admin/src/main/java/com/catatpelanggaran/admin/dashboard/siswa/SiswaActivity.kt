@@ -76,17 +76,19 @@ class SiswaActivity : AppCompatActivity() {
 
                             adapter.onItemDeleteClick = { dataSiswa ->
                                 val builderdelete = AlertDialog.Builder(this@SiswaActivity)
-
                                 builderdelete.setTitle("Warning!")
                                 builderdelete.setMessage("Are you sure want to delete ${dataSiswa!!.nama_siswa} ?")
-                                builderdelete.setPositiveButton("Delete") { i, _ ->
+                                builderdelete.setPositiveButton("Delete") { _, _ ->
                                     database.child("Siswa").child(dataSiswa.nis!!).removeValue()
                                         .addOnCompleteListener {
-                                            database.child("Siswa")
-                                                .addListenerForSingleValueEvent(object :
-                                                    ValueEventListener {
+                                            database.child("Siswa").orderByChild("id_kelas")
+                                                .equalTo(dataSiswa.id_kelas).limitToLast(1)
+                                                .addValueEventListener(object : ValueEventListener {
                                                     override fun onDataChange(snapshot: DataSnapshot) {
-                                                        if (snapshot.child("id_kelas").value == dataSiswa.id_kelas) {
+                                                        val jumlahmurid =
+                                                            snapshot.childrenCount.toInt()
+
+                                                        if (snapshot.exists() && jumlahmurid > 1) {
 
                                                         } else {
                                                             database.child("daftar_kelas")
@@ -151,7 +153,6 @@ class SiswaActivity : AppCompatActivity() {
 
                             adapter.onItemDeleteClick = { dataSiswa ->
                                 val builderdelete = AlertDialog.Builder(this@SiswaActivity)
-
                                 builderdelete.setTitle("Warning!")
                                 builderdelete.setMessage("Are you sure want to delete ${dataSiswa!!.nama_siswa} ?")
                                 builderdelete.setPositiveButton("Delete") { _, _ ->

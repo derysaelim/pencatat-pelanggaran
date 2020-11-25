@@ -81,26 +81,31 @@ class AddSiswaActivity : AppCompatActivity() {
 
         val database = FirebaseDatabase.getInstance().reference
         val builderdelete = AlertDialog.Builder(this@AddSiswaActivity)
-
         builderdelete.setTitle("Warning!")
         builderdelete.setMessage("Are you sure want to delete ${dataSiswa!!.nama_siswa} ?")
-        builderdelete.setPositiveButton("Delete") { i, _ ->
-            database.child("Siswa").child(dataSiswa.nis!!).removeValue().addOnCompleteListener {
-                database.child("Siswa").addListenerForSingleValueEvent(object : ValueEventListener {
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        if (snapshot.child("id_kelas").value == dataSiswa.id_kelas) {
+        builderdelete.setPositiveButton("Delete") { _, _ ->
+            database.child("Siswa").child(dataSiswa.nis!!).removeValue()
+                .addOnCompleteListener {
+                    database.child("Siswa").orderByChild("id_kelas").equalTo(dataSiswa.id_kelas)
+                        .limitToLast(1).addValueEventListener(object : ValueEventListener {
+                            override fun onDataChange(snapshot: DataSnapshot) {
+                                val jumlahmurid = snapshot.childrenCount.toInt()
 
-                        } else {
-                            database.child("daftar_kelas").child(dataSiswa.id_kelas!!).removeValue()
-                        }
-                    }
+                                if (snapshot.exists() && jumlahmurid > 1) {
 
-                    override fun onCancelled(error: DatabaseError) {
-                        TODO("Not yet implemented")
-                    }
+                                } else {
+                                    database.child("daftar_kelas")
+                                        .child(dataSiswa.id_kelas!!)
+                                        .removeValue()
+                                }
+                            }
 
-                })
-            }
+                            override fun onCancelled(error: DatabaseError) {
+                                TODO("Not yet implemented")
+                            }
+
+                        })
+                }
         }
         builderdelete.setNegativeButton("Cancel") { i, _ ->
             Toast.makeText(
@@ -188,6 +193,52 @@ class AddSiswaActivity : AppCompatActivity() {
     }
 
     private fun editData(dataSiswa: Siswa) {
+        val database = FirebaseDatabase.getInstance().reference
+
+        val nis = dataSiswa.nis.toString()
+        val namaSiswa = input_nama.text.toString()
+        val kelas = kelas.selectedItem.toString().replace("\\s".toRegex(), "")
+        val alamat = input_alamat.text.toString()
+        val nohp = input_nohp.text.toString()
+        var jenkel = ""
+
+        if (radio_laki.isChecked) {
+            jenkel = "L"
+        } else if (radio_perempuan.isChecked) {
+            jenkel = "P"
+        }
+        val data = Siswa(kelas, nis, namaSiswa, jenkel, alamat, nohp)
+
+        if (nis.isEmpty() || namaSiswa.isEmpty() || alamat.isEmpty() || nohp.isEmpty()) {
+
+        } else {
+
+            if (kelas != dataSiswa.id_kelas) {
+                database.child("Siswa").orderByChild("id_kelas").equalTo(dataSiswa.id_kelas)
+                    .limitToLast(1).addValueEventListener(object : ValueEventListener {
+                        override fun onDataChange(snapshot: DataSnapshot) {
+                            val jumlahmurid = snapshot.childrenCount.toInt()
+                            if (snapshot.exists() && jumlahmurid > 1) {
+
+                            } else {
+                                database.child("daftar_kelas")
+                                    .child(dataSiswa.id_kelas!!)
+                                    .removeValue()
+                            }
+                        }
+
+                        override fun onCancelled(error: DatabaseError) {
+                            TODO("Not yet implemented")
+                        }
+
+                    })
+            } else {
+                database.child("Siswa").child(nis).setValue(data).addOnCompleteListener {
+                    Toast.makeText(this, "Berhasil", Toast.LENGTH_SHORT).show()
+                    finish()
+                }
+            }
+        }
     }
 
     private fun setStatus(status: Boolean) {
