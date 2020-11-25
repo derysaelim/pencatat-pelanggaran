@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".dashboard.pelanggaran.PelanggaranActivity">
+    tools:context=".dashboard.catat.KelasActivity">
 
     <com.google.android.material.appbar.AppBarLayout
         android:id="@+id/appBarLayout"
@@ -13,21 +13,21 @@
         android:theme="@style/AppTheme.AppBarOverlay">
 
         <com.google.android.material.appbar.MaterialToolbar
-            android:id="@+id/toolbar_pelanggaran"
+            android:id="@+id/toolbar_kelas"
             android:layout_width="match_parent"
             android:layout_height="?attr/actionBarSize"
-            app:popupTheme="@style/AppTheme.PopupOverlay">
+            app:popupTheme="@style/AppTheme.AppBarOverlay">
 
             <RelativeLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content">
 
-                <ImageButton
+                <ImageView
                     android:id="@+id/back_button"
+                    android:src="@drawable/back_icon"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:background="@drawable/back_icon"
-                    android:contentDescription="@string/image_decs" />
+                    android:contentDescription="@string/image_decs"/>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -35,9 +35,9 @@
                     android:layout_marginStart="16dp"
                     android:layout_toEndOf="@id/back_button"
                     android:fontFamily="@font/roboto"
-                    android:text="Kategori Pelanggaran"
+                    android:text="Data Kelas"
                     android:textColor="@android:color/white"
-                    android:textSize="18sp" />
+                    android:textSize="18sp"/>
 
             </RelativeLayout>
 
@@ -46,23 +46,26 @@
     </com.google.android.material.appbar.AppBarLayout>
 
     <androidx.recyclerview.widget.RecyclerView
-        android:id="@+id/list_pelanggaran"
+        android:id="@+id/list_kelas"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_below="@id/appBarLayout"
-        tools:listitem="@layout/item_pelanggaran"/>
+        tools:listitem="@layout/item_kelas"/>
 
     <ProgressBar
         android:id="@+id/progress_bar"
+        style="?attr/progressBarStyle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        style="?attr/progressBarStyle"
         android:visibility="gone"
         android:layout_centerInParent="true"/>
 
     <include
-        android:id="@+id/pelanggaran_empty"
+        android:id="@+id/kelas_empty"
         layout="@layout/view_empty"
-        android:visibility="gone" />
+        android:visibility="gone"/>
+
+
+
 
 </RelativeLayout>

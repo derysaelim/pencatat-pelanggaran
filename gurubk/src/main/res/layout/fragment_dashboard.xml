@@ -22,7 +22,7 @@
         android:id="@+id/linearLayout"
         android:layout_width="match_parent"
         android:layout_height="175dp"
-        android:layout_marginTop="8dp"
+        android:layout_marginTop="32dp"
         android:orientation="horizontal"
         android:paddingStart="16dp"
         android:paddingEnd="16dp"
@@ -31,9 +31,10 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/catat_pelanggaran"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="10dp"
+            android:layout_margin="16dp"
             android:layout_weight="1"
             android:padding="10dp"
             app:cardCornerRadius="12dp"
@@ -52,7 +53,7 @@
                     android:src="@drawable/catat_icon" />
 
                 <TextView
-                    android:id="@+id/textView"
+                    android:id="@+id/tv_catat"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/button_catat"
@@ -65,10 +66,12 @@
         </androidx.cardview.widget.CardView>
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/data_pelanggaran"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="10dp"
+            android:layout_margin="16dp"
             android:layout_weight="1"
+            android:padding="10dp"
             app:cardCornerRadius="12dp"
             app:cardElevation="8dp">
 
@@ -82,10 +85,10 @@
                     android:layout_height="75dp"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="15dp"
-                    android:src="@drawable/pelanggaran_icon" />
+                    android:src="@drawable/kategori_icon" />
 
                 <TextView
-                    android:id="@+id/textView2"
+                    android:id="@+id/tv_kategori"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/button_kategori"
@@ -113,44 +116,11 @@
         app:layout_constraintVertical_bias="0.0">
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/buat_laporan"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_margin="10dp"
-            android:layout_weight="1"
+            android:layout_margin="16dp"
             android:padding="10dp"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="8dp">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <ImageView
-                    android:id="@+id/button_pelanggar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="75dp"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="15dp"
-                    android:src="@drawable/catat_icon"
-                    app:srcCompat="@drawable/datapel_icon" />
-
-                <TextView
-                    android:id="@+id/textView3"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/button_pelanggar"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="10dp"
-                    android:fontFamily="@font/roboto"
-                    android:text="Pelanggar"
-                    android:textSize="24sp" />
-            </RelativeLayout>
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="10dp"
             android:layout_weight="1"
             app:cardCornerRadius="12dp"
             app:cardElevation="8dp">
@@ -165,11 +135,10 @@
                     android:layout_height="75dp"
                     android:layout_centerHorizontal="true"
                     android:layout_marginTop="15dp"
-                    android:src="@drawable/pelanggaran_icon"
-                    app:srcCompat="@drawable/laporan_icon" />
+                    android:src="@drawable/laporan_icon" />
 
                 <TextView
-                    android:id="@+id/textView4"
+                    android:id="@+id/tv_laporan"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_below="@id/button_laporan"
@@ -177,6 +146,41 @@
                     android:layout_marginTop="10dp"
                     android:fontFamily="@font/roboto"
                     android:text="Laporan"
+                    android:textSize="24sp" />
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+
+        <androidx.cardview.widget.CardView
+            android:id="@+id/data_pelanggar"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="16dp"
+            android:padding="10dp"
+            android:layout_weight="1"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="8dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/button_pelanggar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="75dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="15dp"
+                    android:src="@drawable/datapel_icon" />
+
+                <TextView
+                    android:id="@+id/tv_pelanggar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/button_pelanggar"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/roboto"
+                    android:text="Pelanggar"
                     android:textSize="24sp" />
             </RelativeLayout>
         </androidx.cardview.widget.CardView>
