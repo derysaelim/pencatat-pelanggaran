@@ -4,20 +4,26 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
-import androidx.drawerlayout.widget.DrawerLayout
 import androidx.fragment.app.Fragment
 import com.adriandery.catatpelanggaran.LoginActivity
 import com.adriandery.catatpelanggaran.SharedPreferences
 import com.catatpelanggaran.gurubk.dashboard.DashboardFragment
 import com.catatpelanggaran.gurubk.profile.ProfileFragment
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.activity_gurubk.*
 import kotlinx.android.synthetic.main.app_bar_bk.*
-import kotlinx.android.synthetic.main.content_main.*
+import kotlinx.android.synthetic.main.nav_header_bk.*
 
 class GurubkActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gurubk)
