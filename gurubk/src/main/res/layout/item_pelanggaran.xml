@@ -14,7 +14,7 @@
         android:elevation="8dp">
 
         <TextView
-            android:id="@+id/no_absen"
+            android:id="@+id/no_absenpel"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:text="1"
@@ -36,7 +36,7 @@
             android:fontFamily="@font/roboto"
             android:textStyle="bold"
             app:layout_constraintTop_toTopOf="parent"
-            app:layout_constraintStart_toEndOf="@id/no_absen"
+            app:layout_constraintStart_toEndOf="@id/no_absenpel"
             tools:layout_editor_absoluteX="16dp"
             android:layout_marginStart="16dp"/>
         
@@ -48,7 +48,7 @@
             android:textSize="18sp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            app:layout_constraintStart_toEndOf="@id/no_absen"
+            app:layout_constraintStart_toEndOf="@id/no_absenpel"
             app:layout_constraintTop_toBottomOf="@id/nama_pel"
             android:layout_marginStart="16dp"/>
 
