@@ -3,6 +3,7 @@ package com.catatpelanggaran.admin.dashboard.petugas
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.catatpelanggaran.admin.R
@@ -25,17 +26,28 @@ class AddPetugasActivity : AppCompatActivity() {
 
     companion object {
         const val DATA_PETUGAS = "DATAPETUGAS"
+        const val NIP_PETUGAS = "NIP"
     }
+
+    lateinit var nipPetugas: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_add_petugas)
 
         val dataPetugas = intent.getParcelableExtra<Guru>(DATA_PETUGAS)
+        nipPetugas = intent.getStringExtra(NIP_PETUGAS).toString()
 
         if (dataPetugas != null) {
             setText(dataPetugas)
             setStatus(true)
+
+            if (dataPetugas.nip == nipPetugas) {
+                delete_button.visibility = View.GONE
+            } else {
+                delete_button.visibility = View.VISIBLE
+            }
+
         } else {
             setStatus(false)
         }
@@ -63,6 +75,7 @@ class AddPetugasActivity : AppCompatActivity() {
             input_nippetugas.isEnabled = false
             input_role.isEnabled = false
             button_simpanpetugas.text = "Edit"
+            title_petugas.text = "Edit Petugas/Guru BK"
         }
     }
 
@@ -222,11 +235,31 @@ class AddPetugasActivity : AppCompatActivity() {
 
     private fun deleteData(dataPetugas: Guru?) {
         val database = FirebaseDatabase.getInstance().reference
+        var role = ""
+        var child = ""
+
+        database.child("Login").addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                role = snapshot.child(dataPetugas!!.nip!!).child("role").value.toString()
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                TODO("Not yet implemented")
+            }
+
+        })
+
+        if (role == "Admin") {
+            child = "petugas"
+        } else {
+            child = "Guru_BK"
+        }
+
         val builderdelete = AlertDialog.Builder(this@AddPetugasActivity)
         builderdelete.setTitle("Warning!")
         builderdelete.setMessage("Are you sure want to delete ${dataPetugas!!.nama} ?")
         builderdelete.setPositiveButton("Delete") { i, _ ->
-            database.child("petugas").child(dataPetugas.nip!!).removeValue()
+            database.child(child).child(dataPetugas.nip!!).removeValue()
                 .addOnCompleteListener {
                     database.child("Login").child(dataPetugas.nip).removeValue()
                         .addOnCompleteListener {

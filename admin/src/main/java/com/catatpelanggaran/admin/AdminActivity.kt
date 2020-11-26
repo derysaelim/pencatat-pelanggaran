@@ -1,11 +1,11 @@
 package com.catatpelanggaran.admin
 
 import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
 import com.adriandery.catatpelanggaran.LoginActivity
@@ -13,14 +13,25 @@ import com.adriandery.catatpelanggaran.SharedPreferences
 import com.catatpelanggaran.admin.dashboard.DashboardFragment
 import com.catatpelanggaran.admin.profile.EditFragment
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.activity_admin.*
 import kotlinx.android.synthetic.main.app_bar_admin.*
+import kotlinx.android.synthetic.main.nav_header_admin.*
 
 class AdminActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+
+    lateinit var nip: String
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_admin)
         setSupportActionBar(toolbar)
+
+        nip = intent.getStringExtra("NIP").toString()
+        getData(nip)
 
         val toggle = ActionBarDrawerToggle(
             this,
@@ -39,6 +50,31 @@ class AdminActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
                 .commit()
             supportActionBar?.title = "Dashboard"
         }
+    }
+
+    private fun getData(nip: String) {
+        val database = FirebaseDatabase.getInstance().reference
+
+        database.child("petugas").addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.child(nip).exists()) {
+                    val nama = snapshot.child(nip).child("nama").value.toString()
+                    admin_name.text = nama
+                    admin_name_nav.text = nama
+                    admin_nip.text = nip
+                } else {
+                    val intent = Intent(this@AdminActivity, LoginActivity::class.java)
+                    startActivity(intent)
+                    SharedPreferences.clearData(this@AdminActivity)
+                    finish()
+                }
+            }
+
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(this@AdminActivity, "Error", Toast.LENGTH_SHORT).show()
+            }
+
+        })
 
     }
 

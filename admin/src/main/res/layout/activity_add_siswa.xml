@@ -33,6 +33,7 @@
                         android:contentDescription="@string/image_decs" />
 
                     <TextView
+                        android:id="@+id/title_siswa"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginStart="16dp"
@@ -41,6 +42,26 @@
                         android:text="Data Siswa"
                         android:textColor="@android:color/white"
                         android:textSize="18sp" />
+
+                    <ImageButton
+                        android:id="@+id/deletesiswa_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_alignParentEnd="true"
+                        android:layout_marginEnd="16dp"
+                        android:visibility="gone"
+                        android:background="@drawable/delete_icon"
+                        android:contentDescription="@string/image_decs" />
+
+                    <ImageButton
+                        android:id="@+id/editsiswa_button"
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_toStartOf="@id/deletesiswa_button"
+                        android:layout_marginEnd="16dp"
+                        android:visibility="gone"
+                        android:background="@drawable/edit_icon"
+                        android:contentDescription="@string/image_decs" />
 
                 </RelativeLayout>
 
@@ -68,7 +89,8 @@
                 android:layout_height="wrap_content"
                 android:hint="NIS"
                 android:background="@drawable/custom_edittext"
-                android:padding="8dp" />
+                android:padding="8dp"
+                android:inputType="number" />
 
             <TextView
                 android:layout_marginTop="16dp"
@@ -83,39 +105,10 @@
                 android:layout_marginTop="8dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="NIS"
+                android:hint="Nama Lengkap"
                 android:background="@drawable/custom_edittext"
-                android:padding="8dp" />
-
-            <TextView
-                android:layout_marginTop="16dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Tingkat"
-                android:fontFamily="@font/roboto"
-                android:textSize="20sp" />
-
-            <Spinner
-                android:id="@+id/input_tingkat"
-                android:layout_marginTop="8dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/Widget.AppCompat.DropDownItem.Spinner" />
-
-            <TextView
-                android:layout_marginTop="16dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="Jurusan"
-                android:fontFamily="@font/roboto"
-                android:textSize="20sp" />
-
-            <Spinner
-                android:id="@+id/input_jurusan"
-                android:layout_marginTop="8dp"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                style="@style/Widget.AppCompat.DropDownItem.Spinner" />
+                android:padding="8dp"
+                android:inputType="textPersonName" />
 
             <TextView
                 android:layout_marginTop="16dp"
@@ -125,36 +118,51 @@
                 android:fontFamily="@font/roboto"
                 android:textSize="20sp" />
 
+            <EditText
+                android:id="@+id/edit_kelas"
+                android:layout_marginTop="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/custom_edittext"
+                android:padding="8dp"
+                android:enabled="false"
+                android:inputType="textPersonName"
+                android:visibility="gone" />
+
+            <com.toptoche.searchablespinnerlibrary.SearchableSpinner
+                android:id="@+id/kelas"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                style="@style/Widget.AppCompat.DropDownItem.Spinner" />
+
+            <TextView
+                android:layout_marginTop="16dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="Jenis Kelamin"
+                android:fontFamily="@font/roboto"
+                android:textSize="20sp" />
+
             <RadioGroup
-                android:id="@+id/radio_group"
+                android:id="@+id/radio_kelamin"
                 android:layout_marginTop="8dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
                 <RadioButton
-                    android:id="@+id/kelas_a"
+                    android:id="@+id/radio_laki"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="A" />
+                    android:text="Laki - Laki" />
 
                 <RadioButton
-                    android:id="@+id/kelas_B"
+                    android:id="@+id/radio_perempuan"
+                    android:layout_marginStart="8dp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text="B" />
-
-                <RadioButton
-                    android:id="@+id/kelas_c"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="C" />
-
-                <RadioButton
-                    android:id="@+id/kelas_d"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:text="D" />
+                    android:text="Perempuan" />
 
             </RadioGroup>
 
@@ -171,9 +179,10 @@
                 android:layout_marginTop="8dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="NIS"
+                android:hint="Alamat"
                 android:background="@drawable/custom_edittext"
-                android:padding="8dp" />
+                android:padding="8dp"
+                android:inputType="textMultiLine" />
 
             <TextView
                 android:layout_marginTop="16dp"
@@ -188,12 +197,13 @@
                 android:layout_marginTop="8dp"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:hint="NIS"
+                android:hint="No HP Orang Tua"
                 android:background="@drawable/custom_edittext"
-                android:padding="8dp" />
+                android:padding="8dp"
+                android:inputType="number" />
 
             <Button
-                android:id="@+id/button_simpan"
+                android:id="@+id/button_simpansiswa"
                 android:layout_marginTop="28dp"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"

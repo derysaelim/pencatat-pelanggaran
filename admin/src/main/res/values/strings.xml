@@ -14,4 +14,11 @@
         <item>Guru BK</item>
     </string-array>
 
+    <string-array name="tingkat">
+        <item>X</item>
+        <item>XI</item>
+        <item>XII</item>
+        <item>XIII</item>
+    </string-array>
+
 </resources>
