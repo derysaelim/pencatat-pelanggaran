@@ -83,7 +83,6 @@ class EditFragment : Fragment() {
                 database.child("Login").child(nip).setValue(dataLogin)
             }
         }
-
     }
 
     private fun getData(nip: String) {
