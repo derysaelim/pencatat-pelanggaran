@@ -8,11 +8,15 @@ import android.view.View
 import android.view.ViewGroup
 import com.catatpelanggaran.gurubk.R
 import com.catatpelanggaran.gurubk.dashboard.catat.CatatPelanggaranActivity
+import com.catatpelanggaran.gurubk.dashboard.catat.KelasActivity
 import com.catatpelanggaran.gurubk.dashboard.datapelanggar.DataPelanggarActivity
+import com.catatpelanggaran.gurubk.dashboard.gurubk.BkActivity
 import com.catatpelanggaran.gurubk.dashboard.pelanggaran.PelanggaranActivity
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 
 class DashboardFragment : Fragment(), View.OnClickListener {
+
+    lateinit var nip: String
 
     override fun onCreateView(
         inflater: LayoutInflater, container: ViewGroup?,
@@ -28,7 +32,9 @@ class DashboardFragment : Fragment(), View.OnClickListener {
         catat_pelanggaran.setOnClickListener(this)
         data_pelanggaran.setOnClickListener(this)
         buat_laporan.setOnClickListener(this)
-        data_pelanggar.setOnClickListener(this)
+        data_gurubk.setOnClickListener(this)
+
+        nip = activity?.intent?.getStringExtra("NIP").toString()
     }
 
     override fun onClick(view: View) {
@@ -36,7 +42,7 @@ class DashboardFragment : Fragment(), View.OnClickListener {
 
         when (view.id){
             R.id.catat_pelanggaran -> {
-                intent = Intent(context, CatatPelanggaranActivity::class.java)
+                intent = Intent(context, KelasActivity::class.java)
             }
             R.id.data_pelanggaran -> {
                 intent = Intent(context, PelanggaranActivity::class.java)
@@ -44,8 +50,9 @@ class DashboardFragment : Fragment(), View.OnClickListener {
             R.id.buat_laporan -> {
                 intent = Intent(context, DataPelanggarActivity::class.java)
             }
-            R.id.data_pelanggar -> {
-                intent = Intent(context, DataPelanggarActivity::class.java)
+            R.id.data_gurubk -> {
+                intent = Intent(context, BkActivity::class.java)
+                intent.putExtra(BkActivity.NIP_GURUBK, nip)
             }
         }
         startActivity(intent)

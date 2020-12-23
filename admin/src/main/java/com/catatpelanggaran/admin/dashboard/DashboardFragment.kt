@@ -2,12 +2,10 @@ package com.catatpelanggaran.admin.dashboard
 
 import android.content.Intent
 import android.os.Bundle
-import android.util.Log
 import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import com.catatpelanggaran.admin.R
 import com.catatpelanggaran.admin.dashboard.guru.GuruActivity
 import com.catatpelanggaran.admin.dashboard.gurubk.BkActivity
@@ -37,7 +35,7 @@ class DashboardFragment : Fragment(), View.OnClickListener {
         button_guru.setOnClickListener(this)
         button_kelas.setOnClickListener(this)
         button_pelanggaran.setOnClickListener(this)
-        button_gurubk.setOnClickListener(this)
+        button_pelanggar.setOnClickListener(this)
         button_admin.setOnClickListener(this)
 
         nip = activity?.intent?.getStringExtra("NIP").toString()
@@ -61,7 +59,7 @@ class DashboardFragment : Fragment(), View.OnClickListener {
             R.id.button_pelanggaran -> {
                 intent = Intent(context, PelanggaranActivity::class.java)
             }
-            R.id.button_gurubk -> {
+            R.id.button_pelanggar -> {
                 intent = Intent(context, BkActivity::class.java)
             }
             R.id.button_admin -> {

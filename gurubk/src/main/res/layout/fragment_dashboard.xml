@@ -116,6 +116,40 @@
         app:layout_constraintVertical_bias="0.0">
 
         <androidx.cardview.widget.CardView
+            android:id="@+id/data_gurubk"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="16dp"
+            android:padding="10dp"
+            android:layout_weight="1"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="8dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent">
+
+                <ImageView
+                    android:id="@+id/button_gurubk"
+                    android:layout_width="wrap_content"
+                    android:layout_height="75dp"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="15dp"
+                    android:src="@drawable/gurubk_icon" />
+
+                <TextView
+                    android:id="@+id/tv_pelanggar"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_below="@id/button_gurubk"
+                    android:layout_centerHorizontal="true"
+                    android:layout_marginTop="10dp"
+                    android:fontFamily="@font/roboto"
+                    android:text="Guru BK"
+                    android:textSize="24sp" />
+            </RelativeLayout>
+        </androidx.cardview.widget.CardView>
+        <androidx.cardview.widget.CardView
             android:id="@+id/buat_laporan"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
@@ -146,41 +180,6 @@
                     android:layout_marginTop="10dp"
                     android:fontFamily="@font/roboto"
                     android:text="Laporan"
-                    android:textSize="24sp" />
-            </RelativeLayout>
-        </androidx.cardview.widget.CardView>
-
-        <androidx.cardview.widget.CardView
-            android:id="@+id/data_pelanggar"
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:layout_margin="16dp"
-            android:padding="10dp"
-            android:layout_weight="1"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="8dp">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent">
-
-                <ImageView
-                    android:id="@+id/button_pelanggar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="75dp"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="15dp"
-                    android:src="@drawable/datapel_icon" />
-
-                <TextView
-                    android:id="@+id/tv_pelanggar"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_below="@id/button_pelanggar"
-                    android:layout_centerHorizontal="true"
-                    android:layout_marginTop="10dp"
-                    android:fontFamily="@font/roboto"
-                    android:text="Pelanggar"
                     android:textSize="24sp" />
             </RelativeLayout>
         </androidx.cardview.widget.CardView>
