@@ -1,5 +1,6 @@
 package com.catatpelanggaran.gurubk.dashboard.datapelanggar
 
+import android.app.AlertDialog
 import android.app.SearchManager
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
@@ -89,6 +90,23 @@ class DataPelanggarActivity : AppCompatActivity() {
 
                             }
 
+                            adapter.onItemDeleteClick = { selectedSiswa ->
+                                val builderdelete = AlertDialog.Builder(this@DataPelanggarActivity)
+                                builderdelete.setTitle("Warning!")
+                                builderdelete.setMessage("Are you sure want to delete ${selectedSiswa!!.nama_siswa} ?")
+                                builderdelete.setPositiveButton("Delete") { _, _ ->
+                                    database.child("Pelanggar").child(selectedSiswa.nis!!).removeValue()
+                                        .addOnCompleteListener {
+                                            Toast.makeText(this@DataPelanggarActivity, "Berhasil dihapus", Toast.LENGTH_SHORT).show()
+                                        }
+                                }
+                                builderdelete.setNegativeButton("Cancel") { _, _ ->
+                                    Toast.makeText(applicationContext, "Data tidak jadi dihapus", Toast.LENGTH_SHORT).show()
+                                }
+                                val dialogdelete = builderdelete.create()
+                                dialogdelete.show()
+                            }
+
                         }
                         else {
                             siswa_empty.visibility = View.VISIBLE
@@ -125,7 +143,23 @@ class DataPelanggarActivity : AppCompatActivity() {
                                     selectedSiswa
                                 )
                                 startActivity(intent)
+                            }
 
+                            adapter.onItemDeleteClick = { selectedSiswa ->
+                                val builderdelete = AlertDialog.Builder(this@DataPelanggarActivity)
+                                builderdelete.setTitle("Warning!")
+                                builderdelete.setMessage("Are you sure want to delete ${selectedSiswa!!.nama_siswa} ?")
+                                builderdelete.setPositiveButton("Delete") { _, _ ->
+                                    database.child("Pelanggar").child(selectedSiswa.nis!!).removeValue()
+                                        .addOnCompleteListener {
+                                            Toast.makeText(this@DataPelanggarActivity, "Berhasil dihapus", Toast.LENGTH_SHORT).show()
+                                        }
+                                }
+                                builderdelete.setNegativeButton("Cancel") { _, _ ->
+                                    Toast.makeText(applicationContext, "Data tidak jadi dihapus", Toast.LENGTH_SHORT).show()
+                                }
+                                val dialogdelete = builderdelete.create()
+                                dialogdelete.show()
                             }
 
                         }

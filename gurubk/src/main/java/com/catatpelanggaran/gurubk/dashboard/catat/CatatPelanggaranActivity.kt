@@ -1,5 +1,6 @@
 package com.catatpelanggaran.gurubk.dashboard.catat
 
+import android.app.DatePickerDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
@@ -15,6 +16,7 @@ import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.activity_catat_pelanggaran.*
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 import kotlinx.android.synthetic.main.item_siswa.*
+import java.util.*
 import kotlin.collections.ArrayList
 
 class CatatPelanggaranActivity : AppCompatActivity() {
@@ -29,6 +31,20 @@ class CatatPelanggaranActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_catat_pelanggaran)
+
+        val c = Calendar.getInstance()
+        val year = c.get(Calendar.YEAR)
+        val month = c.get(Calendar.MONTH)
+        val day = c.get(Calendar.DAY_OF_MONTH)
+
+        input_tanggal.setOnClickListener {
+            val dpd = DatePickerDialog(this, DatePickerDialog.OnDateSetListener{view, mYear, mMonth, mDay ->
+
+                val mmMonth = mMonth+1
+                input_tanggal.setText(""+ mDay +"/"+ mmMonth +"/"+ mYear)
+            }, year, month, day)
+            dpd.show()
+        }
 
         dataListPelanggaran = ArrayList()
         adapterPelanggaran = ArrayAdapter(
@@ -76,31 +92,42 @@ class CatatPelanggaranActivity : AppCompatActivity() {
         val tanggal = input_tanggal.text.toString()
         val nis = dataCatat.nis.toString()
         val namaSiswa = dataCatat.nama_siswa.toString()
+        val telp_ortu = dataCatat.telp_ortu.toString()
         val jenispel = jenispel.selectedItem.toString().replace("\\s".toRegex(), "")
         val keterangan = input_keterangan.text.toString()
 
-        val data = Catat(tanggal, nis, namaSiswa, jenispel, keterangan)
+        val data = Catat(tanggal, nis, namaSiswa, telp_ortu, jenispel, keterangan)
 
         if (tanggal.isEmpty() || nis.isEmpty() || namaSiswa.isEmpty() || keterangan.isEmpty()) {
+            if (tanggal.isEmpty()) {
+                input_tanggal.error = "Data tidak boleh kosong!"
+            }
+            if (nis.isEmpty()) {
+                detail_nis.error = "Data tidak boleh kosong!"
+            }
+            if (namaSiswa.isEmpty()) {
+                detail_nama.error = "Data tidak boleh kosong!"
+            }
+            if (keterangan.isEmpty()) {
+                input_keterangan.error = "Data tidak boleh kosong!"
+            }
 
         }
         else {
             database.child("Pelanggar").addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
-                    if (snapshot.child(nis).exists()) {
-                    }
-                    else {
-                        try {
-                            database.child("Pelanggar").child(nis).setValue(data).addOnCompleteListener {
-                                Toast.makeText(this@CatatPelanggaranActivity, "Berhasil!", Toast.LENGTH_SHORT).show()
-                                finish()
-                            }
-                        }
-                        catch (e: Exception) {
-                            Toast.makeText(this@CatatPelanggaranActivity, "Check your internet", Toast.LENGTH_SHORT).show()
+                    try {
+                        database.child("Pelanggar").child(nis).setValue(data).addOnCompleteListener {
+                            Toast.makeText(this@CatatPelanggaranActivity, "Berhasil!", Toast.LENGTH_SHORT).show()
+                            finish()
                         }
                     }
+                    catch (e: Exception) {
+                        Toast.makeText(this@CatatPelanggaranActivity, "Check your internet", Toast.LENGTH_SHORT).show()
+                    }
+
                 }
+
 
                 override fun onCancelled(error: DatabaseError) {
                     TODO("Not yet implemented")
@@ -110,32 +137,29 @@ class CatatPelanggaranActivity : AppCompatActivity() {
     }
 
     private fun editData(dataCatat: Catat) {
-        val database = FirebaseDatabase.getInstance().reference
 
-        val tanggal = input_tanggal.text.toString()
+        val tanggal = dataCatat.tanggal.toString()
         val nis = dataCatat.nis.toString()
         val namaSiswa = dataCatat.nama_siswa.toString()
+        val telp_ortu = dataCatat.telp_ortu.toString()
         val jenispel = jenispel.selectedItem.toString().replace("\\s".toRegex(), "")
         val keterangan = input_keterangan.text.toString()
-
-        val data = Catat(tanggal, nis, namaSiswa, jenispel, keterangan)
 
         if (tanggal.isEmpty() || nis.isEmpty() || namaSiswa.isEmpty() || keterangan.isEmpty()) {
 
         }
         else {
-            if (jenispel != dataCatat.namaPelanggaran) {
-                database.child("Pelanggar").orderByChild("namaPelaanggaran").equalTo(dataCatat.namaPelanggaran)
-                    .addValueEventListener(object : ValueEventListener {
-                        override fun onDataChange(snapshot: DataSnapshot) {
-                            database.child("Pelanggar").child(dataCatat.namaPelanggaran!!).removeValue()
-                        }
-
-                        override fun onCancelled(error: DatabaseError) {
-                            TODO("Not yet implemented")
-                        }
-                    })
-
+            try {
+                val database = FirebaseDatabase.getInstance().reference.child("Pelanggar")
+                val update = Catat(tanggal, dataCatat.nis, namaSiswa, telp_ortu, jenispel, keterangan)
+                database.child(nis).setValue(update).addOnSuccessListener {
+                    Toast.makeText(this, "Berhasil Update", Toast.LENGTH_SHORT).show()
+                }.addOnFailureListener {
+                    Toast.makeText(this, "Check your internet", Toast.LENGTH_SHORT).show()
+                }
+            }
+            catch (e: Exception) {
+                Toast.makeText(this, "Check your internet", Toast.LENGTH_SHORT).show()
             }
         }
 
@@ -147,6 +171,7 @@ class CatatPelanggaranActivity : AppCompatActivity() {
             input_tanggal.setText(dataCatat.tanggal)
             detail_nis.setText(dataCatat.nis.toString())
             detail_nama.setText(dataCatat.nama_siswa)
+            detail_telepon.setText(dataCatat.telp_ortu)
             detail_pelanggaran.setText(dataCatat.namaPelanggaran)
             input_keterangan.setText(dataCatat.keterangan)
         }

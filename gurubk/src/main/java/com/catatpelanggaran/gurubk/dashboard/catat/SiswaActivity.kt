@@ -58,7 +58,7 @@ class SiswaActivity : AppCompatActivity() {
         if (query != null){
             val search = query.replace("\\s".toRegex(), "")
             listSiswa = arrayListOf<Catat>()
-            database.child("Siswa").orderByChild("nis").startAt(search).endAt(search + "\uf8ff")
+            database.child("Siswa").orderByChild("nama_siswa").startAt(search).endAt(search + "\uf8ff")
                 .addValueEventListener(object : ValueEventListener {
                     override fun onCancelled(error: DatabaseError) {
                         Toast.makeText(this@SiswaActivity, "Somethings wrong", Toast.LENGTH_SHORT)

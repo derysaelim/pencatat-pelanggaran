@@ -78,10 +78,13 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
+                android:focusable="false"
                 android:layout_marginTop="8dp"
                 android:padding="8dp"
                 android:inputType="date"
+                android:drawableRight="@drawable/date_icon"
                 android:background="@drawable/custom_edittext"/>
+
 
             <TextView
                 android:layout_marginTop="16dp"
@@ -113,6 +116,24 @@
                 android:id="@+id/detail_nama"
                 android:editable="false"
                 android:hint="Nama Lengkap"
+                android:padding="8dp"
+                android:layout_marginTop="8dp"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="@drawable/custom_edittext"/>
+
+            <TextView
+                android:layout_marginTop="16dp"
+                android:textSize="20sp"
+                android:fontFamily="@font/roboto"
+                android:text="Nomor HP Orang Tua"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+            <EditText
+                android:id="@+id/detail_telepon"
+                android:editable="false"
+                android:hint="No Hp Orang Tua"
                 android:padding="8dp"
                 android:layout_marginTop="8dp"
                 android:layout_width="match_parent"
