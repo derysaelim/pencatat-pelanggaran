@@ -119,12 +119,9 @@ class LoginActivity : AppCompatActivity() {
                 intent.putExtra("NIP", nip)
                 startActivity(intent)
             } else {
-                startActivity(
-                    Intent(
-                        this,
-                        Class.forName("com.catatpelanggaran.gurubk.GurubkActivity")
-                    )
-                )
+                val intent = Intent(this, Class.forName("com.catatpelanggaran.gurubk.GurubkActivity"))
+                intent.putExtra("NIP", nip)
+                startActivity(intent)
             }
         }
     }

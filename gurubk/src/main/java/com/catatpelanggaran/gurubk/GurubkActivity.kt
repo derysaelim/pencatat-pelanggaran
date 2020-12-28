@@ -23,11 +23,15 @@ import kotlinx.android.synthetic.main.nav_header_bk.*
 
 class GurubkActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
+    lateinit var nip: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_gurubk)
         setSupportActionBar(toolbar)
+
+        nip = intent.getStringExtra("NIP").toString()
+        getData(nip)
 
         val toggle = ActionBarDrawerToggle(
             this,
@@ -41,13 +45,38 @@ class GurubkActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
         toggle.syncState()
 
         nav_view.setNavigationItemSelectedListener(this)
-
         if (savedInstanceState == null) {
             supportFragmentManager.beginTransaction()
                 .replace(R.id.nav_host_fragment, DashboardFragment())
                 .commit()
+            supportActionBar?.title = "Dashboard"
         }
+    }
 
+    private fun getData(nip: String) {
+        val database = FirebaseDatabase.getInstance().reference
+
+        database.child("Guru_BK").addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(this@GurubkActivity, "Error", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.child(nip).exists()) {
+                    val nama = snapshot.child(nip).child("nama").value.toString()
+                    admin_name.text = nama
+                    admin_name_nav.text = nama
+                    admin_nip.text = nip
+                }
+                else {
+                    val intent = Intent(this@GurubkActivity, LoginActivity::class.java)
+                    startActivity(intent)
+                    SharedPreferences.clearData(this@GurubkActivity)
+                    finish()
+                }
+            }
+
+        })
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {

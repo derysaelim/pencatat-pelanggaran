@@ -180,7 +180,7 @@
                 android:padding="36dp">
 
                 <ImageButton
-                    android:id="@+id/button_gurubk"
+                    android:id="@+id/button_pelanggar"
                     android:layout_width="wrap_content"
                     android:layout_height="75dp"
                     android:layout_centerInParent="true"

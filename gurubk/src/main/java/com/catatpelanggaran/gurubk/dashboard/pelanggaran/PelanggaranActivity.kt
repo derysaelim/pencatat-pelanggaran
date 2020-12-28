@@ -11,6 +11,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.catatpelanggaran.gurubk.R
 import com.catatpelanggaran.gurubk.adapter.AdapterPelanggaran
+import com.catatpelanggaran.gurubk.model.Catat
 import com.catatpelanggaran.gurubk.model.Pelanggaran
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -22,7 +23,7 @@ import kotlinx.android.synthetic.main.activity_pelanggaran.*
 
 class PelanggaranActivity : AppCompatActivity() {
 
-    var listPelanggaran: ArrayList<Pelanggaran>? = null
+    var listPelanggaran: ArrayList<Catat>? = null
 
     lateinit var searchManager: SearchManager
     lateinit var searchView: SearchView
@@ -50,7 +51,7 @@ class PelanggaranActivity : AppCompatActivity() {
         val database = FirebaseDatabase.getInstance().reference
 
         if (query != null){
-            listPelanggaran = arrayListOf<Pelanggaran>()
+            listPelanggaran = arrayListOf<Catat>()
             database.child("jenis_pelanggaran").orderByChild("namaPelanggaran").startAt(query).endAt(query + "\uf8ff")
                 .addValueEventListener(
                     object : ValueEventListener {
@@ -58,7 +59,7 @@ class PelanggaranActivity : AppCompatActivity() {
                             if (snapshot.exists()){
                                 listPelanggaran!!.clear()
                                 for (i in snapshot.children){
-                                    val pelanggaran = i.getValue(Pelanggaran::class.java)
+                                    val pelanggaran = i.getValue(Catat::class.java)
                                     listPelanggaran!!.add(pelanggaran!!)
                                 }
 
@@ -85,7 +86,7 @@ class PelanggaranActivity : AppCompatActivity() {
                     })
         }
         else {
-            listPelanggaran = arrayListOf<Pelanggaran>()
+            listPelanggaran = arrayListOf<Catat>()
             database.child("jenis_pelanggaran").orderByChild("namaPelanggaran")
                 .addValueEventListener(
                     object : ValueEventListener {
@@ -93,7 +94,7 @@ class PelanggaranActivity : AppCompatActivity() {
                             if (snapshot.exists()) {
                                 listPelanggaran!!.clear()
                                 for (i in snapshot.children){
-                                    val pelanggaran = i.getValue(Pelanggaran::class.java)
+                                    val pelanggaran = i.getValue(Catat::class.java)
                                     listPelanggaran?.add(pelanggaran!!)
                                 }
 
