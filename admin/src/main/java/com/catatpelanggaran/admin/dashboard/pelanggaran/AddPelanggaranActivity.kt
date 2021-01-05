@@ -56,6 +56,7 @@ class AddPelanggaranActivity : AppCompatActivity() {
         dataPelanggaran?.let {
             input_pelanggaran.setText(dataPelanggaran.namaPelanggaran)
             input_poin.setText(dataPelanggaran.poinPelanggaran.toString())
+            input_hukuman.setText(dataPelanggaran.hukuman)
         }
     }
 
@@ -103,18 +104,22 @@ class AddPelanggaranActivity : AppCompatActivity() {
     private fun insertData() {
         val jenis = input_pelanggaran.text.toString()
         val poin = input_poin.text.toString()
+        val hukuman = input_hukuman.text.toString()
 
-        if (jenis.isEmpty() || poin.isEmpty()) {
+        if (jenis.isEmpty() || poin.isEmpty() || hukuman.isEmpty()) {
             if (jenis.isEmpty()) {
                 input_pelanggaran.error = "Tolong isi"
             }
             if (poin.isEmpty()) {
                 input_poin.error = "Tolong isi"
             }
+            if (hukuman.isEmpty()) {
+                input_hukuman.error = "Tolong isi"
+            }
         } else {
             val database = FirebaseDatabase.getInstance().reference
             val pelanggaranId = database.push().key
-            val data = Pelanggaran(pelanggaranId, jenis, poin.toInt())
+            val data = Pelanggaran(pelanggaranId, jenis, poin.toInt(), hukuman)
             database.child("jenis_pelanggaran").addListenerForSingleValueEvent(object :
                 ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
@@ -157,16 +162,21 @@ class AddPelanggaranActivity : AppCompatActivity() {
     private fun editData(dataPelanggaran: Pelanggaran) {
         val jenis = input_pelanggaran.text.toString()
         val poin = input_poin.text.toString()
-        if (jenis.isEmpty() || poin.isEmpty()) {
+        val hukuman = input_hukuman.text.toString()
+
+        if (jenis.isEmpty() || poin.isEmpty() || hukuman.isEmpty()) {
             if (jenis.isEmpty()) {
                 input_pelanggaran.error = "Tolong isi"
             }
             if (poin.isEmpty()) {
                 input_poin.error = "Tolong isi"
             }
+            if (hukuman.isEmpty()) {
+                input_poin.error = "Tolong isi"
+            }
         } else {
             val database = FirebaseDatabase.getInstance().reference
-            val data = Pelanggaran(dataPelanggaran.idPelanggaran, jenis, poin.toInt())
+            val data = Pelanggaran(dataPelanggaran.idPelanggaran, jenis, poin.toInt(), hukuman)
 
             try {
                 database.child("jenis_pelanggaran").child(dataPelanggaran.idPelanggaran!!)

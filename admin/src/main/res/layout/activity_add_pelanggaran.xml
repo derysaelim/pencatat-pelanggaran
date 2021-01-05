@@ -99,6 +99,24 @@
                 android:inputType="number"
                 android:padding="8dp" />
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/roboto"
+                android:text="Hukuman"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/input_hukuman"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/custom_edittext"
+                android:hint="Hukuman"
+                android:inputType="text"
+                android:padding="8dp" />
+
             <Button
                 android:id="@+id/button_simpan"
                 android:layout_width="match_parent"

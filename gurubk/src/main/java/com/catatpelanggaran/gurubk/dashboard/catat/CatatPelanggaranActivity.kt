@@ -38,10 +38,9 @@ class CatatPelanggaranActivity : AppCompatActivity() {
         val day = c.get(Calendar.DAY_OF_MONTH)
 
         input_tanggal.setOnClickListener {
-            val dpd = DatePickerDialog(this, DatePickerDialog.OnDateSetListener{view, mYear, mMonth, mDay ->
-
-                val mmMonth = mMonth+1
-                input_tanggal.setText(""+ mDay +"/"+ mmMonth +"/"+ mYear)
+            val dpd = DatePickerDialog(this, { _, mYear, mMonth, mDay ->
+                val mmMonth = mMonth + 1
+                input_tanggal.setText("" + mDay + "/" + mmMonth + "/" + mYear)
             }, year, month, day)
             dpd.show()
         }
