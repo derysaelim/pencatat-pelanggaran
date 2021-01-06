@@ -78,7 +78,6 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
-
                 android:focusable="false"
                 android:layout_marginTop="8dp"
                 android:padding="8dp"
@@ -167,15 +166,6 @@
                 android:layout_marginTop="8dp"
                 style="@style/Widget.AppCompat.DropDownItem.Spinner" />
 
-            <TextView
-                android:id="@+id/tv_pelanggaran"
-                android:layout_marginTop="16dp"
-                android:text="Jenis Pelanggaran"
-                android:textSize="20sp"
-                android:fontFamily="@font/roboto"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content" />
-
             <EditText
                 android:id="@+id/detail_pelanggaran"
                 android:layout_width="match_parent"
@@ -183,8 +173,26 @@
                 android:ems="10"
                 android:layout_marginTop="8dp"
                 android:padding="8dp"
-                android:background="@drawable/custom_edittext"/>
+                android:background="@drawable/custom_edittext" />
 
+            <TextView
+                android:id="@+id/hukuman"
+                android:layout_marginTop="16dp"
+                android:text="Hukuman"
+                android:textSize="20sp"
+                android:fontFamily="@font/roboto"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content" />
+
+            <EditText
+                android:id="@+id/text_hukuman"
+                android:editable="false"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:layout_marginTop="8dp"
+                android:padding="8dp"
+                android:background="@drawable/custom_edittext" />
 
             <TextView
                 android:layout_marginTop="16dp"
@@ -198,6 +206,7 @@
                 android:id="@+id/input_keterangan"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:hint="keterangan"
                 android:ems="10"
                 android:layout_marginTop="8dp"
                 android:padding="8dp"

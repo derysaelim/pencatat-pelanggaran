@@ -87,7 +87,6 @@ class DataPelanggarActivity : AppCompatActivity() {
                                     CatatPelanggaranActivity.DATA_PELANGGAR, selectedSiswa
                                 )
                                 startActivity(intent)
-
                             }
 
                             adapter.onItemDeleteClick = { selectedSiswa ->

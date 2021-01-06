@@ -19,7 +19,8 @@ import kotlinx.android.synthetic.main.item_siswa.*
 import java.util.*
 import kotlin.collections.ArrayList
 
-class CatatPelanggaranActivity : AppCompatActivity() {
+class
+CatatPelanggaranActivity : AppCompatActivity() {
 
     companion object {
         const val DATA_PELANGGAR = "dataPelanggar"
@@ -87,7 +88,6 @@ class CatatPelanggaranActivity : AppCompatActivity() {
 
     private fun insertData(dataCatat: Catat){
         val database = FirebaseDatabase.getInstance().reference
-
         val tanggal = input_tanggal.text.toString()
         val nis = dataCatat.nis.toString()
         val namaSiswa = dataCatat.nama_siswa.toString()
@@ -126,7 +126,6 @@ class CatatPelanggaranActivity : AppCompatActivity() {
                     }
 
                 }
-
 
                 override fun onCancelled(error: DatabaseError) {
                     TODO("Not yet implemented")
@@ -178,7 +177,6 @@ class CatatPelanggaranActivity : AppCompatActivity() {
 
     private fun setStatus(status: Boolean) {
         if (status) {
-            tv_pelanggaran.visibility = View.GONE
             detail_pelanggaran.visibility = View.GONE
         }
     }
@@ -186,7 +184,6 @@ class CatatPelanggaranActivity : AppCompatActivity() {
     private fun setJenpel(status: Boolean) {
         if (status) {
             message_button.visibility = View.VISIBLE
-            tv_jenpel.visibility = View.GONE
             jenispel.visibility = View.GONE
         }
     }
