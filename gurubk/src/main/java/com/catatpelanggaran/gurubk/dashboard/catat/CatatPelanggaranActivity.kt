@@ -19,8 +19,7 @@ import kotlinx.android.synthetic.main.item_siswa.*
 import java.util.*
 import kotlin.collections.ArrayList
 
-class
-CatatPelanggaranActivity : AppCompatActivity() {
+class CatatPelanggaranActivity : AppCompatActivity() {
 
     companion object {
         const val DATA_PELANGGAR = "dataPelanggar"
@@ -28,11 +27,13 @@ CatatPelanggaranActivity : AppCompatActivity() {
 
     lateinit var adapterPelanggaran: ArrayAdapter<String>
     lateinit var dataListPelanggaran: ArrayList<String>
+    lateinit var dataListHukuman: ArrayList<String>
+    lateinit var dataListPoin: ArrayList<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_catat_pelanggaran)
-      
+
         val c = Calendar.getInstance()
         val year = c.get(Calendar.YEAR)
         val month = c.get(Calendar.MONTH)
@@ -46,9 +47,13 @@ CatatPelanggaranActivity : AppCompatActivity() {
             dpd.show()
         }
 
+        dataListHukuman = ArrayList()
+        dataListPoin = ArrayList()
         dataListPelanggaran = ArrayList()
         adapterPelanggaran = ArrayAdapter(
-            this@CatatPelanggaranActivity, android.R.layout.simple_spinner_dropdown_item, dataListPelanggaran
+            this@CatatPelanggaranActivity,
+            android.R.layout.simple_spinner_dropdown_item,
+            dataListPelanggaran
         )
         jenispel.adapter = adapterPelanggaran
 
@@ -58,17 +63,16 @@ CatatPelanggaranActivity : AppCompatActivity() {
                 setStatus(false)
                 setJenpel(true)
                 getData(dataCatat)
-                retrieveData(true, dataCatat)
             }
             else {
                 setStatus(true)
                 setJenpel(false)
                 getData(dataCatat)
-                retrieveData(true, dataCatat)
+                retrieveData()
             }
         }
         else {
-            retrieveData(false, null)
+            retrieveData()
         }
 
         button_simpanpelanggaran.setOnClickListener {
@@ -86,16 +90,20 @@ CatatPelanggaranActivity : AppCompatActivity() {
         }
     }
 
-    private fun insertData(dataCatat: Catat){
+    private fun insertData(dataCatat: Catat) {
         val database = FirebaseDatabase.getInstance().reference
         val tanggal = input_tanggal.text.toString()
         val nis = dataCatat.nis.toString()
         val namaSiswa = dataCatat.nama_siswa.toString()
         val telp_ortu = dataCatat.telp_ortu.toString()
+        val idpelanggaran = jenispel.selectedItemId
         val jenispel = jenispel.selectedItem.toString().replace("\\s".toRegex(), "")
         val keterangan = input_keterangan.text.toString()
 
-        val data = Catat(tanggal, nis, namaSiswa, telp_ortu, jenispel, keterangan)
+        val poin = dataListPoin[idpelanggaran.toInt()].toInt()
+        val hukuman = dataListHukuman[idpelanggaran.toInt()]
+
+        val data = Catat(tanggal, nis, namaSiswa, telp_ortu, jenispel, keterangan, poin, hukuman)
 
         if (tanggal.isEmpty() || nis.isEmpty() || namaSiswa.isEmpty() || keterangan.isEmpty()) {
             if (tanggal.isEmpty()) {
@@ -188,12 +196,14 @@ CatatPelanggaranActivity : AppCompatActivity() {
         }
     }
 
-    private fun retrieveData(status: Boolean, dataCatat: Catat?) {
+    private fun retrieveData() {
         val database = FirebaseDatabase.getInstance().reference
         database.child("jenis_pelanggaran").addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 for (i in snapshot.children) {
                     dataListPelanggaran.add(i.child("namaPelanggaran").value.toString())
+                    dataListPoin.add(i.child("poinPelanggaran").value.toString())
+                    dataListHukuman.add(i.child("hukuman").value.toString())
                 }
                 adapterPelanggaran.notifyDataSetChanged()
             }

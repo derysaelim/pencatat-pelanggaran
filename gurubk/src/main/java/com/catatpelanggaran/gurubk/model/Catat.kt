@@ -12,9 +12,9 @@ data class Catat(
     val namaPelanggaran: String? = null,
     val keterangan: String? = null,
     val poinPelanggaran: Int? = null,
+    val hukuman: String? = null,
     val id_kelas: String? = null,
     val jenkel: String? = null,
-    val alamat: String? = null,
-    val idPelanggaran: String? = null
+    val alamat: String? = null
 
 ) : Parcelable
