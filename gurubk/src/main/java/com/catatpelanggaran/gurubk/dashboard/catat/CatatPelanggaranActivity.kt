@@ -66,7 +66,10 @@ class CatatPelanggaranActivity : AppCompatActivity() {
                 position: Int,
                 id: Long
             ) {
-                text_hukuman.setText(jenispel.selectedItem.toString())
+
+                val hukuman = dataListHukuman[jenispel.selectedItemId.toInt()]
+
+                text_hukuman.setText(hukuman)
             }
 
             override fun onNothingSelected(parent: AdapterView<*>?) {

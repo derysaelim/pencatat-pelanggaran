@@ -32,7 +32,7 @@ class AdapterSiswa(val siswa: ArrayList<Catat>) : RecyclerView.Adapter<AdapterSi
                 val absen = position + 1
 
                 nama_siswa.text = dataCatat.nama_siswa
-                nis_siswa.text = dataCatat.nis
+                nis_siswa.text = dataCatat.poinPelanggaran.toString()
                 no_absen.text = absen.toString()
             }
         }
