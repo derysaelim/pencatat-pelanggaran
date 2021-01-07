@@ -26,7 +26,7 @@
             android:layout_marginTop="8dp"
             android:background="@drawable/custom_edittext"
             android:hint="NIP"
-            android:editable="false"
+            android:enabled="false"
             android:inputType="number"
             android:padding="8dp" />
 

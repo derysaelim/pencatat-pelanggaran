@@ -4,6 +4,7 @@ import android.app.DatePickerDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.core.view.isGone
@@ -57,14 +58,28 @@ class CatatPelanggaranActivity : AppCompatActivity() {
         )
         jenispel.adapter = adapterPelanggaran
 
+        jenispel.onItemSelectedListener = object :
+            AdapterView.OnItemSelectedListener {
+            override fun onItemSelected(
+                parent: AdapterView<*>?,
+                view: View?,
+                position: Int,
+                id: Long
+            ) {
+                text_hukuman.setText(jenispel.selectedItem.toString())
+            }
+
+            override fun onNothingSelected(parent: AdapterView<*>?) {
+            }
+        }
+
         val dataCatat = intent.getParcelableExtra<Catat>(DATA_PELANGGAR)
         if (dataCatat != null) {
             if (dataCatat.tanggal != null) {
                 setStatus(false)
                 setJenpel(true)
                 getData(dataCatat)
-            }
-            else {
+            } else {
                 setStatus(true)
                 setJenpel(false)
                 getData(dataCatat)
