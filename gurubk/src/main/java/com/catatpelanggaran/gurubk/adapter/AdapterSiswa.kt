@@ -9,6 +9,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.catatpelanggaran.gurubk.R
 import com.catatpelanggaran.gurubk.model.Catat
 import com.catatpelanggaran.gurubk.model.Siswa
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.item_siswa.view.*
 
 class AdapterSiswa(val siswa: ArrayList<Catat>) : RecyclerView.Adapter<AdapterSiswa.ViewHolder>() {
@@ -34,6 +38,23 @@ class AdapterSiswa(val siswa: ArrayList<Catat>) : RecyclerView.Adapter<AdapterSi
                 nama_siswa.text = dataCatat.nama_siswa
                 nis_siswa.text = dataCatat.poinPelanggaran.toString()
                 no_absen.text = absen.toString()
+
+                val database = FirebaseDatabase.getInstance().reference
+                database.child("Pelanggar").addValueEventListener(object : ValueEventListener {
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        if (snapshot.child(dataCatat.nis!!).exists()) {
+                            nis_siswa.text = "poin = ${
+                                snapshot.child(dataCatat.nis)
+                                    .child("poinPelanggaran").value.toString()
+                            }"
+                        } else {
+                            nis_siswa.text = "poin = 0"
+                        }
+                    }
+
+                    override fun onCancelled(error: DatabaseError) {}
+
+                })
             }
         }
 

@@ -24,7 +24,7 @@ import kotlinx.android.synthetic.main.activity_siswa.*
 class SiswaActivity : AppCompatActivity() {
 
     companion object {
-        const val DATA_SISWA = "dataSiswa"
+        const val DATA_KELAS = "DATA_KELAS"
     }
 
     var listSiswa: ArrayList<Catat>? = null
@@ -57,7 +57,7 @@ class SiswaActivity : AppCompatActivity() {
 
         if (query != null){
             val search = query.replace("\\s".toRegex(), "")
-            listSiswa = arrayListOf<Catat>()
+            listSiswa = arrayListOf()
             database.child("Siswa").orderByChild("nama_siswa").startAt(search).endAt(search + "\uf8ff")
                 .addValueEventListener(object : ValueEventListener {
                     override fun onCancelled(error: DatabaseError) {
@@ -87,8 +87,7 @@ class SiswaActivity : AppCompatActivity() {
                                 )
                                 startActivity(intent)
                             }
-                        }
-                        else {
+                        } else {
                             siswa_empty.visibility = View.VISIBLE
                             list_siswa.visibility = View.GONE
                         }

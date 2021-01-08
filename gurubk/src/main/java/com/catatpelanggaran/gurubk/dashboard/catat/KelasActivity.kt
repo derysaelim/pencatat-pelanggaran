@@ -76,15 +76,11 @@ class KelasActivity : AppCompatActivity() {
                             list_kelas.visibility = View.VISIBLE
 
                             adapter.onItemClick = { selectedKelas ->
-                                val intent =
-                                    Intent(this@KelasActivity, SiswaActivity::class.java)
-                                intent.putExtra(
-                                    SiswaActivity.DATA_SISWA, selectedKelas
-                                )
+                                val intent = Intent(this@KelasActivity, SiswaActivity::class.java)
+                                intent.putExtra(SiswaActivity.DATA_KELAS, selectedKelas)
                                 startActivity(intent)
                             }
-                        }
-                        else {
+                        } else {
                             kelas_empty.visibility = View.VISIBLE
                             list_kelas.visibility = View.GONE
                         }
@@ -99,6 +95,7 @@ class KelasActivity : AppCompatActivity() {
                         Toast.makeText(this@KelasActivity, "Somethings wrong", Toast.LENGTH_SHORT)
                             .show()
                     }
+
                     override fun onDataChange(snapshot: DataSnapshot) {
                         if (snapshot.exists()) {
                             listKelas!!.clear()
@@ -114,19 +111,15 @@ class KelasActivity : AppCompatActivity() {
 
                             adapter.onItemClick = { selectedKelas ->
                                 val intent = Intent(this@KelasActivity, SiswaActivity::class.java)
-                                intent.putExtra(
-                                    SiswaActivity.DATA_SISWA, selectedKelas
-                                )
+                                intent.putExtra(SiswaActivity.DATA_KELAS, selectedKelas)
                                 startActivity(intent)
-
                             }
-                        }
-                        else {
+                        } else {
                             kelas_empty.visibility = View.VISIBLE
                             list_kelas.visibility = View.GONE
                         }
                     }
-            })
+                })
 
         }
     }
