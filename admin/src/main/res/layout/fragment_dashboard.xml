@@ -56,7 +56,6 @@
                     android:contentDescription="@string/image_decs"
                     android:background="@drawable/siswa_icon" />
 
-
             </RelativeLayout>
         </com.google.android.material.card.MaterialCardView>
 

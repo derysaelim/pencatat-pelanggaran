@@ -16,6 +16,7 @@ import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.activity_add_kelas.*
 import kotlinx.android.synthetic.main.activity_add_siswa.*
 import kotlinx.android.synthetic.main.activity_add_siswa.back_button
+import kotlinx.android.synthetic.main.item_siswa.*
 
 class AddSiswaActivity : AppCompatActivity() {
 
@@ -78,7 +79,6 @@ class AddSiswaActivity : AppCompatActivity() {
     }
 
     private fun deleteData(dataSiswa: Siswa?) {
-
         val database = FirebaseDatabase.getInstance().reference
         val builderdelete = AlertDialog.Builder(this@AddSiswaActivity)
         builderdelete.setTitle("Warning!")
@@ -92,7 +92,8 @@ class AddSiswaActivity : AppCompatActivity() {
                                 val jumlahmurid = snapshot.childrenCount.toInt()
 
                                 if (snapshot.exists() && jumlahmurid > 1) {
-
+                                    database.child("daftar_kelas").child(dataSiswa.nis)
+                                        .removeValue()
                                 } else {
                                     database.child("daftar_kelas")
                                         .child(dataSiswa.id_kelas!!)
@@ -146,35 +147,38 @@ class AddSiswaActivity : AppCompatActivity() {
                     } else {
                         val data = Siswa(kelas, nis, namaSiswa, jenkel, alamat, nohp)
                         database.child("Siswa").child(nis).setValue(data).addOnCompleteListener {
-                            database.child("daftar_kelas").addListenerForSingleValueEvent(object :
-                                ValueEventListener {
-                                override fun onDataChange(snapshot: DataSnapshot) {
-                                    if (snapshot.child(kelas).exists()) {
+                            database.child("daftar_kelas")
+                                .addListenerForSingleValueEvent(object : ValueEventListener {
+                                    override fun onDataChange(snapshot: DataSnapshot) {
+                                        if (snapshot.child(kelas).exists()) {
+                                            database.child("daftar_kelas").child(kelas).child(nis)
+                                                .setValue(namaSiswa)
+                                            Toast.makeText(
+                                                this@AddSiswaActivity,
+                                                "Berhasil",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        } else {
+                                            database.child("daftar_kelas").child(kelas).child(nis)
+                                                .setValue(namaSiswa)
+                                                .addOnCompleteListener {
+                                                    Toast.makeText(
+                                                        this@AddSiswaActivity,
+                                                        "Berhasil",
+                                                        Toast.LENGTH_SHORT
+                                                    ).show()
+                                                }
+                                        }
+                                    }
+
+                                    override fun onCancelled(error: DatabaseError) {
                                         Toast.makeText(
                                             this@AddSiswaActivity,
-                                            "Berhasil",
+                                            "Error",
                                             Toast.LENGTH_SHORT
                                         ).show()
-                                    } else {
-                                        database.child("daftar_kelas").child(kelas).setValue(true)
-                                            .addOnCompleteListener {
-                                                Toast.makeText(
-                                                    this@AddSiswaActivity,
-                                                    "Berhasil",
-                                                    Toast.LENGTH_SHORT
-                                                ).show()
-                                            }
                                     }
-                                }
-
-                                override fun onCancelled(error: DatabaseError) {
-                                    Toast.makeText(
-                                        this@AddSiswaActivity,
-                                        "Error",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                }
-                            })
+                                })
                             finish()
                         }
                     }
