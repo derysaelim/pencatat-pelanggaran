@@ -40,6 +40,7 @@ class SiswaActivity : AppCompatActivity() {
             finish()
         }
 
+
         getData(null)
     }
 
@@ -82,27 +83,26 @@ class SiswaActivity : AppCompatActivity() {
                                 builderdelete.setPositiveButton("Delete") { _, _ ->
                                     database.child("Siswa").child(dataSiswa.nis!!).removeValue()
                                         .addOnCompleteListener {
-                                            database.child("Siswa").orderByChild("id_kelas")
-                                                .equalTo(dataSiswa.id_kelas).limitToLast(1)
-                                                .addValueEventListener(object : ValueEventListener {
+                                            database.child("daftar_kelas")
+                                                .child(dataSiswa.id_kelas!!)
+                                                .addListenerForSingleValueEvent(object :
+                                                    ValueEventListener {
                                                     override fun onDataChange(snapshot: DataSnapshot) {
                                                         val jumlahmurid =
                                                             snapshot.childrenCount.toInt()
 
-                                                        if (snapshot.exists() && jumlahmurid > 1) {
+                                                        if (jumlahmurid > 1) {
                                                             database.child("daftar_kelas")
+                                                                .child(dataSiswa.id_kelas)
                                                                 .child(dataSiswa.nis).removeValue()
                                                         } else {
                                                             database.child("daftar_kelas")
-                                                                .child(dataSiswa.id_kelas!!)
+                                                                .child(dataSiswa.id_kelas)
                                                                 .removeValue()
                                                         }
                                                     }
 
-                                                    override fun onCancelled(error: DatabaseError) {
-                                                        TODO("Not yet implemented")
-                                                    }
-
+                                                    override fun onCancelled(error: DatabaseError) {}
                                                 })
                                         }
                                 }
@@ -159,40 +159,30 @@ class SiswaActivity : AppCompatActivity() {
                                 builderdelete.setMessage("Are you sure want to delete ${dataSiswa!!.nama_siswa} ?")
                                 builderdelete.setPositiveButton("Delete") { _, _ ->
 
-                                    database.child("daftar_kelas").child(dataSiswa.id_kelas!!)
-                                        .addValueEventListener(object : ValueEventListener {
-                                            override fun onDataChange(snapshot: DataSnapshot) {
-                                                val jumlahsiswa = snapshot.childrenCount.toString()
-                                                Log.e("Jumlah", jumlahsiswa)
-                                            }
+                                    database.child("Siswa").child(dataSiswa.nis!!).removeValue()
+                                        .addOnCompleteListener {
+                                            database.child("daftar_kelas")
+                                                .child(dataSiswa.id_kelas!!)
+                                                .addListenerForSingleValueEvent(object :
+                                                    ValueEventListener {
+                                                    override fun onDataChange(snapshot: DataSnapshot) {
+                                                        val jumlahmurid =
+                                                            snapshot.childrenCount.toInt()
 
-                                            override fun onCancelled(error: DatabaseError) {
-                                                TODO("Not yet implemented")
-                                            }
+                                                        if (jumlahmurid > 1) {
+                                                            database.child("daftar_kelas")
+                                                                .child(dataSiswa.id_kelas)
+                                                                .child(dataSiswa.nis).removeValue()
+                                                        } else {
+                                                            database.child("daftar_kelas")
+                                                                .child(dataSiswa.id_kelas)
+                                                                .removeValue()
+                                                        }
+                                                    }
 
-                                        })
-
-//                                    database.child("Siswa").child(dataSiswa.nis!!).removeValue()
-//                                        .addOnCompleteListener {
-//                                            database.child("daftar_kelas").child(dataSiswa.id_kelas!!)
-//                                                .addListenerForSingleValueEvent(object : ValueEventListener {
-//                                                    override fun onDataChange(snapshot: DataSnapshot) {
-//                                                        val jumlahmurid = snapshot.childrenCount.toInt()
-//
-//                                                        if (snapshot.exists() && jumlahmurid > 1) {
-//                                                            database.child("daftar_kelas")
-//                                                                .child(dataSiswa.nis).removeValue()
-//                                                        } else {
-//                                                            database.child("daftar_kelas")
-//                                                                .child(dataSiswa.id_kelas)
-//                                                                .removeValue()
-//                                                        }
-//                                                    }
-//
-//                                                    override fun onCancelled(error: DatabaseError) {}
-//
-//                                                })
-//                                        }
+                                                    override fun onCancelled(error: DatabaseError) {}
+                                                })
+                                        }
                                 }
                                 builderdelete.setNegativeButton("Cancel") { i, _ ->
                                     Toast.makeText(

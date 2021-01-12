@@ -86,25 +86,22 @@ class AddSiswaActivity : AppCompatActivity() {
         builderdelete.setPositiveButton("Delete") { _, _ ->
             database.child("Siswa").child(dataSiswa.nis!!).removeValue()
                 .addOnCompleteListener {
-                    database.child("Siswa").orderByChild("id_kelas").equalTo(dataSiswa.id_kelas)
-                        .limitToLast(1).addValueEventListener(object : ValueEventListener {
+                    database.child("daftar_kelas").child(dataSiswa.id_kelas!!)
+                        .addListenerForSingleValueEvent(object : ValueEventListener {
                             override fun onDataChange(snapshot: DataSnapshot) {
                                 val jumlahmurid = snapshot.childrenCount.toInt()
 
-                                if (snapshot.exists() && jumlahmurid > 1) {
-                                    database.child("daftar_kelas").child(dataSiswa.nis)
-                                        .removeValue()
+                                if (jumlahmurid > 1) {
+                                    database.child("daftar_kelas").child(dataSiswa.id_kelas)
+                                        .child(dataSiswa.nis).removeValue()
                                 } else {
                                     database.child("daftar_kelas")
-                                        .child(dataSiswa.id_kelas!!)
+                                        .child(dataSiswa.id_kelas)
                                         .removeValue()
                                 }
                             }
 
-                            override fun onCancelled(error: DatabaseError) {
-                                TODO("Not yet implemented")
-                            }
-
+                            override fun onCancelled(error: DatabaseError) {}
                         })
                 }
         }

@@ -30,6 +30,7 @@
                     android:contentDescription="@string/image_decs" />
 
                 <TextView
+                    android:id="@+id/count_siswa"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_marginStart="16dp"
