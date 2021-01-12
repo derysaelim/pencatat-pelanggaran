@@ -149,6 +149,7 @@ class AddSiswaActivity : AppCompatActivity() {
                                     override fun onDataChange(snapshot: DataSnapshot) {
                                         if (snapshot.child(kelas).exists()) {
                                             database.child("daftar_kelas").child(kelas).child(nis)
+                                                .child("nama_siswa")
                                                 .setValue(namaSiswa)
                                             Toast.makeText(
                                                 this@AddSiswaActivity,
@@ -157,6 +158,7 @@ class AddSiswaActivity : AppCompatActivity() {
                                             ).show()
                                         } else {
                                             database.child("daftar_kelas").child(kelas).child(nis)
+                                                .child("nama_siswa")
                                                 .setValue(namaSiswa)
                                                 .addOnCompleteListener {
                                                     Toast.makeText(
@@ -215,23 +217,31 @@ class AddSiswaActivity : AppCompatActivity() {
         } else {
 
             if (kelas != dataSiswa.id_kelas) {
-                database.child("Siswa").orderByChild("id_kelas").equalTo(dataSiswa.id_kelas)
-                    .limitToLast(1).addValueEventListener(object : ValueEventListener {
+                database.child("daftar_kelas").child(dataSiswa.id_kelas!!)
+                    .addListenerForSingleValueEvent(object : ValueEventListener {
                         override fun onDataChange(snapshot: DataSnapshot) {
                             val jumlahmurid = snapshot.childrenCount.toInt()
-                            if (snapshot.exists() && jumlahmurid > 1) {
 
+                            if (jumlahmurid > 1) {
+                                database.child("daftar_kelas").child(dataSiswa.id_kelas)
+                                    .child(dataSiswa.nis!!).removeValue().addOnCompleteListener {
+                                        database.child("daftar_kelas").child(kelas)
+                                            .child(dataSiswa.nis)
+                                            .child("nama_siswa").setValue(namaSiswa)
+                                    }
                             } else {
                                 database.child("daftar_kelas")
-                                    .child(dataSiswa.id_kelas!!)
+                                    .child(dataSiswa.id_kelas)
                                     .removeValue()
+                                    .addOnCompleteListener {
+                                        database.child("daftar_kelas").child(kelas)
+                                            .child(dataSiswa.nis!!).child("nama_siswa")
+                                            .setValue(namaSiswa)
+                                    }
                             }
                         }
 
-                        override fun onCancelled(error: DatabaseError) {
-                            TODO("Not yet implemented")
-                        }
-
+                        override fun onCancelled(error: DatabaseError) {}
                     })
             } else {
                 database.child("Siswa").child(nis).setValue(data).addOnCompleteListener {
@@ -269,7 +279,7 @@ class AddSiswaActivity : AppCompatActivity() {
             if (jenkel == "L") {
                 radio_laki.isChecked = true
             } else {
-                radio_perempuan.isChecked = false
+                radio_perempuan.isChecked = true
             }
         }
     }

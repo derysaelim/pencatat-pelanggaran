@@ -14,7 +14,6 @@ import com.catatpelanggaran.gurubk.R
 import com.catatpelanggaran.gurubk.adapter.AdapterSiswa
 import com.catatpelanggaran.gurubk.model.Catat
 import com.catatpelanggaran.gurubk.model.Kelas
-import com.catatpelanggaran.gurubk.model.Siswa
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -32,42 +31,45 @@ class SiswaActivity : AppCompatActivity() {
 
     lateinit var searchManager: SearchManager
     lateinit var searchView: SearchView
+    lateinit var dataKelas: Kelas
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_siswa)
         setSupportActionBar(toolbar_siswa)
 
-        val dataKelas = intent.getParcelableExtra<Kelas>(DATA_KELAS)
+        dataKelas = intent.getParcelableExtra(DATA_KELAS)!!
 
         back_button.setOnClickListener {
             onBackPressed()
         }
 
-        getData(null)
+        getData(null, dataKelas)
     }
 
     override fun onResume() {
         super.onResume()
-        getData(null)
+        getData(null, dataKelas)
     }
 
-    private fun getData(query: String?) {
+    private fun getData(query: String?, dataKelas: Kelas) {
         progress_bar.visibility = View.VISIBLE
         list_siswa.layoutManager = LinearLayoutManager(this)
         list_siswa.hasFixedSize()
         val database = FirebaseDatabase.getInstance().reference
 
-        if (query != null){
+        if (query != null) {
             val search = query.replace("\\s".toRegex(), "")
             listSiswa = arrayListOf()
-            database.child("Siswa").orderByChild("nama_siswa").startAt(search).endAt(search + "\uf8ff")
+            database.child("daftar_kelas").child(dataKelas.idKelas!!).orderByChild("nama_siswa")
+                .startAt(search).endAt(search + "\uf8ff")
                 .addValueEventListener(object : ValueEventListener {
                     override fun onCancelled(error: DatabaseError) {
                         Toast.makeText(this@SiswaActivity, "Somethings wrong", Toast.LENGTH_SHORT)
                             .show()
                     }
 
+                    //                    Ada error disini
                     override fun onDataChange(snapshot: DataSnapshot) {
                         if (snapshot.exists()) {
                             listSiswa!!.clear()
@@ -98,42 +100,43 @@ class SiswaActivity : AppCompatActivity() {
                 })
         }
         else {
-            listSiswa = arrayListOf<Catat>()
-            database.child("Siswa").child("").addValueEventListener(object : ValueEventListener {
-                override fun onCancelled(error: DatabaseError) {
-                    Toast.makeText(this@SiswaActivity, "Somethings wrong", Toast.LENGTH_SHORT)
-                        .show()
-                }
-
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    if (snapshot.exists()) {
-                        listSiswa!!.clear()
-                        for (i in snapshot.children) {
-                            val siswa = i.getValue(Catat::class.java)
-                            listSiswa!!.add(siswa!!)
-                        }
-                        val adapter = AdapterSiswa(listSiswa!!)
-                        list_siswa.adapter = adapter
-                        progress_bar.visibility = View.GONE
-                        siswa_empty.visibility = View.GONE
-                        list_siswa.visibility = View.VISIBLE
-
-                        adapter.onItemClick = { selectedSiswa ->
-                            val intent =
-                                Intent(this@SiswaActivity, CatatPelanggaranActivity::class.java)
-                            intent.putExtra(
-                                CatatPelanggaranActivity.DATA_PELANGGAR,
-                                selectedSiswa
-                            )
-                            startActivity(intent)
-
-                        }
-                    } else {
-                        siswa_empty.visibility = View.VISIBLE
-                        list_siswa.visibility = View.GONE
+            listSiswa = arrayListOf()
+            database.child("daftar_kelas").child(dataKelas.idKelas!!)
+                .addValueEventListener(object : ValueEventListener {
+                    override fun onCancelled(error: DatabaseError) {
+                        Toast.makeText(this@SiswaActivity, "Somethings wrong", Toast.LENGTH_SHORT)
+                            .show()
                     }
-                }
-            })
+
+                    override fun onDataChange(snapshot: DataSnapshot) {
+                        if (snapshot.exists()) {
+                            listSiswa!!.clear()
+                            for (i in snapshot.children) {
+                                val siswa = i.getValue(Catat::class.java)
+                                listSiswa!!.add(siswa!!)
+                            }
+                            val adapter = AdapterSiswa(listSiswa!!)
+                            list_siswa.adapter = adapter
+                            progress_bar.visibility = View.GONE
+                            siswa_empty.visibility = View.GONE
+                            list_siswa.visibility = View.VISIBLE
+
+                            adapter.onItemClick = { selectedSiswa ->
+                                val intent =
+                                    Intent(this@SiswaActivity, CatatPelanggaranActivity::class.java)
+                                intent.putExtra(
+                                    CatatPelanggaranActivity.DATA_PELANGGAR,
+                                    selectedSiswa
+                                )
+                                startActivity(intent)
+
+                            }
+                        } else {
+                            siswa_empty.visibility = View.VISIBLE
+                            list_siswa.visibility = View.GONE
+                        }
+                    }
+                })
 
         }
     }
@@ -152,7 +155,7 @@ class SiswaActivity : AppCompatActivity() {
             }
 
             override fun onQueryTextChange(query: String): Boolean {
-                getData(query)
+                getData(query, dataKelas)
                 return true
             }
         })
