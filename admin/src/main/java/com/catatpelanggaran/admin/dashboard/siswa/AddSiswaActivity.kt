@@ -7,9 +7,7 @@ import android.widget.ArrayAdapter
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import com.catatpelanggaran.admin.R
-import com.catatpelanggaran.admin.model.Kelas
 import com.catatpelanggaran.admin.model.Siswa
-import com.catatpelanggaran.admin.model.SiswaKelas
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -143,8 +141,8 @@ class AddSiswaActivity : AppCompatActivity() {
                         Toast.makeText(this@AddSiswaActivity, "Sudah ada", Toast.LENGTH_SHORT)
                             .show()
                     } else {
-                        val data = Siswa(kelas, nis, namaSiswa, jenkel, alamat, nohp)
-                        val dataKelas = SiswaKelas(nis, namaSiswa)
+                        val data = Siswa(nis, namaSiswa, kelas, jenkel, alamat, nohp)
+                        val dataKelas = Siswa(nis, namaSiswa)
                         database.child("Siswa").child(nis).setValue(data).addOnCompleteListener {
                             database.child("daftar_kelas")
                                 .addListenerForSingleValueEvent(object : ValueEventListener {
@@ -210,7 +208,8 @@ class AddSiswaActivity : AppCompatActivity() {
         } else if (radio_perempuan.isChecked) {
             jenkel = "P"
         }
-        val data = Siswa(kelas, nis, namaSiswa, jenkel, alamat, nohp)
+        val data = Siswa(nis, namaSiswa, kelas, jenkel, alamat, nohp)
+        val dataKelas = Siswa(nis, namaSiswa)
 
         if (nis.isEmpty() || namaSiswa.isEmpty() || alamat.isEmpty() || nohp.isEmpty()) {
 
@@ -225,18 +224,16 @@ class AddSiswaActivity : AppCompatActivity() {
                             if (jumlahmurid > 1) {
                                 database.child("daftar_kelas").child(dataSiswa.id_kelas)
                                     .child(dataSiswa.nis!!).removeValue().addOnCompleteListener {
-                                        database.child("daftar_kelas").child(kelas)
-                                            .child(dataSiswa.nis)
-                                            .child("nama_siswa").setValue(namaSiswa)
+                                        database.child("daftar_kelas").child(kelas).child(nis)
+                                            .setValue(dataKelas)
                                     }
                             } else {
                                 database.child("daftar_kelas")
                                     .child(dataSiswa.id_kelas)
                                     .removeValue()
                                     .addOnCompleteListener {
-                                        database.child("daftar_kelas").child(kelas)
-                                            .child(dataSiswa.nis!!).child("nama_siswa")
-                                            .setValue(namaSiswa)
+                                        database.child("daftar_kelas").child(kelas).child(nis)
+                                            .setValue(dataKelas)
                                     }
                             }
                         }
