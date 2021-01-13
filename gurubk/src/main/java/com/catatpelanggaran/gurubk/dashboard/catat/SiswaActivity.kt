@@ -39,6 +39,7 @@ class SiswaActivity : AppCompatActivity() {
         setSupportActionBar(toolbar_siswa)
 
         dataKelas = intent.getParcelableExtra(DATA_KELAS)!!
+        text_kelas.text = "${dataKelas.tingkat + " " + dataKelas.jurusan + " " + dataKelas.kelas}"
 
         back_button.setOnClickListener {
             onBackPressed()
@@ -69,7 +70,6 @@ class SiswaActivity : AppCompatActivity() {
                             .show()
                     }
 
-                    //                    Ada error disini
                     override fun onDataChange(snapshot: DataSnapshot) {
                         if (snapshot.exists()) {
                             listSiswa!!.clear()

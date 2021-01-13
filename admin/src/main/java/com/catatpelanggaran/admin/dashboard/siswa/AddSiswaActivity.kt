@@ -9,6 +9,7 @@ import androidx.appcompat.app.AlertDialog
 import com.catatpelanggaran.admin.R
 import com.catatpelanggaran.admin.model.Kelas
 import com.catatpelanggaran.admin.model.Siswa
+import com.catatpelanggaran.admin.model.SiswaKelas
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -143,14 +144,14 @@ class AddSiswaActivity : AppCompatActivity() {
                             .show()
                     } else {
                         val data = Siswa(kelas, nis, namaSiswa, jenkel, alamat, nohp)
+                        val dataKelas = SiswaKelas(nis, namaSiswa)
                         database.child("Siswa").child(nis).setValue(data).addOnCompleteListener {
                             database.child("daftar_kelas")
                                 .addListenerForSingleValueEvent(object : ValueEventListener {
                                     override fun onDataChange(snapshot: DataSnapshot) {
                                         if (snapshot.child(kelas).exists()) {
                                             database.child("daftar_kelas").child(kelas).child(nis)
-                                                .child("nama_siswa")
-                                                .setValue(namaSiswa)
+                                                .setValue(dataKelas)
                                             Toast.makeText(
                                                 this@AddSiswaActivity,
                                                 "Berhasil",
@@ -158,8 +159,7 @@ class AddSiswaActivity : AppCompatActivity() {
                                             ).show()
                                         } else {
                                             database.child("daftar_kelas").child(kelas).child(nis)
-                                                .child("nama_siswa")
-                                                .setValue(namaSiswa)
+                                                .setValue(dataKelas)
                                                 .addOnCompleteListener {
                                                     Toast.makeText(
                                                         this@AddSiswaActivity,

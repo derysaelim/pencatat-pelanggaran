@@ -17,9 +17,9 @@ import kotlinx.android.synthetic.main.item_kelas.view.*
 import kotlinx.android.synthetic.main.item_siswa.view.*
 import kotlinx.android.synthetic.main.item_siswa.view.no_absen
 
-class AdapterKelas(val kelas: ArrayList<Siswa>) : RecyclerView.Adapter<AdapterKelas.ViewHolder>() {
+class AdapterKelas(val kelas: ArrayList<Kelas>) : RecyclerView.Adapter<AdapterKelas.ViewHolder>() {
 
-    var onItemClick: ((Siswa) -> Unit)? = null
+    var onItemClick: ((Kelas) -> Unit)? = null
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AdapterKelas.ViewHolder {
         val view = LayoutInflater.from(parent.context).inflate(R.layout.item_kelas, parent, false)
@@ -33,10 +33,10 @@ class AdapterKelas(val kelas: ArrayList<Siswa>) : RecyclerView.Adapter<AdapterKe
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView){
-        fun bind(dataSiswa: Siswa) {
+        fun bind(dataKelas: Kelas) {
             with(itemView) {
                 val absen = position + 1
-                val kelas = "${dataSiswa.tingkat} ${dataSiswa.jurusan} ${dataSiswa.kelas}"
+                val kelas = "${dataKelas.tingkat} ${dataKelas.jurusan} ${dataKelas.kelas}"
 
                 no_absenkel.text = absen.toString()
                 nama_kelas.text = kelas
@@ -45,7 +45,7 @@ class AdapterKelas(val kelas: ArrayList<Siswa>) : RecyclerView.Adapter<AdapterKe
                 database.child("Guru").addListenerForSingleValueEvent(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
                         nama_walikelas.text =
-                            snapshot.child(dataSiswa.nip!!).child("nama").value.toString()
+                            snapshot.child(dataKelas.nip!!).child("nama").value.toString()
                     }
 
                     override fun onCancelled(error: DatabaseError) {

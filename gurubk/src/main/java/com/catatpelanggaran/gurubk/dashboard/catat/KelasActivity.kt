@@ -25,7 +25,7 @@ import kotlinx.android.synthetic.main.activity_kelas.*
 
 class KelasActivity : AppCompatActivity() {
 
-    var listKelas: ArrayList<Siswa>? = null
+    var listKelas: ArrayList<Kelas>? = null
 
     lateinit var searchManager: SearchManager
     lateinit var searchView: SearchView
@@ -54,7 +54,7 @@ class KelasActivity : AppCompatActivity() {
 
         if (query != null){
             val search = query.replace("\\s".toRegex(), "")
-            listKelas = arrayListOf<Siswa>()
+            listKelas = arrayListOf()
             database.child("kelas").orderByChild("idKelas").startAt(search).endAt(search + "\uf8ff")
                 .addValueEventListener(object : ValueEventListener {
                     override fun onCancelled(error: DatabaseError) {
@@ -66,7 +66,7 @@ class KelasActivity : AppCompatActivity() {
                         if (snapshot.exists()) {
                             listKelas!!.clear()
                             for (i in snapshot.children) {
-                                val kelas = i.getValue(Siswa::class.java)
+                                val kelas = i.getValue(Kelas::class.java)
                                 listKelas!!.add(kelas!!)
                             }
                             val adapter = AdapterKelas(listKelas!!)
@@ -88,7 +88,7 @@ class KelasActivity : AppCompatActivity() {
                 })
         }
         else {
-            listKelas = arrayListOf<Siswa>()
+            listKelas = arrayListOf()
             database.child("kelas").orderByChild("idKelas")
                 .addValueEventListener(object : ValueEventListener {
                     override fun onCancelled(error: DatabaseError) {
@@ -100,7 +100,7 @@ class KelasActivity : AppCompatActivity() {
                         if (snapshot.exists()) {
                             listKelas!!.clear()
                             for (i in snapshot.children) {
-                                val kelas = i.getValue(Siswa::class.java)
+                                val kelas = i.getValue(Kelas::class.java)
                                 listKelas!!.add(kelas!!)
                             }
                             val adapter = AdapterKelas(listKelas!!)
