@@ -38,6 +38,7 @@ class AdapterSiswa(val siswa: ArrayList<Catat>) : RecyclerView.Adapter<AdapterSi
                 nama_siswa.text = dataCatat.nama_siswa
                 nis_siswa.text = dataCatat.poinPelanggaran.toString()
                 no_absen.text = absen.toString()
+                nis_siswa.text = " "
 
                 val database = FirebaseDatabase.getInstance().reference
                 database.child("Pelanggar").addValueEventListener(object : ValueEventListener {

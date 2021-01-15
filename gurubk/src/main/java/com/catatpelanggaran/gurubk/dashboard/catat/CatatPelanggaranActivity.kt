@@ -3,6 +3,7 @@ package com.catatpelanggaran.gurubk.dashboard.catat
 import android.app.DatePickerDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
@@ -66,9 +67,7 @@ class CatatPelanggaranActivity : AppCompatActivity() {
                 position: Int,
                 id: Long
             ) {
-
                 val hukuman = dataListHukuman[jenispel.selectedItemId.toInt()]
-
                 text_hukuman.setText(hukuman)
             }
 
@@ -76,9 +75,32 @@ class CatatPelanggaranActivity : AppCompatActivity() {
             }
         }
 
-        val dataCatat = intent.getParcelableExtra<Catat>(DATA_PELANGGAR)
+        var dataCatat = intent.getParcelableExtra<Catat>(DATA_PELANGGAR)
+
+        val database = FirebaseDatabase.getInstance().reference
+        database.child("Pelanggar").child(dataCatat?.nis!!)
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        val nama = snapshot.child("nama_siswa").value.toString()
+                        val tanggal = snapshot.child("tanggal").value.toString()
+                        val nis = snapshot.child("nis").value.toString()
+                        val poin: Int = snapshot.child("poin").value as Int
+                        val namaPelanggaran = snapshot.child("namaPelanggaran").value.toString()
+                        val keterangan = snapshot.child("keterangan").value.toString()
+                        val hukuman = snapshot.child("hukuman").value.toString()
+
+                        dataCatat =
+                            Catat(nis, nama, tanggal, namaPelanggaran, keterangan, hukuman, poin)
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {}
+
+            })
+
         if (dataCatat != null) {
-            if (dataCatat.tanggal != null) {
+            if (dataCatat!!.tanggal != null) {
                 setStatus(false)
                 setJenpel(true)
                 getData(dataCatat)
@@ -94,12 +116,10 @@ class CatatPelanggaranActivity : AppCompatActivity() {
         }
 
         button_simpanpelanggaran.setOnClickListener {
-            if (dataCatat != null) {
-                if (dataCatat.tanggal != null) {
-                    editData(dataCatat)
-                } else {
-                    insertData(dataCatat)
-                }
+            if (dataCatat?.tanggal != null) {
+                editData(dataCatat!!)
+            } else {
+                insertData(dataCatat!!)
             }
         }
 
@@ -113,15 +133,13 @@ class CatatPelanggaranActivity : AppCompatActivity() {
         val tanggal = input_tanggal.text.toString()
         val nis = dataCatat.nis.toString()
         val namaSiswa = dataCatat.nama_siswa.toString()
-        val telp_ortu = dataCatat.telp_ortu.toString()
         val idpelanggaran = jenispel.selectedItemId
-        val jenispel = jenispel.selectedItem.toString().replace("\\s".toRegex(), "")
+        val jenispel = jenispel.selectedItem.toString()
         val keterangan = input_keterangan.text.toString()
-
         val poin = dataListPoin[idpelanggaran.toInt()].toInt()
         val hukuman = dataListHukuman[idpelanggaran.toInt()]
 
-        val data = Catat(tanggal, nis, namaSiswa, telp_ortu, jenispel, keterangan, poin, hukuman)
+        val data = Catat(nis, namaSiswa, tanggal, jenispel, keterangan, hukuman, poin)
 
         if (tanggal.isEmpty() || nis.isEmpty() || namaSiswa.isEmpty() || keterangan.isEmpty()) {
             if (tanggal.isEmpty()) {
@@ -165,7 +183,6 @@ class CatatPelanggaranActivity : AppCompatActivity() {
         val tanggal = dataCatat.tanggal.toString()
         val nis = dataCatat.nis.toString()
         val namaSiswa = dataCatat.nama_siswa.toString()
-        val telp_ortu = dataCatat.telp_ortu.toString()
         val jenispel = jenispel.selectedItem.toString().replace("\\s".toRegex(), "")
         val keterangan = input_keterangan.text.toString()
 
@@ -173,29 +190,27 @@ class CatatPelanggaranActivity : AppCompatActivity() {
 
         }
         else {
-            try {
-                val database = FirebaseDatabase.getInstance().reference.child("Pelanggar")
-                val update = Catat(tanggal, dataCatat.nis, namaSiswa, telp_ortu, jenispel, keterangan)
-                database.child(nis).setValue(update).addOnSuccessListener {
-                    Toast.makeText(this, "Berhasil Update", Toast.LENGTH_SHORT).show()
-                }.addOnFailureListener {
-                    Toast.makeText(this, "Check your internet", Toast.LENGTH_SHORT).show()
-                }
-            }
-            catch (e: Exception) {
-                Toast.makeText(this, "Check your internet", Toast.LENGTH_SHORT).show()
-            }
+            Toast.makeText(this, "Tambah pelanggaran", Toast.LENGTH_SHORT).show()
+//            try {
+//                val database = FirebaseDatabase.getInstance().reference.child("Pelanggar")
+//                val data = Catat(nis, namaSiswa, tanggal, jenispel, keterangan, hukuman, poin)
+//                database.child(nis).setValue(update).addOnSuccessListener {
+//                    Toast.makeText(this, "Berhasil Update", Toast.LENGTH_SHORT).show()
+//                }.addOnFailureListener {
+//                    Toast.makeText(this, "Check your internet", Toast.LENGTH_SHORT).show()
+//                }
+//            }
+//            catch (e: Exception) {
+//                Toast.makeText(this, "Check your internet", Toast.LENGTH_SHORT).show()
+//            }
         }
-
     }
 
     private fun getData(dataCatat: Catat?) {
         dataCatat?.let {
-
             input_tanggal.setText(dataCatat.tanggal)
             detail_nis.setText(dataCatat.nis.toString())
             detail_nama.setText(dataCatat.nama_siswa)
-            detail_telepon.setText(dataCatat.telp_ortu)
             detail_pelanggaran.setText(dataCatat.namaPelanggaran)
             input_keterangan.setText(dataCatat.keterangan)
         }
