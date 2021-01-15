@@ -85,13 +85,20 @@ class CatatPelanggaranActivity : AppCompatActivity() {
                         val nama = snapshot.child("nama_siswa").value.toString()
                         val tanggal = snapshot.child("tanggal").value.toString()
                         val nis = snapshot.child("nis").value.toString()
-                        val poin: Int = snapshot.child("poin").value as Int
+                        val poin = snapshot.child("poinPelanggaran").value.toString()
                         val namaPelanggaran = snapshot.child("namaPelanggaran").value.toString()
                         val keterangan = snapshot.child("keterangan").value.toString()
                         val hukuman = snapshot.child("hukuman").value.toString()
 
-                        dataCatat =
-                            Catat(nis, nama, tanggal, namaPelanggaran, keterangan, hukuman, poin)
+                        dataCatat = Catat(
+                            nis,
+                            nama,
+                            tanggal,
+                            namaPelanggaran,
+                            keterangan,
+                            hukuman,
+                            poin.toInt()
+                        )
                     }
                 }
 
@@ -180,29 +187,35 @@ class CatatPelanggaranActivity : AppCompatActivity() {
 
     private fun editData(dataCatat: Catat) {
 
-        val tanggal = dataCatat.tanggal.toString()
+        val database = FirebaseDatabase.getInstance().reference
+        val tanggal = input_tanggal.text.toString()
         val nis = dataCatat.nis.toString()
         val namaSiswa = dataCatat.nama_siswa.toString()
-        val jenispel = jenispel.selectedItem.toString().replace("\\s".toRegex(), "")
+        val idpelanggaran = jenispel.selectedItemId
+        val jenispel = jenispel.selectedItem.toString()
         val keterangan = input_keterangan.text.toString()
+        val poin = dataListPoin[idpelanggaran.toInt()].toInt()
+        val hukuman = dataListHukuman[idpelanggaran.toInt()]
 
+        val update = Catat(
+            nis, namaSiswa, "${dataCatat.tanggal + ", " + tanggal}",
+            "${dataCatat.namaPelanggaran + ", " + jenispel}",
+            "${dataCatat.keterangan + ", " + keterangan}",
+            "${dataCatat.hukuman + ", " + hukuman}",
+            dataCatat.poinPelanggaran.plus(poin)
+        )
         if (tanggal.isEmpty() || nis.isEmpty() || namaSiswa.isEmpty() || keterangan.isEmpty()) {
 
-        }
-        else {
-            Toast.makeText(this, "Tambah pelanggaran", Toast.LENGTH_SHORT).show()
-//            try {
-//                val database = FirebaseDatabase.getInstance().reference.child("Pelanggar")
-//                val data = Catat(nis, namaSiswa, tanggal, jenispel, keterangan, hukuman, poin)
-//                database.child(nis).setValue(update).addOnSuccessListener {
-//                    Toast.makeText(this, "Berhasil Update", Toast.LENGTH_SHORT).show()
-//                }.addOnFailureListener {
-//                    Toast.makeText(this, "Check your internet", Toast.LENGTH_SHORT).show()
-//                }
-//            }
-//            catch (e: Exception) {
-//                Toast.makeText(this, "Check your internet", Toast.LENGTH_SHORT).show()
-//            }
+        } else {
+            try {
+                database.child("Pelanggar").child(nis).setValue(update).addOnSuccessListener {
+                    Toast.makeText(this, "Berhasil", Toast.LENGTH_SHORT).show()
+                }.addOnFailureListener {
+                    Toast.makeText(this, "Check your internet", Toast.LENGTH_SHORT).show()
+                }
+            } catch (e: Exception) {
+                Toast.makeText(this, "Check your internet", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
