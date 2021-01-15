@@ -202,7 +202,7 @@ class CatatPelanggaranActivity : AppCompatActivity() {
             "${dataCatat.namaPelanggaran + ", " + jenispel}",
             "${dataCatat.keterangan + ", " + keterangan}",
             "${dataCatat.hukuman + ", " + hukuman}",
-            dataCatat.poinPelanggaran.plus(poin)
+            dataCatat.poinPelanggaran + poin
         )
         if (tanggal.isEmpty() || nis.isEmpty() || namaSiswa.isEmpty() || keterangan.isEmpty()) {
 
