@@ -3,7 +3,7 @@
     <string name="image_decs">image decs</string>
     <string name="login_title">Pencatat \nPelanggaran \nSiswa</string>
     <string name="smkncimahi">SMK Negeri 1 Cimahi</string>
-    <string name="NIP">NIP</string>
+    <string name="NIP">ID</string>
     <string name="password">Password</string>
     <string name="login">Login</string>
     <string name="admin">Admin</string>
@@ -11,4 +11,5 @@
     <string name="title_gurubk">Guru</string>
     <string name="title_activity_guru">GuruActivity</string>
     <string name="title_activity_admin">AdminActivity</string>
+    <string name="title_orangtua">orangtua</string>
 </resources>

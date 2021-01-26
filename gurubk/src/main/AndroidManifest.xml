@@ -16,7 +16,7 @@
     </dist:module>
 
     <application android:theme="@style/NoBorder">
-        <activity android:name=".dashboard.datapelanggar.DetailPelanggarActivity"></activity>
+        <activity android:name=".dashboard.datapelanggar.DetailPelanggarActivity" />
         <activity android:name=".dashboard.gurubk.BkActivity" />
         <activity android:name=".dashboard.datapelanggar.DataPelanggarActivity" />
         <activity android:name=".dashboard.pelanggaran.PelanggaranActivity" />

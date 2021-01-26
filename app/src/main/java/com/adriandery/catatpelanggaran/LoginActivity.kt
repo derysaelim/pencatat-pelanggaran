@@ -53,15 +53,27 @@ class LoginActivity : AppCompatActivity() {
                                         SharedPreferences.setNIP(this@LoginActivity, nip)
                                         goToModule("admin", nip)
                                         finish()
+                                    } else if (snapshot.child(nip).child("role")
+                                            .getValue(String::class.java).equals("guru")
+                                    ) {
+
+//                                set user sudah login
+                                        SharedPreferences.setDataLogin(this@LoginActivity, true)
+
+//                                set login sebagai guru
+                                        SharedPreferences.setDataAs(this@LoginActivity, "gurubk")
+                                        SharedPreferences.setNIP(this@LoginActivity, nip)
+                                        goToModule("gurubk", nip)
+                                        finish()
                                     } else {
 
 //                                set user sudah login
                                         SharedPreferences.setDataLogin(this@LoginActivity, true)
 
-//                                set login sebagai guru bk
-                                        SharedPreferences.setDataAs(this@LoginActivity, "gurubk")
+//                                set login sebagai orang tua
+                                        SharedPreferences.setDataAs(this@LoginActivity, "orangtua")
                                         SharedPreferences.setNIP(this@LoginActivity, nip)
-                                        goToModule("gurubk", nip)
+                                        goToModule("orangtua", nip)
                                         finish()
                                     }
                                 } else {
@@ -103,7 +115,7 @@ class LoginActivity : AppCompatActivity() {
             if (SharedPreferences.getDataAs(this).equals("admin")) {
                 goToModule("admin", nip)
                 finish()
-            } else {
+            } else if (SharedPreferences.getDataAs(this).equals("gurubk")) {
                 goToModule("gurubk", nip)
                 finish()
             }
@@ -118,10 +130,13 @@ class LoginActivity : AppCompatActivity() {
                 val intent = Intent(this, Class.forName("com.catatpelanggaran.admin.AdminActivity"))
                 intent.putExtra("NIP", nip)
                 startActivity(intent)
-            } else {
-                val intent = Intent(this, Class.forName("com.catatpelanggaran.gurubk.GurubkActivity"))
+            } else if (moduleName == "gurubk") {
+                val intent =
+                    Intent(this, Class.forName("com.catatpelanggaran.gurubk.GurubkActivity"))
                 intent.putExtra("NIP", nip)
                 startActivity(intent)
+            } else {
+
             }
         }
     }

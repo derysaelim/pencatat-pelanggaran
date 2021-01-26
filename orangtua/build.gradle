@@ -1,16 +1,17 @@
-apply plugin: "com.android.dynamic-feature"
-apply plugin: 'kotlin-android'
-apply plugin: 'kotlin-android-extensions'
-apply plugin: "kotlin-kapt"
+plugins {
+    id 'com.android.dynamic-feature'
+    id 'kotlin-android'
+    id 'kotlin-android-extensions'
+    id 'kotlin-kapt'
+}
 apply from: '../shared_dependencies.gradle'
-apply plugin: 'com.google.gms.google-services'
 
 android {
     compileSdkVersion 30
     buildToolsVersion "30.0.2"
 
     defaultConfig {
-        applicationId "com.catatpelanggaran.gurubk"
+        applicationId "com.catatpelanggaran.orangtua"
         minSdkVersion 21
         targetSdkVersion 30
         versionCode 1
@@ -31,6 +32,9 @@ android {
     }
     kotlinOptions {
         jvmTarget = '1.8'
+    }
+    buildFeatures {
+        viewBinding = true
     }
 }
 
