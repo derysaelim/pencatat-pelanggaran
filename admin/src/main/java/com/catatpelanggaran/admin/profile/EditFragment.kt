@@ -79,7 +79,7 @@ class EditFragment : Fragment() {
             val dataLogin = Login(nip, password, role)
 
 
-            database.child("petugas").child(nip).setValue(dataPetugas).addOnCompleteListener {
+            database.child("Guru").child(nip).setValue(dataPetugas).addOnCompleteListener {
                 database.child("Login").child(nip).setValue(dataLogin)
             }
         }

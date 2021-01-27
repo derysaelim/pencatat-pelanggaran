@@ -15,6 +15,7 @@ import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.catatpelanggaran.admin.R
 import com.catatpelanggaran.admin.adapter.AdapterGuru
+import com.catatpelanggaran.admin.dashboard.petugas.PetugasActivity
 import com.catatpelanggaran.admin.model.Guru
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -24,10 +25,15 @@ import kotlinx.android.synthetic.main.activity_guru.*
 
 class GuruActivity : AppCompatActivity() {
 
+    companion object {
+        const val NIP_PETUGAS = "nippetugas"
+    }
+
     var listGuru: ArrayList<Guru>? = null
 
     lateinit var searchManager: SearchManager
     lateinit var searchView: SearchView
+    lateinit var nip: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -37,6 +43,8 @@ class GuruActivity : AppCompatActivity() {
         back_button.setOnClickListener {
             finish()
         }
+
+        nip = intent.getStringExtra(PetugasActivity.NIP_PETUGAS).toString()
         getData(null)
     }
 
@@ -57,7 +65,7 @@ class GuruActivity : AppCompatActivity() {
         val database = FirebaseDatabase.getInstance().reference
 
         if (name != null) {
-            listGuru = arrayListOf<Guru>()
+            listGuru = arrayListOf()
             database.child("Guru").orderByChild("nama").startAt(name).endAt(name + "\uf8ff")
                 .addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
@@ -76,54 +84,63 @@ class GuruActivity : AppCompatActivity() {
                             adapter.onItemClick = { selectedGuru ->
                                 val intent = Intent(this@GuruActivity, AddGuruActivity::class.java)
                                 intent.putExtra(AddGuruActivity.DATA_GURU, selectedGuru)
+                                intent.putExtra(AddGuruActivity.NIP_PETUGAS, nip)
                                 startActivity(intent)
                             }
 
                             adapter.onItemDeleteClick = { selectedGuru ->
                                 val builderdelete = AlertDialog.Builder(this@GuruActivity)
-                                database.child("walikelas").addValueEventListener(object :
-                                    ValueEventListener {
-                                    override fun onDataChange(snapshot: DataSnapshot) {
-                                        if (snapshot.child(selectedGuru.nip!!).exists()) {
-                                            builderdelete.setTitle("Warning!")
-                                            builderdelete.setMessage("Tidak bisa menghapus ${selectedGuru.nama} karena terdaftar sebagai walikelas")
-                                            builderdelete.setPositiveButton("OK") { i, _ -> }
-                                        } else {
-                                            builderdelete.setTitle("Warning!")
-                                            builderdelete.setMessage("Are you sure want to delete ${selectedGuru.nama} ?")
-                                            builderdelete.setPositiveButton("Delete") { i, _ ->
-                                                database.child("Guru").child(selectedGuru.nip!!)
-                                                    .removeValue()
-                                                    .addOnCompleteListener {
-                                                        Toast.makeText(
-                                                            this@GuruActivity,
-                                                            "Berhasil dihapus",
-                                                            Toast.LENGTH_SHORT
-                                                        ).show()
-                                                    }
+                                if (selectedGuru.nip == nip) {
+                                    builderdelete.setTitle("Warning!")
+                                    builderdelete.setMessage("You cant delete your self ${selectedGuru.nama} ")
+                                    builderdelete.setPositiveButton("OK") { _, _ -> }
+                                    val dialogdelete = builderdelete.create()
+                                    dialogdelete.show()
+                                } else {
+                                    database.child("walikelas").addValueEventListener(object :
+                                        ValueEventListener {
+                                        override fun onDataChange(snapshot: DataSnapshot) {
+                                            if (snapshot.child(selectedGuru.nip!!).exists()) {
+                                                builderdelete.setTitle("Warning!")
+                                                builderdelete.setMessage("Tidak bisa menghapus ${selectedGuru.nama} karena terdaftar sebagai walikelas")
+                                                builderdelete.setPositiveButton("OK") { i, _ -> }
+                                            } else {
+                                                builderdelete.setTitle("Warning!")
+                                                builderdelete.setMessage("Are you sure want to delete ${selectedGuru.nama} ?")
+                                                builderdelete.setPositiveButton("Delete") { i, _ ->
+                                                    database.child("Guru").child(selectedGuru.nip!!)
+                                                        .removeValue()
+                                                        .addOnCompleteListener {
+                                                            Toast.makeText(
+                                                                this@GuruActivity,
+                                                                "Berhasil dihapus",
+                                                                Toast.LENGTH_SHORT
+                                                            ).show()
+                                                        }
+                                                }
+                                                builderdelete.setNegativeButton("Cancel") { i, _ ->
+                                                    Toast.makeText(
+                                                        applicationContext,
+                                                        "Data tidak jadi dihapus",
+                                                        Toast.LENGTH_LONG
+                                                    ).show()
+                                                }
                                             }
-                                            builderdelete.setNegativeButton("Cancel") { i, _ ->
-                                                Toast.makeText(
-                                                    applicationContext,
-                                                    "Data tidak jadi dihapus",
-                                                    Toast.LENGTH_LONG
-                                                ).show()
-                                            }
+
+                                            val dialogdelete = builderdelete.create()
+                                            dialogdelete.show()
                                         }
 
-                                        val dialogdelete = builderdelete.create()
-                                        dialogdelete.show()
-                                    }
+                                        override fun onCancelled(error: DatabaseError) {
+                                            Toast.makeText(
+                                                this@GuruActivity,
+                                                "Something Wrong",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        }
 
-                                    override fun onCancelled(error: DatabaseError) {
-                                        Toast.makeText(
-                                            this@GuruActivity,
-                                            "Something Wrong",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                    }
-
-                                })
+                                    })
+                                }
                             }
                         } else {
                             guru_empty.visibility = View.VISIBLE
@@ -140,7 +157,7 @@ class GuruActivity : AppCompatActivity() {
                 })
         } else {
             val database = FirebaseDatabase.getInstance().reference
-            listGuru = arrayListOf<Guru>()
+            listGuru = arrayListOf()
             database.child("Guru").orderByChild("nama")
                 .addValueEventListener(object : ValueEventListener {
                     override fun onDataChange(snapshot: DataSnapshot) {
@@ -158,54 +175,63 @@ class GuruActivity : AppCompatActivity() {
                             adapter.onItemClick = { selectedGuru ->
                                 val intent = Intent(this@GuruActivity, AddGuruActivity::class.java)
                                 intent.putExtra(AddGuruActivity.DATA_GURU, selectedGuru)
+                                intent.putExtra(AddGuruActivity.NIP_PETUGAS, nip)
                                 startActivity(intent)
                             }
 
                             adapter.onItemDeleteClick = { selectedGuru ->
                                 val builderdelete = AlertDialog.Builder(this@GuruActivity)
-                                database.child("walikelas").addValueEventListener(object :
-                                    ValueEventListener {
-                                    override fun onDataChange(snapshot: DataSnapshot) {
-                                        if (snapshot.child(selectedGuru.nip!!).exists()) {
-                                            builderdelete.setTitle("Warning!")
-                                            builderdelete.setMessage("Tidak bisa menghapus ${selectedGuru.nama} karena terdaftar sebagai walikelas")
-                                            builderdelete.setPositiveButton("OK") { i, _ -> }
-                                        } else {
-                                            builderdelete.setTitle("Warning!")
-                                            builderdelete.setMessage("Are you sure want to delete ${selectedGuru.nama} ?")
-                                            builderdelete.setPositiveButton("Delete") { i, _ ->
-                                                database.child("Guru").child(selectedGuru.nip!!)
-                                                    .removeValue()
-                                                    .addOnCompleteListener {
-                                                        Toast.makeText(
-                                                            this@GuruActivity,
-                                                            "Berhasil dihapus",
-                                                            Toast.LENGTH_SHORT
-                                                        ).show()
-                                                    }
+                                if (selectedGuru.nip == nip) {
+                                    builderdelete.setTitle("Warning!")
+                                    builderdelete.setMessage("You cant delete your self ${selectedGuru.nama} ")
+                                    builderdelete.setPositiveButton("OK") { _, _ -> }
+                                    val dialogdelete = builderdelete.create()
+                                    dialogdelete.show()
+                                } else {
+                                    database.child("walikelas").addValueEventListener(object :
+                                        ValueEventListener {
+                                        override fun onDataChange(snapshot: DataSnapshot) {
+                                            if (snapshot.child(selectedGuru.nip!!).exists()) {
+                                                builderdelete.setTitle("Warning!")
+                                                builderdelete.setMessage("Tidak bisa menghapus ${selectedGuru.nama} karena terdaftar sebagai walikelas")
+                                                builderdelete.setPositiveButton("OK") { i, _ -> }
+                                            } else {
+                                                builderdelete.setTitle("Warning!")
+                                                builderdelete.setMessage("Are you sure want to delete ${selectedGuru.nama} ?")
+                                                builderdelete.setPositiveButton("Delete") { i, _ ->
+                                                    database.child("Guru").child(selectedGuru.nip!!)
+                                                        .removeValue()
+                                                        .addOnCompleteListener {
+                                                            Toast.makeText(
+                                                                this@GuruActivity,
+                                                                "Berhasil dihapus",
+                                                                Toast.LENGTH_SHORT
+                                                            ).show()
+                                                        }
+                                                }
+                                                builderdelete.setNegativeButton("Cancel") { i, _ ->
+                                                    Toast.makeText(
+                                                        applicationContext,
+                                                        "Data tidak jadi dihapus",
+                                                        Toast.LENGTH_LONG
+                                                    ).show()
+                                                }
                                             }
-                                            builderdelete.setNegativeButton("Cancel") { i, _ ->
-                                                Toast.makeText(
-                                                    applicationContext,
-                                                    "Data tidak jadi dihapus",
-                                                    Toast.LENGTH_LONG
-                                                ).show()
-                                            }
+
+                                            val dialogdelete = builderdelete.create()
+                                            dialogdelete.show()
                                         }
 
-                                        val dialogdelete = builderdelete.create()
-                                        dialogdelete.show()
-                                    }
+                                        override fun onCancelled(error: DatabaseError) {
+                                            Toast.makeText(
+                                                this@GuruActivity,
+                                                "Something Wrong",
+                                                Toast.LENGTH_SHORT
+                                            ).show()
+                                        }
 
-                                    override fun onCancelled(error: DatabaseError) {
-                                        Toast.makeText(
-                                            this@GuruActivity,
-                                            "Something Wrong",
-                                            Toast.LENGTH_SHORT
-                                        ).show()
-                                    }
-
-                                })
+                                    })
+                                }
                             }
                         } else {
                             guru_empty.visibility = View.VISIBLE

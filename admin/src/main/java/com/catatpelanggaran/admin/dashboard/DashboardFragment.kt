@@ -35,8 +35,6 @@ class DashboardFragment : Fragment(), View.OnClickListener {
         button_guru.setOnClickListener(this)
         button_kelas.setOnClickListener(this)
         button_pelanggaran.setOnClickListener(this)
-        button_pelanggar.setOnClickListener(this)
-        button_admin.setOnClickListener(this)
 
         nip = activity?.intent?.getStringExtra("NIP").toString()
 
@@ -52,19 +50,13 @@ class DashboardFragment : Fragment(), View.OnClickListener {
             }
             R.id.button_guru -> {
                 intent = Intent(context, GuruActivity::class.java)
+                intent.putExtra(GuruActivity.NIP_PETUGAS, nip)
             }
             R.id.button_kelas -> {
                 intent = Intent(context, KelasActivity::class.java)
             }
             R.id.button_pelanggaran -> {
                 intent = Intent(context, PelanggaranActivity::class.java)
-            }
-            R.id.button_pelanggar -> {
-                intent = Intent(context, BkActivity::class.java)
-            }
-            R.id.button_admin -> {
-                intent = Intent(context, PetugasActivity::class.java)
-                intent.putExtra(PetugasActivity.NIP_PETUGAS, nip)
             }
         }
         startActivity(intent)

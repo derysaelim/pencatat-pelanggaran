@@ -13,13 +13,6 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import kotlinx.android.synthetic.main.activity_add_guru.*
-import kotlinx.android.synthetic.main.activity_add_guru.back_button
-import kotlinx.android.synthetic.main.activity_add_guru.button_simpan
-import kotlinx.android.synthetic.main.activity_add_guru.delete_button
-import kotlinx.android.synthetic.main.activity_add_guru.input_nama
-import kotlinx.android.synthetic.main.activity_add_guru.input_nip
-import kotlinx.android.synthetic.main.activity_add_guru.input_nohp
 import kotlinx.android.synthetic.main.activity_add_petugas.*
 
 class AddPetugasActivity : AppCompatActivity() {

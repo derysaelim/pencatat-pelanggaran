@@ -39,7 +39,7 @@
                         android:layout_marginStart="16dp"
                         android:layout_toEndOf="@id/back_button"
                         android:fontFamily="@font/roboto"
-                        android:text="Tambah Guru"
+                        android:text="Tambah Admin/Guru"
                         android:textColor="@android:color/white"
                         android:textSize="18sp" />
 
@@ -49,9 +49,9 @@
                         android:layout_height="wrap_content"
                         android:layout_alignParentEnd="true"
                         android:layout_marginEnd="16dp"
-                        android:visibility="gone"
                         android:background="@drawable/delete_icon"
-                        android:contentDescription="@string/image_decs" />
+                        android:contentDescription="@string/image_decs"
+                        android:visibility="gone" />
 
                 </RelativeLayout>
             </com.google.android.material.appbar.MaterialToolbar>
@@ -72,7 +72,7 @@
                 android:textSize="20sp" />
 
             <EditText
-                android:id="@+id/input_nip"
+                android:id="@+id/input_nipguru"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -90,7 +90,7 @@
                 android:textSize="20sp" />
 
             <EditText
-                android:id="@+id/input_nama"
+                android:id="@+id/input_namaguru"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -108,7 +108,7 @@
                 android:textSize="20sp" />
 
             <EditText
-                android:id="@+id/input_nohp"
+                android:id="@+id/input_nohpguru"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
@@ -117,14 +117,64 @@
                 android:inputType="number"
                 android:padding="8dp" />
 
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/roboto"
+                android:text="Password"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/input_password"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/custom_edittext"
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:padding="8dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/roboto"
+                android:text="Konfirmasi Password"
+                android:textSize="20sp" />
+
+            <EditText
+                android:id="@+id/input_konfirmasi"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:background="@drawable/custom_edittext"
+                android:hint="Password"
+                android:inputType="textPassword"
+                android:padding="8dp" />
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:fontFamily="@font/roboto"
+                android:text="Role"
+                android:textSize="20sp" />
+
+            <Spinner
+                android:id="@+id/input_role"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:entries="@array/role" />
+
             <Button
-                android:id="@+id/button_simpan"
+                android:id="@+id/button_simpanguru"
                 android:layout_width="match_parent"
                 android:layout_height="40dp"
                 android:layout_marginTop="28dp"
                 android:background="@drawable/button_login"
                 android:text="Simpan" />
-
         </LinearLayout>
     </LinearLayout>
 </ScrollView>

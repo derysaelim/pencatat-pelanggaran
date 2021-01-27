@@ -45,7 +45,6 @@ class PetugasActivity : AppCompatActivity() {
         back_button.setOnClickListener { finish() }
 
         nip = intent.getStringExtra(NIP_PETUGAS).toString()
-        Log.e("NIP", nip)
 
         getData(null)
     }
@@ -77,6 +76,7 @@ class PetugasActivity : AppCompatActivity() {
                                 val intent =
                                     Intent(this@PetugasActivity, AddPetugasActivity::class.java)
                                 intent.putExtra(AddPetugasActivity.DATA_PETUGAS, it)
+                                intent.putExtra(AddPetugasActivity.NIP_PETUGAS, nip)
                                 startActivity(intent)
                             }
                             adapter.onItemDeleteClick = { selectedPetugas ->
