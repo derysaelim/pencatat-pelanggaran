@@ -1,4 +1,4 @@
-package com.catatpelanggaran.gurubk.dashboard.pelanggaran
+package com.catatpelanggaran.gurubk.dashboard.penghargaan
 
 import android.app.SearchManager
 import android.content.Context
@@ -11,108 +11,101 @@ import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.catatpelanggaran.gurubk.R
 import com.catatpelanggaran.gurubk.adapter.AdapterPelanggaran
+import com.catatpelanggaran.gurubk.adapter.AdapterPenghargaan
 import com.catatpelanggaran.gurubk.model.Catat
-import com.catatpelanggaran.gurubk.model.Pelanggaran
+import com.catatpelanggaran.gurubk.model.Penghargaan
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import kotlinx.android.synthetic.main.activity_catat_pelanggaran.*
-import kotlinx.android.synthetic.main.activity_catat_pelanggaran.back_button
 import kotlinx.android.synthetic.main.activity_pelanggaran.*
+import kotlinx.android.synthetic.main.activity_penghargaan.*
+import kotlinx.android.synthetic.main.activity_penghargaan.back_button
+import kotlinx.android.synthetic.main.activity_penghargaan.progress_bar
 
-class PelanggaranActivity : AppCompatActivity() {
+class PenghargaanActivity : AppCompatActivity() {
 
-    var listPelanggaran: ArrayList<Catat>? = null
+    var listPenghargaan: ArrayList<Penghargaan>? = null
 
     lateinit var searchManager: SearchManager
     lateinit var searchView: SearchView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_pelanggaran)
-        setSupportActionBar(toolbar_pelanggaran)
+        setContentView(R.layout.activity_penghargaan)
+        setSupportActionBar(toolbar_penghargaan)
 
-        back_button.setOnClickListener {
-            onBackPressed()
-        }
+        back_button.setOnClickListener { finish() }
         getData(null)
     }
 
-    override fun onResume() {
-        super.onResume()
-        getData(null)
-    }
-
-    private fun getData(query: String?){
+    private fun getData(query: String?) {
         progress_bar.visibility = View.VISIBLE
-        list_pelanggaran.layoutManager = LinearLayoutManager(this)
-        list_pelanggaran.hasFixedSize()
+        list_penghargaan.layoutManager = LinearLayoutManager(this)
+        list_penghargaan.hasFixedSize()
         val database = FirebaseDatabase.getInstance().reference
 
-        if (query != null){
-            listPelanggaran = arrayListOf<Catat>()
-            database.child("jenis_pelanggaran").orderByChild("namaPelanggaran").startAt(query).endAt(query + "\uf8ff")
+        if (query != null) {
+            listPenghargaan = arrayListOf()
+            database.child("jenis_penghargaan").orderByChild("namaPenghargaan").startAt(query)
+                .endAt(query + "\uf8ff")
                 .addValueEventListener(
                     object : ValueEventListener {
                         override fun onDataChange(snapshot: DataSnapshot) {
-                            if (snapshot.exists()){
-                                listPelanggaran!!.clear()
-                                for (i in snapshot.children){
-                                    val pelanggaran = i.getValue(Catat::class.java)
-                                    listPelanggaran!!.add(pelanggaran!!)
+                            if (snapshot.exists()) {
+                                listPenghargaan!!.clear()
+                                for (i in snapshot.children) {
+                                    val penghargaan = i.getValue(Penghargaan::class.java)
+                                    listPenghargaan?.add(penghargaan!!)
                                 }
 
-                                val adapter = AdapterPelanggaran(listPelanggaran!!)
-                                list_pelanggaran.adapter = adapter
+                                val adapter = AdapterPenghargaan(listPenghargaan!!)
+                                list_penghargaan.adapter = adapter
                                 progress_bar.visibility = View.GONE
-                                pelanggaran_empty.visibility = View.GONE
-                                list_pelanggaran.visibility = View.VISIBLE
-                            }
-                            else {
-                                pelanggaran_empty.visibility = View.VISIBLE
-                                list_pelanggaran.visibility = View.GONE
+                                penghargaan_empty.visibility = View.GONE
+                                list_penghargaan.visibility = View.VISIBLE
+                            } else {
+                                penghargaan_empty.visibility = View.VISIBLE
+                                list_penghargaan.visibility = View.GONE
                             }
                         }
 
                         override fun onCancelled(error: DatabaseError) {
                             Toast.makeText(
-                                this@PelanggaranActivity,
-                                "check ur inet",
+                                this@PenghargaanActivity,
+                                "check your internet",
                                 Toast.LENGTH_SHORT
                             ).show()
                         }
 
                     })
-        }
-        else {
-            listPelanggaran = arrayListOf()
-            database.child("jenis_pelanggaran").orderByChild("namaPelanggaran")
+        } else {
+            listPenghargaan = arrayListOf()
+            database.child("jenis_penghargaan").orderByChild("namaPenghargaan")
                 .addValueEventListener(
                     object : ValueEventListener {
                         override fun onDataChange(snapshot: DataSnapshot) {
                             if (snapshot.exists()) {
-                                listPelanggaran!!.clear()
-                                for (i in snapshot.children){
-                                    val pelanggaran = i.getValue(Catat::class.java)
-                                    listPelanggaran?.add(pelanggaran!!)
+                                listPenghargaan!!.clear()
+                                for (i in snapshot.children) {
+                                    val penghargaan = i.getValue(Penghargaan::class.java)
+                                    listPenghargaan?.add(penghargaan!!)
                                 }
 
-                                val adapter = AdapterPelanggaran(listPelanggaran!!)
-                                list_pelanggaran.adapter = adapter
+                                val adapter = AdapterPenghargaan(listPenghargaan!!)
+                                list_penghargaan.adapter = adapter
                                 progress_bar.visibility = View.GONE
-                                pelanggaran_empty.visibility = View.GONE
-                                list_pelanggaran.visibility = View.VISIBLE
-                            }
-                            else {
-                                pelanggaran_empty.visibility = View.VISIBLE
-                                list_pelanggaran.visibility = View.GONE
+                                penghargaan_empty.visibility = View.GONE
+                                list_penghargaan.visibility = View.VISIBLE
+                            } else {
+                                penghargaan_empty.visibility = View.VISIBLE
+                                list_penghargaan.visibility = View.GONE
                             }
                         }
 
                         override fun onCancelled(error: DatabaseError) {
                             Toast.makeText(
-                                this@PelanggaranActivity,
+                                this@PenghargaanActivity,
                                 "check ur inet",
                                 Toast.LENGTH_SHORT
                             ).show()
@@ -142,6 +135,11 @@ class PelanggaranActivity : AppCompatActivity() {
         })
 
         return true
+    }
+
+    override fun onResume() {
+        super.onResume()
+        getData(null)
     }
 
     override fun onBackPressed() {

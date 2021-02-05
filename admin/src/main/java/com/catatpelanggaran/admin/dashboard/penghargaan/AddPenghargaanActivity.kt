@@ -12,7 +12,6 @@ import kotlinx.android.synthetic.main.activity_add_pelanggaran.*
 import kotlinx.android.synthetic.main.activity_add_pelanggaran.back_button
 import kotlinx.android.synthetic.main.activity_add_pelanggaran.button_simpan
 import kotlinx.android.synthetic.main.activity_add_pelanggaran.delete_button
-import kotlinx.android.synthetic.main.activity_add_pelanggaran.input_poin
 import kotlinx.android.synthetic.main.activity_add_penghargaan.*
 import java.lang.Exception
 
@@ -59,7 +58,7 @@ class AddPenghargaanActivity : AppCompatActivity() {
         builderdelete.setTitle("Warning!")
         builderdelete.setMessage("Are you sure want to delete ${dataPenghargaan?.namaPenghargaan} ?")
         builderdelete.setPositiveButton("Delete") { i, _ ->
-            database.child("jenis_pelanggaran")
+            database.child("jenis_penghargaan")
                 .child(dataPenghargaan?.id_penghargaan!!)
                 .removeValue()
                 .addOnCompleteListener {

@@ -90,7 +90,7 @@ class PelanggaranActivity : AppCompatActivity() {
                                         AlertDialog.Builder(this@PelanggaranActivity)
                                     builderdelete.setTitle("Warning!")
                                     builderdelete.setMessage("Are you sure want to delete ${selectedPelanggaran.namaPelanggaran} ?")
-                                    builderdelete.setPositiveButton("Delete") { i, _ ->
+                                    builderdelete.setPositiveButton("Delete") { _, _ ->
                                         database.child("jenis_pelanggaran")
                                             .child(selectedPelanggaran.idPelanggaran!!)
                                             .removeValue()

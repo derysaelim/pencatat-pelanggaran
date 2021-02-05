@@ -12,6 +12,7 @@ import com.catatpelanggaran.gurubk.dashboard.catat.KelasActivity
 import com.catatpelanggaran.gurubk.dashboard.datapelanggar.DataPelanggarActivity
 import com.catatpelanggaran.gurubk.dashboard.gurubk.BkActivity
 import com.catatpelanggaran.gurubk.dashboard.pelanggaran.PelanggaranActivity
+import com.catatpelanggaran.gurubk.dashboard.penghargaan.PenghargaanActivity
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 
 class DashboardFragment : Fragment(), View.OnClickListener {
@@ -32,7 +33,7 @@ class DashboardFragment : Fragment(), View.OnClickListener {
         catat_pelanggaran.setOnClickListener(this)
         data_pelanggaran.setOnClickListener(this)
         buat_laporan.setOnClickListener(this)
-        data_gurubk.setOnClickListener(this)
+        data_penghargaan.setOnClickListener(this)
 
         nip = activity?.intent?.getStringExtra("NIP").toString()
     }
@@ -40,7 +41,7 @@ class DashboardFragment : Fragment(), View.OnClickListener {
     override fun onClick(view: View) {
         lateinit var intent: Intent
 
-        when (view.id){
+        when (view.id) {
             R.id.catat_pelanggaran -> {
                 intent = Intent(context, KelasActivity::class.java)
             }
@@ -50,9 +51,8 @@ class DashboardFragment : Fragment(), View.OnClickListener {
             R.id.buat_laporan -> {
                 intent = Intent(context, DataPelanggarActivity::class.java)
             }
-            R.id.data_gurubk -> {
-                intent = Intent(context, BkActivity::class.java)
-                intent.putExtra(BkActivity.NIP_GURUBK, nip)
+            R.id.data_penghargaan -> {
+                intent = Intent(context, PenghargaanActivity::class.java)
             }
         }
         startActivity(intent)

@@ -54,7 +54,7 @@ class LoginActivity : AppCompatActivity() {
                                         goToModule("admin", nip)
                                         finish()
                                     } else if (snapshot.child(nip).child("role")
-                                            .getValue(String::class.java).equals("guru")
+                                            .getValue(String::class.java).equals("Guru")
                                     ) {
 
 //                                set user sudah login

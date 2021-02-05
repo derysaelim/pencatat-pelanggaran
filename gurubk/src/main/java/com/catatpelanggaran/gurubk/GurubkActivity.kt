@@ -56,7 +56,7 @@ class GurubkActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
     private fun getData(nip: String) {
         val database = FirebaseDatabase.getInstance().reference
 
-        database.child("Guru_BK").addListenerForSingleValueEvent(object : ValueEventListener {
+        database.child("Guru").addListenerForSingleValueEvent(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
                 Toast.makeText(this@GurubkActivity, "Error", Toast.LENGTH_SHORT).show()
             }
@@ -67,8 +67,7 @@ class GurubkActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelec
                     admin_name.text = nama
                     admin_name_nav.text = nama
                     admin_nip.text = nip
-                }
-                else {
+                } else {
                     val intent = Intent(this@GurubkActivity, LoginActivity::class.java)
                     startActivity(intent)
                     SharedPreferences.clearData(this@GurubkActivity)

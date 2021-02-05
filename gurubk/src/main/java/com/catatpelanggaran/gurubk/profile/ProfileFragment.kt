@@ -40,7 +40,7 @@ class ProfileFragment : Fragment() {
     private fun getData(nip: String) {
         val database = FirebaseDatabase.getInstance().reference
 
-        database.child("Guru_BK").child(nip).addValueEventListener(object : ValueEventListener {
+        database.child("Guru").child(nip).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 input_nippetugas.setText(snapshot.child("nip").value.toString())
                 input_namapetugas.setText(snapshot.child("nama").value.toString())
@@ -54,8 +54,6 @@ class ProfileFragment : Fragment() {
             override fun onDataChange(snapshot: DataSnapshot) {
                 input_password.setText(snapshot.child("password").value.toString())
                 input_konfirmasi.setText(snapshot.child("password").value.toString())
-                input_role.isEnabled = false
-                input_role.setSelection(0)
             }
 
             override fun onCancelled(error: DatabaseError) {
@@ -69,7 +67,7 @@ class ProfileFragment : Fragment() {
         val nohp = input_nohppetugas.text.toString()
         val password = input_password.text.toString()
         val konfirmasi = input_konfirmasi.text.toString()
-        val role = "Guru BK"
+        val role = "Guru"
         val database = FirebaseDatabase.getInstance().reference
 
         if (nip.isEmpty() || nama.isEmpty() || nohp.isEmpty() || password.isEmpty() || konfirmasi != password) {
@@ -97,7 +95,7 @@ class ProfileFragment : Fragment() {
             val dataGuru = Guru(nip, nama, nohp)
             val dataLogin = Login(nip, password, role)
 
-            database.child("Guru_BK").child(nip).setValue(dataGuru).addOnCompleteListener {
+            database.child("Guru").child(nip).setValue(dataGuru).addOnCompleteListener {
                 database.child("Login").child(nip).setValue(dataLogin)
             }
         }

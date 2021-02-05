@@ -8,6 +8,7 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.View
 import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.catatpelanggaran.gurubk.R
@@ -32,6 +33,7 @@ class SiswaActivity : AppCompatActivity() {
     lateinit var searchManager: SearchManager
     lateinit var searchView: SearchView
     lateinit var dataKelas: Kelas
+    lateinit var siswa: Intent
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -122,13 +124,32 @@ class SiswaActivity : AppCompatActivity() {
                             list_siswa.visibility = View.VISIBLE
 
                             adapter.onItemClick = { selectedSiswa ->
-                                val intent =
-                                    Intent(this@SiswaActivity, CatatPelanggaranActivity::class.java)
-                                intent.putExtra(
-                                    CatatPelanggaranActivity.DATA_PELANGGAR,
-                                    selectedSiswa
-                                )
-                                startActivity(intent)
+                                val alertBuilder = AlertDialog.Builder(this@SiswaActivity)
+                                alertBuilder.setTitle("Catat")
+                                alertBuilder.setMessage("Pilih salah satu")
+                                alertBuilder.setPositiveButton("Pelanggaran") { _, _ ->
+                                    siswa = Intent(
+                                        this@SiswaActivity,
+                                        CatatPelanggaranActivity::class.java
+                                    )
+                                    siswa.putExtra(
+                                        CatatPelanggaranActivity.DATA_PELANGGAR,
+                                        selectedSiswa
+                                    )
+                                }
+                                alertBuilder.setNegativeButton("Penghargaan") { _, _ ->
+                                    siswa = Intent(
+                                        this@SiswaActivity,
+                                        CatatPelanggaranActivity::class.java
+                                    )
+                                    siswa.putExtra(
+                                        CatatPelanggaranActivity.DATA_PELANGGAR,
+                                        selectedSiswa
+                                    )
+                                }
+                                val dialogCatat = alertBuilder.create()
+                                dialogCatat.show()
+                                startActivity(siswa)
 
                             }
                         } else {
