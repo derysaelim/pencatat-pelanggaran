@@ -11,6 +11,7 @@ import com.catatpelanggaran.admin.dashboard.guru.GuruActivity
 import com.catatpelanggaran.admin.dashboard.gurubk.BkActivity
 import com.catatpelanggaran.admin.dashboard.kelas.KelasActivity
 import com.catatpelanggaran.admin.dashboard.pelanggaran.PelanggaranActivity
+import com.catatpelanggaran.admin.dashboard.penghargaan.PenghargaanActivity
 import com.catatpelanggaran.admin.dashboard.petugas.PetugasActivity
 import com.catatpelanggaran.admin.dashboard.siswa.SiswaActivity
 import kotlinx.android.synthetic.main.fragment_dashboard.*
@@ -35,6 +36,7 @@ class DashboardFragment : Fragment(), View.OnClickListener {
         button_guru.setOnClickListener(this)
         button_kelas.setOnClickListener(this)
         button_pelanggaran.setOnClickListener(this)
+        button_penghargaan.setOnClickListener(this)
 
         nip = activity?.intent?.getStringExtra("NIP").toString()
 
@@ -57,6 +59,9 @@ class DashboardFragment : Fragment(), View.OnClickListener {
             }
             R.id.button_pelanggaran -> {
                 intent = Intent(context, PelanggaranActivity::class.java)
+            }
+            R.id.button_penghargaan -> {
+                intent = Intent(context, PenghargaanActivity::class.java)
             }
         }
         startActivity(intent)

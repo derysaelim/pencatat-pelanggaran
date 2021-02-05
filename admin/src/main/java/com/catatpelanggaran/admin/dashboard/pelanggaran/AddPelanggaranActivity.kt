@@ -73,8 +73,7 @@ class AddPelanggaranActivity : AppCompatActivity() {
 
     private fun deleteData(dataPelanggaran: Pelanggaran?) {
         val database = FirebaseDatabase.getInstance().reference
-        val builderdelete =
-            AlertDialog.Builder(this@AddPelanggaranActivity)
+        val builderdelete = AlertDialog.Builder(this@AddPelanggaranActivity)
         builderdelete.setTitle("Warning!")
         builderdelete.setMessage("Are you sure want to delete ${dataPelanggaran?.namaPelanggaran} ?")
         builderdelete.setPositiveButton("Delete") { i, _ ->
@@ -120,42 +119,23 @@ class AddPelanggaranActivity : AppCompatActivity() {
             val database = FirebaseDatabase.getInstance().reference
             val pelanggaranId = database.push().key
             val data = Pelanggaran(pelanggaranId, jenis, poin.toInt(), hukuman)
-            database.child("jenis_pelanggaran").addListenerForSingleValueEvent(object :
-                ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    if (snapshot.child(pelanggaranId.toString()).child(jenis).exists()) {
-                        Toast.makeText(this@AddPelanggaranActivity, "Sudah ada", Toast.LENGTH_SHORT)
-                            .show()
-                    } else {
-                        try {
-                            database.child("jenis_pelanggaran").child(pelanggaranId.toString())
-                                .setValue(data).addOnCompleteListener {
-                                    Toast.makeText(
-                                        this@AddPelanggaranActivity,
-                                        "berhasil",
-                                        Toast.LENGTH_SHORT
-                                    ).show()
-                                    finish()
-                                }
-                        } catch (e: Exception) {
-                            Toast.makeText(
-                                this@AddPelanggaranActivity,
-                                "check your internet",
-                                Toast.LENGTH_SHORT
-                            ).show()
-                        }
+            try {
+                database.child("jenis_pelanggaran").child(pelanggaranId.toString())
+                    .setValue(data).addOnCompleteListener {
+                        Toast.makeText(
+                            this@AddPelanggaranActivity,
+                            "berhasil",
+                            Toast.LENGTH_SHORT
+                        ).show()
+                        finish()
                     }
-                }
-
-                override fun onCancelled(error: DatabaseError) {
-                    Toast.makeText(
-                        this@AddPelanggaranActivity,
-                        "Something wrong",
-                        Toast.LENGTH_SHORT
-                    ).show()
-                }
-
-            })
+            } catch (e: Exception) {
+                Toast.makeText(
+                    this@AddPelanggaranActivity,
+                    "check your internet",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
     }
 

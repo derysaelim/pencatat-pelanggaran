@@ -123,7 +123,6 @@ class AddSiswaActivity : AppCompatActivity() {
         val namaSiswa = input_nama.text.toString()
         val kelas = kelas.selectedItem.toString().replace("\\s".toRegex(), "")
         val alamat = input_alamat.text.toString()
-        val nohp = input_nohp.text.toString()
         var jenkel = ""
 
         if (radio_laki.isChecked) {
@@ -132,7 +131,7 @@ class AddSiswaActivity : AppCompatActivity() {
             jenkel = "P"
         }
 
-        if (nis.isEmpty() || namaSiswa.isEmpty() || alamat.isEmpty() || nohp.isEmpty()) {
+        if (nis.isEmpty() || namaSiswa.isEmpty() || alamat.isEmpty()) {
 
         } else {
             database.child("Siswa").addListenerForSingleValueEvent(object : ValueEventListener {
@@ -141,7 +140,7 @@ class AddSiswaActivity : AppCompatActivity() {
                         Toast.makeText(this@AddSiswaActivity, "Sudah ada", Toast.LENGTH_SHORT)
                             .show()
                     } else {
-                        val data = Siswa(nis, namaSiswa, kelas, jenkel, alamat, nohp)
+                        val data = Siswa(nis, namaSiswa, kelas, jenkel, alamat)
                         val dataKelas = Siswa(nis, namaSiswa)
                         database.child("Siswa").child(nis).setValue(data).addOnCompleteListener {
                             database.child("daftar_kelas")
@@ -200,7 +199,6 @@ class AddSiswaActivity : AppCompatActivity() {
         val namaSiswa = input_nama.text.toString()
         val kelas = kelas.selectedItem.toString().replace("\\s".toRegex(), "")
         val alamat = input_alamat.text.toString()
-        val nohp = input_nohp.text.toString()
         var jenkel = ""
 
         if (radio_laki.isChecked) {
@@ -208,10 +206,10 @@ class AddSiswaActivity : AppCompatActivity() {
         } else if (radio_perempuan.isChecked) {
             jenkel = "P"
         }
-        val data = Siswa(nis, namaSiswa, kelas, jenkel, alamat, nohp)
+        val data = Siswa(nis, namaSiswa, kelas, jenkel, alamat)
         val dataKelas = Siswa(nis, namaSiswa)
 
-        if (nis.isEmpty() || namaSiswa.isEmpty() || alamat.isEmpty() || nohp.isEmpty()) {
+        if (nis.isEmpty() || namaSiswa.isEmpty() || alamat.isEmpty()) {
 
         } else {
 
@@ -270,7 +268,6 @@ class AddSiswaActivity : AppCompatActivity() {
             input_nis.setText(dataSiswa.nis)
             input_nama.setText(dataSiswa.nama_siswa)
             input_alamat.setText(dataSiswa.alamat)
-            input_nohp.setText(dataSiswa.telp_ortu)
             val jenkel = dataSiswa.jenkel.toString()
 
             if (jenkel == "L") {

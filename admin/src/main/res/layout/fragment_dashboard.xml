@@ -83,7 +83,6 @@
 
             </RelativeLayout>
         </com.google.android.material.card.MaterialCardView>
-
     </LinearLayout>
 
     <LinearLayout
@@ -98,6 +97,72 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/linearLayout"
+        app:layout_constraintVertical_bias="0.0">
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/data_pelanggaran"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:layout_weight="1"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="8dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="36dp">
+
+                <ImageButton
+                    android:id="@+id/button_pelanggaran"
+                    android:layout_width="wrap_content"
+                    android:layout_height="75dp"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/pelanggaran_icon"
+                    android:contentDescription="@string/image_decs" />
+
+            </RelativeLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/data_penghargaan"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
+            android:layout_weight="1"
+            app:cardCornerRadius="12dp"
+            app:cardElevation="8dp">
+
+            <RelativeLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:padding="36dp">
+
+                <ImageButton
+                    android:id="@+id/button_penghargaan"
+                    android:layout_width="wrap_content"
+                    android:layout_height="75dp"
+                    android:layout_centerInParent="true"
+                    android:background="@drawable/pelanggaran_icon"
+                    android:contentDescription="@string/image_decs" />
+
+            </RelativeLayout>
+        </com.google.android.material.card.MaterialCardView>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:id="@+id/linearLayout3"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingStart="16dp"
+        android:paddingEnd="16dp"
+        android:weightSum="2"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
         app:layout_constraintVertical_bias="0.0">
 
         <com.google.android.material.card.MaterialCardView
@@ -120,31 +185,6 @@
                     android:layout_height="75dp"
                     android:layout_centerInParent="true"
                     android:background="@drawable/guru_icon"
-                    android:contentDescription="@string/image_decs" />
-
-            </RelativeLayout>
-        </com.google.android.material.card.MaterialCardView>
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/data_pelanggaran"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="16dp"
-            android:layout_weight="1"
-            app:cardCornerRadius="12dp"
-            app:cardElevation="8dp">
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:padding="36dp">
-
-                <ImageButton
-                    android:id="@+id/button_pelanggaran"
-                    android:layout_width="wrap_content"
-                    android:layout_height="75dp"
-                    android:layout_centerInParent="true"
-                    android:background="@drawable/pelanggaran_icon"
                     android:contentDescription="@string/image_decs" />
 
             </RelativeLayout>

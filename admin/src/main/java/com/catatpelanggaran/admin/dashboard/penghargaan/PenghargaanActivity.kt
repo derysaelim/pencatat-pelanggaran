@@ -1,4 +1,4 @@
-package com.catatpelanggaran.admin.dashboard.pelanggaran
+package com.catatpelanggaran.admin.dashboard.penghargaan
 
 import android.app.SearchManager
 import android.content.Context
@@ -13,33 +13,31 @@ import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.widget.SearchView
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.catatpelanggaran.admin.R
-import com.catatpelanggaran.admin.adapter.AdapterGuru
-import com.catatpelanggaran.admin.adapter.AdapterPelanggaran
-import com.catatpelanggaran.admin.dashboard.guru.AddGuruActivity
-import com.catatpelanggaran.admin.model.Guru
-import com.catatpelanggaran.admin.model.Pelanggaran
+import com.catatpelanggaran.admin.adapter.AdapterPenghargaan
+import com.catatpelanggaran.admin.model.Penghargaan
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import kotlinx.android.synthetic.main.activity_guru.*
 import kotlinx.android.synthetic.main.activity_pelanggaran.*
-import kotlinx.android.synthetic.main.activity_pelanggaran.back_button
-import kotlinx.android.synthetic.main.activity_pelanggaran.progress_bar
+import kotlinx.android.synthetic.main.activity_penghargaan.*
+import kotlinx.android.synthetic.main.activity_penghargaan.back_button
+import kotlinx.android.synthetic.main.activity_penghargaan.progress_bar
 
-class PelanggaranActivity : AppCompatActivity() {
+class PenghargaanActivity : AppCompatActivity() {
 
-    var listPelanggaran: ArrayList<Pelanggaran>? = null
+    var listPenghargaan: ArrayList<Penghargaan>? = null
 
     lateinit var searchManager: SearchManager
     lateinit var searchView: SearchView
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_pelanggaran)
-        setSupportActionBar(toolbar_pelanggaran)
+        setContentView(R.layout.activity_penghargaan)
+        setSupportActionBar(toolbar_penghargaan)
 
         back_button.setOnClickListener { finish() }
+
         getData(null)
     }
 
@@ -48,61 +46,61 @@ class PelanggaranActivity : AppCompatActivity() {
         getData(null)
     }
 
-    private fun getData(query: String?) {
+    fun getData(query: String?) {
         progress_bar.visibility = View.VISIBLE
-        list_pelanggaran.layoutManager = LinearLayoutManager(this)
-        list_pelanggaran.hasFixedSize()
+        list_penghargaan.layoutManager = LinearLayoutManager(this)
+        list_penghargaan.hasFixedSize()
         val database = FirebaseDatabase.getInstance().reference
 
         if (query != null) {
-            listPelanggaran = arrayListOf<Pelanggaran>()
-            database.child("jenis_pelanggaran").orderByChild("namaPelanggaran").startAt(query)
+            listPenghargaan = arrayListOf()
+            database.child("jenis_penghargaan").orderByChild("namaPenghargaan").startAt(query)
                 .endAt(query + "\uf8ff").addValueEventListener(
                     object : ValueEventListener {
                         override fun onDataChange(snapshot: DataSnapshot) {
                             if (snapshot.exists()) {
-                                listPelanggaran!!.clear()
+                                listPenghargaan!!.clear()
                                 for (i in snapshot.children) {
-                                    val pelanggaran = i.getValue(Pelanggaran::class.java)
-                                    listPelanggaran!!.add(pelanggaran!!)
+                                    val penghargaan = i.getValue(Penghargaan::class.java)
+                                    listPenghargaan?.add(penghargaan!!)
                                 }
 
-                                val adapter = AdapterPelanggaran(listPelanggaran!!)
-                                list_pelanggaran.adapter = adapter
+                                val adapter = AdapterPenghargaan(listPenghargaan!!)
+                                list_penghargaan.adapter = adapter
                                 progress_bar.visibility = View.GONE
-                                pelanggaran_empty.visibility = View.GONE
-                                list_pelanggaran.visibility = View.VISIBLE
+                                penghargaan_empty.visibility = View.GONE
+                                list_penghargaan.visibility = View.VISIBLE
 
-                                adapter.onItemClick = { selectedPelanggaran ->
+                                adapter.onItemClick = { selectedPenghargaan ->
                                     val intent = Intent(
-                                        this@PelanggaranActivity,
-                                        AddPelanggaranActivity::class.java
+                                        this@PenghargaanActivity,
+                                        AddPenghargaanActivity::class.java
                                     )
                                     intent.putExtra(
-                                        AddPelanggaranActivity.DATA_PELANGGARAN,
-                                        selectedPelanggaran
+                                        AddPenghargaanActivity.DATA_PENGHARGAAN,
+                                        selectedPenghargaan
                                     )
                                     startActivity(intent)
                                 }
 
-                                adapter.onItemDeleteClick = { selectedPelanggaran ->
+                                adapter.onItemDeleteClick = { selectedPenghargaan ->
                                     val builderdelete =
-                                        AlertDialog.Builder(this@PelanggaranActivity)
+                                        AlertDialog.Builder(this@PenghargaanActivity)
                                     builderdelete.setTitle("Warning!")
-                                    builderdelete.setMessage("Are you sure want to delete ${selectedPelanggaran.namaPelanggaran} ?")
-                                    builderdelete.setPositiveButton("Delete") { i, _ ->
-                                        database.child("jenis_pelanggaran")
-                                            .child(selectedPelanggaran.idPelanggaran!!)
+                                    builderdelete.setMessage("Are you sure want to delete ${selectedPenghargaan.namaPenghargaan} ?")
+                                    builderdelete.setPositiveButton("Delete") { _, _ ->
+                                        database.child("jenis_penghargaan")
+                                            .child(selectedPenghargaan.id_penghargaan!!)
                                             .removeValue()
                                             .addOnCompleteListener {
                                                 Toast.makeText(
-                                                    this@PelanggaranActivity,
+                                                    this@PenghargaanActivity,
                                                     "Berhasil dihapus",
                                                     Toast.LENGTH_SHORT
                                                 ).show()
                                             }
                                     }
-                                    builderdelete.setNegativeButton("Cancel") { i, _ ->
+                                    builderdelete.setNegativeButton("Cancel") { _, _ ->
                                         Toast.makeText(
                                             applicationContext,
                                             "Data tidak jadi dihapus",
@@ -114,14 +112,14 @@ class PelanggaranActivity : AppCompatActivity() {
                                 }
 
                             } else {
-                                pelanggaran_empty.visibility = View.VISIBLE
-                                list_pelanggaran.visibility = View.GONE
+                                penghargaan_empty.visibility = View.VISIBLE
+                                list_penghargaan.visibility = View.GONE
                             }
                         }
 
                         override fun onCancelled(error: DatabaseError) {
                             Toast.makeText(
-                                this@PelanggaranActivity,
+                                this@PenghargaanActivity,
                                 "check ur inet",
                                 Toast.LENGTH_SHORT
                             ).show()
@@ -129,54 +127,54 @@ class PelanggaranActivity : AppCompatActivity() {
 
                     })
         } else {
-            listPelanggaran = arrayListOf<Pelanggaran>()
-            database.child("jenis_pelanggaran").orderByChild("namaPelanggaran")
+            listPenghargaan = arrayListOf()
+            database.child("jenis_penghargaan").orderByChild("namaPenghargaan")
                 .addValueEventListener(
                     object : ValueEventListener {
                         override fun onDataChange(snapshot: DataSnapshot) {
                             if (snapshot.exists()) {
-                                listPelanggaran!!.clear()
+                                listPenghargaan!!.clear()
                                 for (i in snapshot.children) {
-                                    val pelanggaran = i.getValue(Pelanggaran::class.java)
-                                    listPelanggaran?.add(pelanggaran!!)
+                                    val penghargaan = i.getValue(Penghargaan::class.java)
+                                    listPenghargaan?.add(penghargaan!!)
                                 }
 
-                                val adapter = AdapterPelanggaran(listPelanggaran!!)
-                                list_pelanggaran.adapter = adapter
+                                val adapter = AdapterPenghargaan(listPenghargaan!!)
+                                list_penghargaan.adapter = adapter
                                 progress_bar.visibility = View.GONE
-                                pelanggaran_empty.visibility = View.GONE
-                                list_pelanggaran.visibility = View.VISIBLE
+                                penghargaan_empty.visibility = View.GONE
+                                list_penghargaan.visibility = View.VISIBLE
 
-                                adapter.onItemClick = { selectedPelanggaran ->
+                                adapter.onItemClick = { selectedPenghargaan ->
                                     val intent = Intent(
-                                        this@PelanggaranActivity,
-                                        AddPelanggaranActivity::class.java
+                                        this@PenghargaanActivity,
+                                        AddPenghargaanActivity::class.java
                                     )
                                     intent.putExtra(
-                                        AddPelanggaranActivity.DATA_PELANGGARAN,
-                                        selectedPelanggaran
+                                        AddPenghargaanActivity.DATA_PENGHARGAAN,
+                                        selectedPenghargaan
                                     )
                                     startActivity(intent)
                                 }
 
-                                adapter.onItemDeleteClick = { selectedPelanggaran ->
+                                adapter.onItemDeleteClick = { selectedPenghargaan ->
                                     val builderdelete =
-                                        AlertDialog.Builder(this@PelanggaranActivity)
+                                        AlertDialog.Builder(this@PenghargaanActivity)
                                     builderdelete.setTitle("Warning!")
-                                    builderdelete.setMessage("Are you sure want to delete ${selectedPelanggaran.namaPelanggaran} ?")
-                                    builderdelete.setPositiveButton("Delete") { i, _ ->
-                                        database.child("jenis_pelanggaran")
-                                            .child(selectedPelanggaran.idPelanggaran!!)
+                                    builderdelete.setMessage("Are you sure want to delete ${selectedPenghargaan.namaPenghargaan} ?")
+                                    builderdelete.setPositiveButton("Delete") { _, _ ->
+                                        database.child("jenis_penghargaan")
+                                            .child(selectedPenghargaan.id_penghargaan!!)
                                             .removeValue()
                                             .addOnCompleteListener {
                                                 Toast.makeText(
-                                                    this@PelanggaranActivity,
+                                                    this@PenghargaanActivity,
                                                     "Berhasil dihapus",
                                                     Toast.LENGTH_SHORT
                                                 ).show()
                                             }
                                     }
-                                    builderdelete.setNegativeButton("Cancel") { i, _ ->
+                                    builderdelete.setNegativeButton("Cancel") { _, _ ->
                                         Toast.makeText(
                                             applicationContext,
                                             "Data tidak jadi dihapus",
@@ -188,14 +186,14 @@ class PelanggaranActivity : AppCompatActivity() {
                                 }
 
                             } else {
-                                pelanggaran_empty.visibility = View.VISIBLE
-                                list_pelanggaran.visibility = View.GONE
+                                penghargaan_empty.visibility = View.VISIBLE
+                                list_penghargaan.visibility = View.GONE
                             }
                         }
 
                         override fun onCancelled(error: DatabaseError) {
                             Toast.makeText(
-                                this@PelanggaranActivity,
+                                this@PenghargaanActivity,
                                 "check ur inet",
                                 Toast.LENGTH_SHORT
                             ).show()
@@ -215,7 +213,6 @@ class PelanggaranActivity : AppCompatActivity() {
         searchView.queryHint = "Cari"
         searchView.setOnQueryTextListener(object : SearchView.OnQueryTextListener {
             override fun onQueryTextSubmit(query: String): Boolean {
-//                getData(query)
                 return false
             }
 
@@ -231,7 +228,7 @@ class PelanggaranActivity : AppCompatActivity() {
     override fun onOptionsItemSelected(item: MenuItem): Boolean {
         return when (item.itemId) {
             R.id.add_button -> {
-                val intent = Intent(this, AddPelanggaranActivity::class.java)
+                val intent = Intent(this, AddPenghargaanActivity::class.java)
                 startActivity(intent)
                 true
             }

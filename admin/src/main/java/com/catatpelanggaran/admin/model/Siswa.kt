@@ -9,6 +9,5 @@ data class Siswa(
     val nama_siswa: String? = null,
     val id_kelas: String? = null,
     val jenkel: String? = null,
-    val alamat: String? = null,
-    val telp_ortu: String? = null
+    val alamat: String? = null
 ) : Parcelable
