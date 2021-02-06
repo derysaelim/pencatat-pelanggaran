@@ -37,7 +37,7 @@ class AdapterDataPelanggar(val siswa: ArrayList<Catat>) : RecyclerView.Adapter<A
                 val absen = position + 1
 
                 nama_siswa.text = dataCatat.nama_siswa
-                poin_pel.text = "Poin = ${dataCatat.poinPelanggaran}"
+                poin_pel.text = "Poin = ${dataCatat.poin}"
                 no_absen.text = absen.toString()
 
                 more_button.setOnClickListener {

@@ -30,10 +30,10 @@ class AdapterPelanggaran(val pelanggaran: ArrayList<Catat>) :
         fun bind(dataCatat: Catat) {
             with(itemView) {
                 val nomor = position + 1
-
-                nama_pel.text = dataCatat.namaPelanggaran
-                poin_pel.text = "Poin = ${dataCatat.poinPelanggaran}"
-                no_absenpel.text = nomor.toString()
+//
+//                nama_pel.text = dataCatat.namaPelanggaran
+//                poin_pel.text = "Poin = ${dataCatat.poinPelanggaran}"
+//                no_absenpel.text = nomor.toString()
             }
         }
 

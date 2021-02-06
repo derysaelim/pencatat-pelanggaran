@@ -36,7 +36,7 @@ class AdapterSiswa(val siswa: ArrayList<Catat>) : RecyclerView.Adapter<AdapterSi
                 val absen = position + 1
 
                 nama_siswa.text = dataCatat.nama_siswa
-                nis_siswa.text = dataCatat.poinPelanggaran.toString()
+                nis_siswa.text = dataCatat.poin.toString()
                 no_absen.text = absen.toString()
                 nis_siswa.text = " "
 
@@ -46,7 +46,7 @@ class AdapterSiswa(val siswa: ArrayList<Catat>) : RecyclerView.Adapter<AdapterSi
                         if (snapshot.child(dataCatat.nis!!).exists()) {
                             nis_siswa.text = "poin = ${
                                 snapshot.child(dataCatat.nis)
-                                    .child("poinPelanggaran").value.toString()
+                                    .child("poin").value.toString()
                             }"
                         } else {
                             nis_siswa.text = "poin = 0"

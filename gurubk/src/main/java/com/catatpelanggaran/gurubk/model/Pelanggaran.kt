@@ -7,5 +7,7 @@ data class Pelanggaran(
     val idPelanggaran: String? = null,
     val namaPelanggaran: String? = null,
     val poinPelanggaran: Int? = null,
-    val hukuman: String? = null
+    val hukuman: String? = null,
+    val keterangan: String? = null,
+    val tanggal: String? = null
 ) : Parcelable

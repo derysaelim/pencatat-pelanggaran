@@ -3,13 +3,13 @@ package com.catatpelanggaran.gurubk.dashboard.catat
 import android.app.DatePickerDialog
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
 import android.widget.AdapterView
 import android.widget.ArrayAdapter
 import android.widget.Toast
 import com.catatpelanggaran.gurubk.R
 import com.catatpelanggaran.gurubk.model.Catat
+import com.catatpelanggaran.gurubk.model.Pelanggaran
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -30,6 +30,7 @@ class CatatPelanggaranActivity : AppCompatActivity() {
     lateinit var dataListPelanggaran: ArrayList<String>
     lateinit var dataListHukuman: ArrayList<String>
     lateinit var dataListPoin: ArrayList<String>
+    lateinit var dataListId: ArrayList<String>
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -51,6 +52,7 @@ class CatatPelanggaranActivity : AppCompatActivity() {
         dataListHukuman = ArrayList()
         dataListPoin = ArrayList()
         dataListPelanggaran = ArrayList()
+        dataListId = ArrayList()
         adapterPelanggaran = ArrayAdapter(
             this@CatatPelanggaranActivity,
             android.R.layout.simple_spinner_dropdown_item,
@@ -74,39 +76,10 @@ class CatatPelanggaranActivity : AppCompatActivity() {
             }
         }
 
-        var dataCatat = intent.getParcelableExtra<Catat>(DATA_PELANGGAR)
-
-        val database = FirebaseDatabase.getInstance().reference
-        database.child("Pelanggar").child(dataCatat?.nis!!)
-            .addListenerForSingleValueEvent(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    if (snapshot.exists()) {
-                        val nama = snapshot.child("nama_siswa").value.toString()
-                        val tanggal = snapshot.child("tanggal").value.toString()
-                        val nis = snapshot.child("nis").value.toString()
-                        val poin = snapshot.child("poinPelanggaran").value.toString()
-                        val namaPelanggaran = snapshot.child("namaPelanggaran").value.toString()
-                        val keterangan = snapshot.child("keterangan").value.toString()
-                        val hukuman = snapshot.child("hukuman").value.toString()
-
-                        dataCatat = Catat(
-                            nis,
-                            nama,
-                            tanggal,
-                            namaPelanggaran,
-                            keterangan,
-                            hukuman,
-                            poin.toInt()
-                        )
-                    }
-                }
-
-                override fun onCancelled(error: DatabaseError) {}
-
-            })
+        val dataCatat = intent.getParcelableExtra<Catat>(DATA_PELANGGAR)
 
         if (dataCatat != null) {
-            if (dataCatat!!.tanggal != null) {
+            if (dataCatat.poin != null) {
                 setStatus(false)
                 setJenpel(true)
                 getData(dataCatat)
@@ -122,8 +95,8 @@ class CatatPelanggaranActivity : AppCompatActivity() {
         }
 
         button_simpanpelanggaran.setOnClickListener {
-            if (dataCatat?.tanggal != null) {
-                editData(dataCatat!!)
+            if (dataCatat?.poin != null) {
+                editData(dataCatat)
             } else {
                 insertData(dataCatat!!)
             }
@@ -144,8 +117,10 @@ class CatatPelanggaranActivity : AppCompatActivity() {
         val keterangan = input_keterangan.text.toString()
         val poin = dataListPoin[idpelanggaran.toInt()].toInt()
         val hukuman = dataListHukuman[idpelanggaran.toInt()]
+        val id = dataListId[idpelanggaran.toInt()]
 
-        val data = Catat(nis, namaSiswa, tanggal, jenispel, keterangan, hukuman, poin)
+        val data = Catat(nis, namaSiswa, poin)
+        val dataPelanggar = Pelanggaran(id, jenispel, poin, hukuman, keterangan, tanggal)
 
         if (tanggal.isEmpty() || nis.isEmpty() || namaSiswa.isEmpty() || keterangan.isEmpty()) {
             if (tanggal.isEmpty()) {
@@ -163,24 +138,21 @@ class CatatPelanggaranActivity : AppCompatActivity() {
 
         }
         else {
-            database.child("Pelanggar").addValueEventListener(object : ValueEventListener {
-                override fun onDataChange(snapshot: DataSnapshot) {
-                    try {
-                        database.child("Pelanggar").child(nis).setValue(data).addOnCompleteListener {
-                            Toast.makeText(this@CatatPelanggaranActivity, "Berhasil!", Toast.LENGTH_SHORT).show()
+            try {
+                database.child("Pelanggar").child(nis).setValue(data).addOnCompleteListener {
+                    database.child("Pelanggar").child(nis).child(id).setValue(dataPelanggar)
+                        .addOnCompleteListener {
+                            Toast.makeText(this, "berhasil", Toast.LENGTH_SHORT).show()
                             finish()
                         }
-                    }
-                    catch (e: Exception) {
-                        Toast.makeText(this@CatatPelanggaranActivity, "Check your internet", Toast.LENGTH_SHORT).show()
-                    }
-
                 }
-
-                override fun onCancelled(error: DatabaseError) {
-                    TODO("Not yet implemented")
-                }
-            })
+            } catch (e: Exception) {
+                Toast.makeText(
+                    this@CatatPelanggaranActivity,
+                    "Check your internet",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
         }
     }
 
@@ -196,35 +168,35 @@ class CatatPelanggaranActivity : AppCompatActivity() {
         val poin = dataListPoin[idpelanggaran.toInt()].toInt()
         val hukuman = dataListHukuman[idpelanggaran.toInt()]
 
-        val update = Catat(
-            nis, namaSiswa, "${dataCatat.tanggal + ", " + tanggal}",
-            "${dataCatat.namaPelanggaran + ", " + jenispel}",
-            "${dataCatat.keterangan + ", " + keterangan}",
-            "${dataCatat.hukuman + ", " + hukuman}",
-            dataCatat.poinPelanggaran + poin
-        )
-        if (tanggal.isEmpty() || nis.isEmpty() || namaSiswa.isEmpty() || keterangan.isEmpty()) {
-
-        } else {
-            try {
-                database.child("Pelanggar").child(nis).setValue(update).addOnSuccessListener {
-                    Toast.makeText(this, "Berhasil", Toast.LENGTH_SHORT).show()
-                }.addOnFailureListener {
-                    Toast.makeText(this, "Check your internet", Toast.LENGTH_SHORT).show()
-                }
-            } catch (e: Exception) {
-                Toast.makeText(this, "Check your internet", Toast.LENGTH_SHORT).show()
-            }
-        }
+//        val update = Catat(
+//            nis, namaSiswa, "${dataCatat.tanggal + ", " + tanggal}",
+//            "${dataCatat.namaPelanggaran + ", " + jenispel}",
+//            "${dataCatat.keterangan + ", " + keterangan}",
+//            "${dataCatat.hukuman + ", " + hukuman}",
+//            dataCatat.poinPelanggaran + poin
+//        )
+//        if (tanggal.isEmpty() || nis.isEmpty() || namaSiswa.isEmpty() || keterangan.isEmpty()) {
+//
+//        } else {
+//            try {
+//                database.child("Pelanggar").child(nis).setValue(update).addOnSuccessListener {
+//                    Toast.makeText(this, "Berhasil", Toast.LENGTH_SHORT).show()
+//                }.addOnFailureListener {
+//                    Toast.makeText(this, "Check your internet", Toast.LENGTH_SHORT).show()
+//                }
+//            } catch (e: Exception) {
+//                Toast.makeText(this, "Check your internet", Toast.LENGTH_SHORT).show()
+//            }
+//        }
     }
 
     private fun getData(dataCatat: Catat?) {
         dataCatat?.let {
-            input_tanggal.setText(dataCatat.tanggal)
+//            input_tanggal.setText(dataCatat.tanggal)
             detail_nis.setText(dataCatat.nis.toString())
             detail_nama.setText(dataCatat.nama_siswa)
-            detail_pelanggaran.setText(dataCatat.namaPelanggaran)
-            input_keterangan.setText(dataCatat.keterangan)
+//            detail_pelanggaran.setText(dataCatat.namaPelanggaran)
+//            input_keterangan.setText(dataCatat.keterangan)
         }
     }
 
@@ -249,6 +221,7 @@ class CatatPelanggaranActivity : AppCompatActivity() {
                     dataListPelanggaran.add(i.child("namaPelanggaran").value.toString())
                     dataListPoin.add(i.child("poinPelanggaran").value.toString())
                     dataListHukuman.add(i.child("hukuman").value.toString())
+                    dataListId.add(i.child("idPelanggaran").value.toString())
                 }
                 adapterPelanggaran.notifyDataSetChanged()
             }
