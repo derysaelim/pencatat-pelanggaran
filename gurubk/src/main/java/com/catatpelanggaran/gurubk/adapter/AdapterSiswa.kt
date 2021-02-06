@@ -45,7 +45,7 @@ class AdapterSiswa(val siswa: ArrayList<Catat>) : RecyclerView.Adapter<AdapterSi
                     override fun onDataChange(snapshot: DataSnapshot) {
                         if (snapshot.child(dataCatat.nis!!).exists()) {
                             nis_siswa.text = "poin = ${
-                                snapshot.child(dataCatat.nis)
+                                snapshot.child(dataCatat.nis).child("dataPelanggar")
                                     .child("poin").value.toString()
                             }"
                         } else {

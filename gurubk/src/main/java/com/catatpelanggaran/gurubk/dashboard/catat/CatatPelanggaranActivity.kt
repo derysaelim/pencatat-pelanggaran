@@ -76,10 +76,23 @@ class CatatPelanggaranActivity : AppCompatActivity() {
             }
         }
 
-        val dataCatat = intent.getParcelableExtra<Catat>(DATA_PELANGGAR)
+        var dataCatat = intent.getParcelableExtra<Catat>(DATA_PELANGGAR)
+        val database = FirebaseDatabase.getInstance().reference
+        database.child("Pelanggar").child(dataCatat!!.nis.toString())
+            .addListenerForSingleValueEvent(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        val poin = snapshot.child("dataPelanggar").child("poin").value.toString()
+                        dataCatat = Catat(dataCatat!!.nis, dataCatat!!.nama_siswa, poin.toInt())
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {}
+
+            })
 
         if (dataCatat != null) {
-            if (dataCatat.poin != null) {
+            if (dataCatat!!.poin != null) {
                 setStatus(false)
                 setJenpel(true)
                 getData(dataCatat)
@@ -96,7 +109,7 @@ class CatatPelanggaranActivity : AppCompatActivity() {
 
         button_simpanpelanggaran.setOnClickListener {
             if (dataCatat?.poin != null) {
-                editData(dataCatat)
+                editData(dataCatat!!)
             } else {
                 insertData(dataCatat!!)
             }
@@ -139,13 +152,14 @@ class CatatPelanggaranActivity : AppCompatActivity() {
         }
         else {
             try {
-                database.child("Pelanggar").child(nis).setValue(data).addOnCompleteListener {
-                    database.child("Pelanggar").child(nis).child(id).setValue(dataPelanggar)
-                        .addOnCompleteListener {
-                            Toast.makeText(this, "berhasil", Toast.LENGTH_SHORT).show()
-                            finish()
-                        }
-                }
+                database.child("Pelanggar").child(nis).child("dataPelanggar").setValue(data)
+                    .addOnCompleteListener {
+                        database.child("Pelanggar").child(nis).child(id).setValue(dataPelanggar)
+                            .addOnCompleteListener {
+                                Toast.makeText(this, "berhasil", Toast.LENGTH_SHORT).show()
+                                finish()
+                            }
+                    }
             } catch (e: Exception) {
                 Toast.makeText(
                     this@CatatPelanggaranActivity,
@@ -157,7 +171,6 @@ class CatatPelanggaranActivity : AppCompatActivity() {
     }
 
     private fun editData(dataCatat: Catat) {
-
         val database = FirebaseDatabase.getInstance().reference
         val tanggal = input_tanggal.text.toString()
         val nis = dataCatat.nis.toString()
@@ -167,27 +180,42 @@ class CatatPelanggaranActivity : AppCompatActivity() {
         val keterangan = input_keterangan.text.toString()
         val poin = dataListPoin[idpelanggaran.toInt()].toInt()
         val hukuman = dataListHukuman[idpelanggaran.toInt()]
+        val id = dataListId[idpelanggaran.toInt()]
 
-//        val update = Catat(
-//            nis, namaSiswa, "${dataCatat.tanggal + ", " + tanggal}",
-//            "${dataCatat.namaPelanggaran + ", " + jenispel}",
-//            "${dataCatat.keterangan + ", " + keterangan}",
-//            "${dataCatat.hukuman + ", " + hukuman}",
-//            dataCatat.poinPelanggaran + poin
-//        )
-//        if (tanggal.isEmpty() || nis.isEmpty() || namaSiswa.isEmpty() || keterangan.isEmpty()) {
-//
-//        } else {
-//            try {
-//                database.child("Pelanggar").child(nis).setValue(update).addOnSuccessListener {
-//                    Toast.makeText(this, "Berhasil", Toast.LENGTH_SHORT).show()
-//                }.addOnFailureListener {
-//                    Toast.makeText(this, "Check your internet", Toast.LENGTH_SHORT).show()
-//                }
-//            } catch (e: Exception) {
-//                Toast.makeText(this, "Check your internet", Toast.LENGTH_SHORT).show()
-//            }
-//        }
+        val data = Catat(nis, namaSiswa, dataCatat.poin!! + poin)
+        val dataPelanggar = Pelanggaran(id, jenispel, poin, hukuman, keterangan, tanggal)
+
+        if (tanggal.isEmpty() || nis.isEmpty() || namaSiswa.isEmpty() || keterangan.isEmpty()) {
+            if (tanggal.isEmpty()) {
+                input_tanggal.error = "Data tidak boleh kosong!"
+            }
+            if (nis.isEmpty()) {
+                detail_nis.error = "Data tidak boleh kosong!"
+            }
+            if (namaSiswa.isEmpty()) {
+                detail_nama.error = "Data tidak boleh kosong!"
+            }
+            if (keterangan.isEmpty()) {
+                input_keterangan.error = "Data tidak boleh kosong!"
+            }
+        } else {
+            try {
+                database.child("Pelanggar").child(nis).child("dataPelanggar").setValue(data)
+                    .addOnCompleteListener {
+                        database.child("Pelanggar").child(nis).child(id).setValue(dataPelanggar)
+                            .addOnCompleteListener {
+                                Toast.makeText(this, "berhasil", Toast.LENGTH_SHORT).show()
+                                finish()
+                            }
+                    }
+            } catch (e: Exception) {
+                Toast.makeText(
+                    this@CatatPelanggaranActivity,
+                    "Check your internet",
+                    Toast.LENGTH_SHORT
+                ).show()
+            }
+        }
     }
 
     private fun getData(dataCatat: Catat?) {
