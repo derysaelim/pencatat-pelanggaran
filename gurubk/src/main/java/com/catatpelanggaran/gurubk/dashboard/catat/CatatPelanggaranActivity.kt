@@ -35,6 +35,7 @@ class CatatPelanggaranActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_catat_pelanggaran)
+        setSupportActionBar(toolbar_catat)
 
         val c = Calendar.getInstance()
         val year = c.get(Calendar.YEAR)
@@ -88,7 +89,6 @@ class CatatPelanggaranActivity : AppCompatActivity() {
                 }
 
                 override fun onCancelled(error: DatabaseError) {}
-
             })
 
         if (dataCatat != null) {
@@ -115,7 +115,7 @@ class CatatPelanggaranActivity : AppCompatActivity() {
             }
         }
 
-        back_button.setOnClickListener {
+        back_pelanggaran.setOnClickListener {
             onBackPressed()
         }
     }

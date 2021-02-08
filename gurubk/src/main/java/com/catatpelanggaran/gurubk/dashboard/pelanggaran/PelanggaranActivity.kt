@@ -18,12 +18,11 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.activity_catat_pelanggaran.*
-import kotlinx.android.synthetic.main.activity_catat_pelanggaran.back_button
 import kotlinx.android.synthetic.main.activity_pelanggaran.*
 
 class PelanggaranActivity : AppCompatActivity() {
 
-    var listPelanggaran: ArrayList<Catat>? = null
+    var listPelanggaran: ArrayList<Pelanggaran>? = null
 
     lateinit var searchManager: SearchManager
     lateinit var searchView: SearchView
@@ -51,15 +50,15 @@ class PelanggaranActivity : AppCompatActivity() {
         val database = FirebaseDatabase.getInstance().reference
 
         if (query != null){
-            listPelanggaran = arrayListOf<Catat>()
+            listPelanggaran = arrayListOf()
             database.child("jenis_pelanggaran").orderByChild("namaPelanggaran").startAt(query).endAt(query + "\uf8ff")
                 .addValueEventListener(
                     object : ValueEventListener {
                         override fun onDataChange(snapshot: DataSnapshot) {
-                            if (snapshot.exists()){
+                            if (snapshot.exists()) {
                                 listPelanggaran!!.clear()
-                                for (i in snapshot.children){
-                                    val pelanggaran = i.getValue(Catat::class.java)
+                                for (i in snapshot.children) {
+                                    val pelanggaran = i.getValue(Pelanggaran::class.java)
                                     listPelanggaran!!.add(pelanggaran!!)
                                 }
 
@@ -68,8 +67,7 @@ class PelanggaranActivity : AppCompatActivity() {
                                 progress_bar.visibility = View.GONE
                                 pelanggaran_empty.visibility = View.GONE
                                 list_pelanggaran.visibility = View.VISIBLE
-                            }
-                            else {
+                            } else {
                                 pelanggaran_empty.visibility = View.VISIBLE
                                 list_pelanggaran.visibility = View.GONE
                             }
@@ -93,8 +91,8 @@ class PelanggaranActivity : AppCompatActivity() {
                         override fun onDataChange(snapshot: DataSnapshot) {
                             if (snapshot.exists()) {
                                 listPelanggaran!!.clear()
-                                for (i in snapshot.children){
-                                    val pelanggaran = i.getValue(Catat::class.java)
+                                for (i in snapshot.children) {
+                                    val pelanggaran = i.getValue(Pelanggaran::class.java)
                                     listPelanggaran?.add(pelanggaran!!)
                                 }
 
@@ -103,8 +101,7 @@ class PelanggaranActivity : AppCompatActivity() {
                                 progress_bar.visibility = View.GONE
                                 pelanggaran_empty.visibility = View.GONE
                                 list_pelanggaran.visibility = View.VISIBLE
-                            }
-                            else {
+                            } else {
                                 pelanggaran_empty.visibility = View.VISIBLE
                                 list_pelanggaran.visibility = View.GONE
                             }

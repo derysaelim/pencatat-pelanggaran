@@ -34,28 +34,9 @@ class AdapterSiswa(val siswa: ArrayList<Catat>) : RecyclerView.Adapter<AdapterSi
         fun bind(dataCatat: Catat){
             with(itemView) {
                 val absen = position + 1
-
                 nama_siswa.text = dataCatat.nama_siswa
-                nis_siswa.text = dataCatat.poin.toString()
+                nis_siswa.text = dataCatat.nis
                 no_absen.text = absen.toString()
-                nis_siswa.text = " "
-
-                val database = FirebaseDatabase.getInstance().reference
-                database.child("Pelanggar").addValueEventListener(object : ValueEventListener {
-                    override fun onDataChange(snapshot: DataSnapshot) {
-                        if (snapshot.child(dataCatat.nis!!).exists()) {
-                            nis_siswa.text = "poin = ${
-                                snapshot.child(dataCatat.nis).child("dataPelanggar")
-                                    .child("poin").value.toString()
-                            }"
-                        } else {
-                            nis_siswa.text = "poin = 0"
-                        }
-                    }
-
-                    override fun onCancelled(error: DatabaseError) {}
-
-                })
             }
         }
 

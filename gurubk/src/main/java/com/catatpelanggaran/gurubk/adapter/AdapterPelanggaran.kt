@@ -12,11 +12,15 @@ import com.catatpelanggaran.gurubk.model.Pelanggaran
 import kotlinx.android.synthetic.main.item_pelanggaran.view.*
 import kotlinx.android.synthetic.main.item_siswa.view.*
 
-class AdapterPelanggaran(val pelanggaran: ArrayList<Catat>) :
+class AdapterPelanggaran(val pelanggaran: ArrayList<Pelanggaran>) :
     RecyclerView.Adapter<AdapterPelanggaran.ViewHolder>() {
 
-    override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AdapterPelanggaran.ViewHolder {
-        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_pelanggaran, parent, false)
+    override fun onCreateViewHolder(
+        parent: ViewGroup,
+        viewType: Int
+    ): AdapterPelanggaran.ViewHolder {
+        val view =
+            LayoutInflater.from(parent.context).inflate(R.layout.item_pelanggaran, parent, false)
         return ViewHolder(view)
     }
 
@@ -27,13 +31,12 @@ class AdapterPelanggaran(val pelanggaran: ArrayList<Catat>) :
     }
 
     inner class ViewHolder(itemView: View) : RecyclerView.ViewHolder(itemView) {
-        fun bind(dataCatat: Catat) {
+        fun bind(dataPelanggaran: Pelanggaran) {
             with(itemView) {
                 val nomor = position + 1
-//
-//                nama_pel.text = dataCatat.namaPelanggaran
-//                poin_pel.text = "Poin = ${dataCatat.poinPelanggaran}"
-//                no_absenpel.text = nomor.toString()
+                nama_pel.text = dataPelanggaran.namaPelanggaran
+                poin_pel.text = "Poin = ${dataPelanggaran.poinPelanggaran}"
+                no_absenpel.text = nomor.toString()
             }
         }
 

@@ -20,7 +20,6 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.activity_catat_pelanggaran.*
-import kotlinx.android.synthetic.main.activity_catat_pelanggaran.back_button
 import kotlinx.android.synthetic.main.activity_kelas.*
 
 class KelasActivity : AppCompatActivity() {

@@ -19,7 +19,6 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.activity_catat_pelanggaran.*
-import kotlinx.android.synthetic.main.activity_catat_pelanggaran.back_button
 import kotlinx.android.synthetic.main.activity_data_pelanggar.*
 import kotlinx.android.synthetic.main.activity_siswa.*
 import kotlinx.android.synthetic.main.activity_siswa.progress_bar
@@ -41,7 +40,7 @@ class DataPelanggarActivity : AppCompatActivity() {
         setContentView(R.layout.activity_data_pelanggar)
         setSupportActionBar(toolbar_datapel)
 
-        back_button.setOnClickListener {
+        back_data.setOnClickListener {
             onBackPressed()
         }
 

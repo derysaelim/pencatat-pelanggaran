@@ -19,7 +19,6 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import kotlinx.android.synthetic.main.activity_catat_pelanggaran.back_button
 import kotlinx.android.synthetic.main.activity_siswa.*
 
 class SiswaActivity : AppCompatActivity() {
@@ -104,10 +103,10 @@ class SiswaActivity : AppCompatActivity() {
                                         this@SiswaActivity,
                                         CatatPenghargaanActivity::class.java
                                     )
-//                                    siswa.putExtra(
-//                                        CatatPelanggaranActivity.DATA_PELANGGAR,
-//                                        selectedSiswa
-//                                    )
+                                    siswa.putExtra(
+                                        CatatPenghargaanActivity.DATA_PENGHARGAAN,
+                                        selectedSiswa
+                                    )
                                     startActivity(siswa)
                                 }
                                 val dialogCatat = alertBuilder.create()
@@ -162,15 +161,14 @@ class SiswaActivity : AppCompatActivity() {
                                         this@SiswaActivity,
                                         CatatPenghargaanActivity::class.java
                                     )
-//                                    siswa.putExtra(
-//                                        CatatPelanggaranActivity.DATA_PELANGGAR,
-//                                        selectedSiswa
-//                                    )
+                                    siswa.putExtra(
+                                        CatatPenghargaanActivity.DATA_PENGHARGAAN,
+                                        selectedSiswa
+                                    )
                                     startActivity(siswa)
                                 }
                                 val dialogCatat = alertBuilder.create()
                                 dialogCatat.show()
-
                             }
                         } else {
                             siswa_empty.visibility = View.VISIBLE
