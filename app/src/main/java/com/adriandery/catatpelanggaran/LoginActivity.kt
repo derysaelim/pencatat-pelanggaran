@@ -102,6 +102,12 @@ class LoginActivity : AppCompatActivity() {
 
             }
         }
+
+        button_daftar.setOnClickListener {
+            val intent = Intent(this, RegisterActivity::class.java)
+            startActivity(intent)
+
+        }
     }
 
     override fun onStart() {
