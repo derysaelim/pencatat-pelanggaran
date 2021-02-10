@@ -3,12 +3,20 @@
     xmlns:dist="http://schemas.android.com/apk/distribution"
     package="com.catatpelanggaran.orangtua">
 
+    <uses-permission android:name="android.permission.INTERNET" />
+
     <dist:module
         dist:instant="false"
         dist:title="@string/title_orangtua">
         <dist:delivery>
             <dist:install-time />
         </dist:delivery>
+
         <dist:fusing dist:include="true" />
     </dist:module>
+
+    <application android:theme="@style/NoBorder">
+        <activity android:name=".OrtuActivity" />
+    </application>
+
 </manifest>

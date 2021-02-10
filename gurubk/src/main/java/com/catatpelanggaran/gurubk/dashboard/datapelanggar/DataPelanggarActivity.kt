@@ -59,7 +59,7 @@ class DataPelanggarActivity : AppCompatActivity() {
         val database = FirebaseDatabase.getInstance().reference
 
         if (query != null){
-            listSiswa = arrayListOf<Catat>()
+            listSiswa = arrayListOf()
             database.child("Pelanggar").orderByChild("nama_siswa").startAt(query).endAt(query + "\uf8ff")
                 .addValueEventListener(object : ValueEventListener {
                     override fun onCancelled(error: DatabaseError) {
@@ -114,7 +114,7 @@ class DataPelanggarActivity : AppCompatActivity() {
                 })
         }
         else {
-            listSiswa = arrayListOf<Catat>()
+            listSiswa = arrayListOf()
             database.child("Pelanggar").orderByChild("nama_siswa")
                 .addValueEventListener(object : ValueEventListener {
                     override fun onCancelled(error: DatabaseError) {
