@@ -102,6 +102,12 @@ class LoginActivity : AppCompatActivity() {
 
             }
         }
+
+        button_daftar.setOnClickListener {
+            val intent = Intent(this, RegisterActivity::class.java)
+            startActivity(intent)
+
+        }
     }
 
     override fun onStart() {
@@ -136,10 +142,7 @@ class LoginActivity : AppCompatActivity() {
                 intent.putExtra("NIP", nip)
                 startActivity(intent)
             } else {
-                val intent =
-                    Intent(this, Class.forName("com.catatpelanggaran.orangtua.OrtuActivity"))
-                intent.putExtra("NIS", nip)
-                startActivity(intent)
+
             }
         }
     }
