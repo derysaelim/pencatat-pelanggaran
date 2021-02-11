@@ -142,6 +142,7 @@ class LoginActivity : AppCompatActivity() {
                 intent.putExtra("NIP", nip)
                 startActivity(intent)
             } else {
+                val intent = Intent(this, Class.forName("com.catatpelanggaran.orangtua."))
 
             }
         }
