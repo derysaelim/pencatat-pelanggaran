@@ -39,7 +39,6 @@ class ProfileFragment : Fragment() {
 
     private fun getData(nip: String) {
         val database = FirebaseDatabase.getInstance().reference
-
         database.child("Guru").child(nip).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
                 input_nippetugas.setText(snapshot.child("nip").value.toString())

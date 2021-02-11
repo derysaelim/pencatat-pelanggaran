@@ -4,6 +4,7 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.MenuItem
+import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.core.view.GravityCompat
 import androidx.fragment.app.Fragment
@@ -12,8 +13,13 @@ import com.adriandery.catatpelanggaran.SharedPreferences
 import com.catatpelanggaran.orangtua.dashboard.DashboardFragment
 import com.catatpelanggaran.orangtua.profile.EditFragment
 import com.google.android.material.navigation.NavigationView
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.activity_ortu.*
 import kotlinx.android.synthetic.main.app_bar_main.*
+import kotlinx.android.synthetic.main.nav_header_main.*
 
 class OrtuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
 
@@ -22,6 +28,7 @@ class OrtuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_ortu)
+        setSupportActionBar(toolbar)
 
         nis = intent.getStringExtra("NIS").toString()
         getData(nis)
@@ -33,6 +40,7 @@ class OrtuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             R.string.navigation_drawer_open,
             R.string.navigation_drawer_close
         )
+
         drawer_layout.addDrawerListener(toggle)
         toggle.syncState()
 
@@ -47,7 +55,27 @@ class OrtuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun getData(nis: String) {
-        TODO("Not yet implemented")
+        val database = FirebaseDatabase.getInstance().reference
+        database.child("Orang_Tua").addListenerForSingleValueEvent(object : ValueEventListener {
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(this@OrtuActivity, "Error", Toast.LENGTH_SHORT).show()
+            }
+
+            override fun onDataChange(snapshot: DataSnapshot) {
+                if (snapshot.child(nis).exists()) {
+                    val nama = snapshot.child(nis).child("nama").value.toString()
+                    nama_orangtua.text = nama
+                    nama_ortu.text = nama
+                    nis_anak.text = nis
+                } else {
+                    val intent = Intent(this@OrtuActivity, LoginActivity::class.java)
+                    startActivity(intent)
+                    SharedPreferences.clearData(this@OrtuActivity)
+                    finish()
+                }
+            }
+
+        })
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
