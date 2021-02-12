@@ -124,6 +124,9 @@ class LoginActivity : AppCompatActivity() {
             } else if (SharedPreferences.getDataAs(this).equals("gurubk")) {
                 goToModule("gurubk", nip)
                 finish()
+            } else if (SharedPreferences.getDataAs(this).equals("orangtua")) {
+                goToModule("orangtua", nip)
+                finish()
             }
         }
     }
@@ -141,8 +144,10 @@ class LoginActivity : AppCompatActivity() {
                     Intent(this, Class.forName("com.catatpelanggaran.gurubk.GurubkActivity"))
                 intent.putExtra("NIP", nip)
                 startActivity(intent)
-            } else {
-
+            } else if (moduleName == "orangtua") {
+                val intent = Intent(this, Class.forName("com.catatpelanggaran.orangtua.OrtuActivity"))
+                intent.putExtra("NIS", nip)
+                startActivity(intent)
             }
         }
     }

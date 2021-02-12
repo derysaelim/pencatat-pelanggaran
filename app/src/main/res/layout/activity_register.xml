@@ -48,8 +48,10 @@
         android:background="@drawable/custom_edittext"
         android:padding="8dp"
         android:inputType="number"
-        android:hint="ID"
-        android:fontFamily="@font/roboto" />
+        android:hint="Username"
+        android:fontFamily="@font/roboto"
+        android:drawablePadding="8dp"
+        android:drawableLeft="@drawable/username_icon"/>
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/input_nama"
@@ -61,7 +63,9 @@
         android:layout_marginTop="12dp"
         android:inputType="textPersonName"
         android:hint="Nama Lengkap"
-        android:fontFamily="@font/roboto" />
+        android:fontFamily="@font/roboto"
+        android:drawableStart="@drawable/name_icon"
+        android:drawablePadding="8dp"/>
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/input_nohp"
@@ -73,19 +77,24 @@
         android:layout_marginTop="12dp"
         android:inputType="number"
         android:hint="Nomor HP"
-        android:fontFamily="@font/roboto" />
+        android:fontFamily="@font/roboto"
+        android:drawableStart="@drawable/phone_icon"
+        android:drawablePadding="8dp"/>
 
     <com.google.android.material.textfield.TextInputEditText
-        android:id="@+id/input_password"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:id="@+id/input_password"
         android:layout_below="@+id/input_nohp"
         android:background="@drawable/custom_edittext"
         android:padding="8dp"
         android:layout_marginTop="12dp"
         android:inputType="textPassword"
         android:hint="Password"
-        android:fontFamily="@font/roboto" />
+        android:fontFamily="@font/roboto"
+        android:drawableStart="@drawable/lock_icon"
+        android:drawablePadding="8dp"/>
+
 
     <com.google.android.material.textfield.TextInputEditText
         android:id="@+id/input_konfirmasi"
@@ -97,7 +106,9 @@
         android:layout_marginTop="12dp"
         android:inputType="textPassword"
         android:hint="Konfirmasi Password"
-        android:fontFamily="@font/roboto" />
+        android:fontFamily="@font/roboto"
+        android:drawableStart="@drawable/lock_icon"
+        android:drawablePadding="8dp" />
 
 
     <Button
