@@ -35,7 +35,12 @@ class AdapterPelanggaran(val pelanggaran: ArrayList<Pelanggaran>) :
                 val nomor = position + 1
 
                 nama_pel.text = dataPelanggaran.namaPelanggaran
-                tanggal_pel.text = "Tanggal : ${dataPelanggaran.tanggal}"
+
+                if (dataPelanggaran.tanggal == null) {
+                    tanggal_pel.text = "Poin : ${dataPelanggaran.poinPelanggaran}"
+                } else {
+                    tanggal_pel.text = "Tanggal : ${dataPelanggaran.tanggal}"
+                }
                 no_absenpel.text = nomor.toString()
             }
         }

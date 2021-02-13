@@ -31,7 +31,11 @@ class AdapterPenghargaan(val Penghargaan: ArrayList<Penghargaan>) :
                 val nomor = position + 1
 
                 nama_pel.text = dataPenghargaan.namaPenghargaan
-                tanggal_pel.text = "Tanggal : ${dataPenghargaan.tanggal}"
+                if (dataPenghargaan.tanggal == null) {
+                    tanggal_pel.text = "Poin : ${dataPenghargaan.poin}"
+                } else {
+                    tanggal_pel.text = "Tanggal : ${dataPenghargaan.tanggal}"
+                }
                 no_absenpel.text = nomor.toString()
             }
         }

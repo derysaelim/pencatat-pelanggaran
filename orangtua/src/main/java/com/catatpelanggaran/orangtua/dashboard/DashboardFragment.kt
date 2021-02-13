@@ -33,6 +33,8 @@ class DashboardFragment : Fragment(), View.OnClickListener {
 
         button_pelanggaran.setOnClickListener(this)
         button_penghargaan.setOnClickListener(this)
+        button_data_pelanggaran.setOnClickListener(this)
+        button_data_penghargaan.setOnClickListener(this)
 
         getData(nis)
     }
@@ -63,12 +65,21 @@ class DashboardFragment : Fragment(), View.OnClickListener {
             R.id.button_pelanggaran -> {
                 pindah = Intent(context, PelanggaranActivity::class.java)
                 pindah.putExtra(PelanggaranActivity.NIS_SISWA, nis)
+                pindah.putExtra(PelanggaranActivity.DATA_ACTIVITY, "siswa")
             }
             R.id.button_penghargaan -> {
                 pindah = Intent(context, PenghargaanActivity::class.java)
                 pindah.putExtra(PenghargaanActivity.NIS_SISWA, nis)
             }
-
+            R.id.button_data_pelanggaran -> {
+                pindah = Intent(context, PelanggaranActivity::class.java)
+                pindah.putExtra(PelanggaranActivity.NIS_SISWA, nis)
+                pindah.putExtra(PelanggaranActivity.DATA_ACTIVITY, "data")
+            }
+            R.id.button_data_penghargaan -> {
+                pindah = Intent(context, PenghargaanActivity::class.java)
+                pindah.putExtra(PenghargaanActivity.NIS_SISWA, nis)
+            }
         }
 
         startActivity(pindah)

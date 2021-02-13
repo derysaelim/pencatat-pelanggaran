@@ -20,9 +20,11 @@ class PelanggaranActivity : AppCompatActivity() {
 
     companion object {
         const val NIS_SISWA = "NIS_SISWA"
+        const val DATA_ACTIVITY = "DATA_ACTIVITY"
     }
 
     lateinit var nis: String
+    lateinit var data: String
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -30,17 +32,68 @@ class PelanggaranActivity : AppCompatActivity() {
         setSupportActionBar(toolbar_pelanggaran)
 
         nis = intent.getStringExtra(NIS_SISWA).toString()
+        data = intent.getStringExtra(DATA_ACTIVITY).toString()
 
         back_button.setOnClickListener { onBackPressed() }
-        getData(nis)
+
+        if (data == "siswa") {
+            getDataSiswa(nis)
+        } else {
+            getData()
+        }
     }
 
     override fun onResume() {
         super.onResume()
-        getData(nis)
+        if (data == "siswa") {
+            getDataSiswa(nis)
+        } else {
+            getData()
+        }
     }
 
-    private fun getData(nis: String) {
+    private fun getData() {
+        progress_bar.visibility = View.VISIBLE
+        list_pelanggaran.layoutManager = LinearLayoutManager(this)
+        list_pelanggaran.hasFixedSize()
+        val database = FirebaseDatabase.getInstance().reference
+
+        listPelanggaran = arrayListOf()
+        database.child("jenis_pelanggaran").orderByChild("namaPelanggaran")
+            .addValueEventListener(object : ValueEventListener {
+                override fun onDataChange(snapshot: DataSnapshot) {
+                    if (snapshot.exists()) {
+                        listPelanggaran!!.clear()
+                        for (i in snapshot.children) {
+                            val pelanggaran = i.getValue(Pelanggaran::class.java)
+                            listPelanggaran!!.add(pelanggaran!!)
+                        }
+
+                        val adapter = AdapterPelanggaran(listPelanggaran!!)
+                        list_pelanggaran.adapter = adapter
+                        progress_bar.visibility = View.GONE
+                        pelanggaran_empty.visibility = View.GONE
+                        list_pelanggaran.visibility = View.VISIBLE
+
+                    } else {
+                        list_pelanggaran.visibility = View.GONE
+                        pelanggaran_empty.visibility = View.VISIBLE
+                    }
+                }
+
+                override fun onCancelled(error: DatabaseError) {
+                    Toast.makeText(
+                        this@PelanggaranActivity,
+                        "Check your internet",
+                        Toast.LENGTH_SHORT
+                    )
+                        .show()
+                }
+
+            })
+    }
+
+    private fun getDataSiswa(nis: String) {
         progress_bar.visibility = View.VISIBLE
         list_pelanggaran.layoutManager = LinearLayoutManager(this)
         list_pelanggaran.hasFixedSize()
