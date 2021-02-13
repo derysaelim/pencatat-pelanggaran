@@ -47,7 +47,7 @@ class PelanggaranActivity : AppCompatActivity() {
         val database = FirebaseDatabase.getInstance().reference
 
         listPelanggaran = arrayListOf()
-        database.child("Pelanggar").child(nis).orderByChild("hukuman")
+        database.child("Pelanggar").child(nis).orderByChild("namaPelanggaran")
             .addValueEventListener(object : ValueEventListener {
                 override fun onDataChange(snapshot: DataSnapshot) {
                     if (snapshot.exists()) {

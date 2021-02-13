@@ -11,8 +11,8 @@ import kotlinx.android.synthetic.main.item_pelanggaran.view.*
 class AdapterPelanggaran(val pelanggaran: ArrayList<Pelanggaran>) :
     RecyclerView.Adapter<AdapterPelanggaran.ViewHolder>() {
 
-    var onItemClick: ((Pelanggaran) -> Unit)? = null
-    var onItemDeleteClick: ((Pelanggaran) -> Unit)? = null
+//    var onItemClick: ((Pelanggaran) -> Unit)? = null
+//    var onItemDeleteClick: ((Pelanggaran) -> Unit)? = null
 
     override fun onCreateViewHolder(
         parent: ViewGroup,
