@@ -15,7 +15,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:fontFamily="@font/roboto"
-            android:text="Nomor Induk PNS"
+            android:text="@string/nomor_induk_pns"
             android:textSize="20sp" />
 
         <EditText
@@ -24,8 +24,8 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:background="@drawable/custom_edittext"
-            android:hint="NIP"
-            android:enabled="false"
+            android:hint="@string/nip"
+            android:editable="false"
             android:inputType="number"
             android:padding="8dp" />
 
@@ -34,7 +34,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:fontFamily="@font/roboto"
-            android:text="Nama Lengkap"
+            android:text="@string/nama_lengkap"
             android:textSize="20sp" />
 
         <EditText
@@ -43,7 +43,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:background="@drawable/custom_edittext"
-            android:hint="Nama Lengkap"
+            android:hint="@string/nama_lengkap"
             android:inputType="textPersonName"
             android:padding="8dp" />
 
@@ -52,7 +52,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:fontFamily="@font/roboto"
-            android:text="Nomor HP"
+            android:text="@string/nomor_hp"
             android:textSize="20sp" />
 
         <EditText
@@ -61,7 +61,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:background="@drawable/custom_edittext"
-            android:hint="Nomor HP"
+            android:hint="@string/nomor_hp"
             android:inputType="number"
             android:padding="8dp" />
 
@@ -70,7 +70,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:fontFamily="@font/roboto"
-            android:text="Password"
+            android:text="@string/password"
             android:textSize="20sp" />
 
         <EditText
@@ -79,7 +79,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:background="@drawable/custom_edittext"
-            android:hint="Password"
+            android:hint="@string/password"
             android:inputType="textPassword"
             android:padding="8dp" />
 
@@ -88,7 +88,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:fontFamily="@font/roboto"
-            android:text="Konfirmasi Password"
+            android:text="@string/konfirmasi_password"
             android:textSize="20sp" />
 
         <EditText
@@ -97,7 +97,7 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:background="@drawable/custom_edittext"
-            android:hint="Password"
+            android:hint="@string/konfirmasi_password"
             android:inputType="textPassword"
             android:padding="8dp" />
 
@@ -107,7 +107,7 @@
             android:layout_height="40dp"
             android:layout_marginTop="28dp"
             android:background="@drawable/button_login"
-            android:text="Edit" />
+            android:text="@string/edit" />
 
     </LinearLayout>
 

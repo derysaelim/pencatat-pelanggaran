@@ -124,6 +124,9 @@ class LoginActivity : AppCompatActivity() {
             } else if (SharedPreferences.getDataAs(this).equals("gurubk")) {
                 goToModule("gurubk", nip)
                 finish()
+            } else {
+                goToModule("orangtua", nip)
+                finish()
             }
         }
     }

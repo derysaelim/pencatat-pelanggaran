@@ -14,6 +14,7 @@ import com.catatpelanggaran.gurubk.adapter.AdapterDataPelanggar
 import com.catatpelanggaran.gurubk.adapter.AdapterSiswa
 import com.catatpelanggaran.gurubk.dashboard.catat.CatatPelanggaranActivity
 import com.catatpelanggaran.gurubk.model.Catat
+import com.catatpelanggaran.gurubk.model.Siswa
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
@@ -27,32 +28,35 @@ import kotlinx.android.synthetic.main.activity_siswa.siswa_empty
 class DataPelanggarActivity : AppCompatActivity() {
 
     companion object {
-        const val DATA_SISWA = "dataSiswa"
+        const val DATA_PELANGGAR = "dataCatat"
     }
 
     var listSiswa: ArrayList<Catat>? = null
 
     lateinit var searchManager: SearchManager
     lateinit var searchView: SearchView
+    lateinit var dataCatat: Catat
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_data_pelanggar)
         setSupportActionBar(toolbar_datapel)
 
+        dataCatat = intent.getParcelableExtra(DATA_PELANGGAR)!!
+
         back_data.setOnClickListener {
             onBackPressed()
         }
 
-        getData(null)
+        getData(null, dataCatat)
     }
 
     override fun onResume() {
         super.onResume()
-        getData(null)
+        getData(null, dataCatat)
     }
 
-    private fun getData(query: String?) {
+    private fun getData(query: String?, dataCatat: Catat) {
         progress_bar.visibility = View.VISIBLE
         list_datapel.layoutManager = LinearLayoutManager(this)
         list_datapel.hasFixedSize()
@@ -60,7 +64,7 @@ class DataPelanggarActivity : AppCompatActivity() {
 
         if (query != null){
             listSiswa = arrayListOf()
-            database.child("Pelanggar").orderByChild("nama_siswa").startAt(query).endAt(query + "\uf8ff")
+            database.child("Pelanggar").child(dataCatat.nis!!).orderByChild("nama_siswa").startAt(query).endAt(query + "\uf8ff")
                 .addValueEventListener(object : ValueEventListener {
                     override fun onCancelled(error: DatabaseError) {
                         Toast.makeText(this@DataPelanggarActivity, "Somethings wrong", Toast.LENGTH_SHORT)
@@ -115,7 +119,7 @@ class DataPelanggarActivity : AppCompatActivity() {
         }
         else {
             listSiswa = arrayListOf()
-            database.child("Pelanggar").orderByChild("nama_siswa")
+            database.child("Pelanggar").child(dataCatat.nis!!).orderByChild("nama_siswa")
                 .addValueEventListener(object : ValueEventListener {
                     override fun onCancelled(error: DatabaseError) {
                         Toast.makeText(this@DataPelanggarActivity, "Somethings wrong", Toast.LENGTH_SHORT)

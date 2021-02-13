@@ -55,7 +55,7 @@ class PelanggaranActivity : AppCompatActivity() {
         val database = FirebaseDatabase.getInstance().reference
 
         if (query != null) {
-            listPelanggaran = arrayListOf<Pelanggaran>()
+            listPelanggaran = arrayListOf()
             database.child("jenis_pelanggaran").orderByChild("namaPelanggaran").startAt(query)
                 .endAt(query + "\uf8ff").addValueEventListener(
                     object : ValueEventListener {
@@ -129,7 +129,7 @@ class PelanggaranActivity : AppCompatActivity() {
 
                     })
         } else {
-            listPelanggaran = arrayListOf<Pelanggaran>()
+            listPelanggaran = arrayListOf()
             database.child("jenis_pelanggaran").orderByChild("namaPelanggaran")
                 .addValueEventListener(
                     object : ValueEventListener {
