@@ -57,11 +57,16 @@ class OrtuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun getData(nis: String) {
         val database = FirebaseDatabase.getInstance().reference
+<<<<<<< HEAD
         database.child("Orang_Tua").addValueEventListener(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
                 Toast.makeText(this@OrtuActivity, "Error", Toast.LENGTH_SHORT).show()
             }
 
+=======
+
+        database.child("Orang_Tua").addListenerForSingleValueEvent(object : ValueEventListener {
+>>>>>>> catat
             override fun onDataChange(snapshot: DataSnapshot) {
                 if (snapshot.child(nis).exists()) {
                     val nama = snapshot.child(nis).child("nama").value.toString()
@@ -76,6 +81,12 @@ class OrtuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
                 }
             }
 
+<<<<<<< HEAD
+=======
+            override fun onCancelled(error: DatabaseError) {
+                Toast.makeText(this@OrtuActivity, "Error", Toast.LENGTH_SHORT).show()
+            }
+>>>>>>> catat
         })
     }
 
