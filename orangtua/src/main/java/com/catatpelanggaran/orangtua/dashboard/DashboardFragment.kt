@@ -2,20 +2,20 @@ package com.catatpelanggaran.orangtua.dashboard
 
 import android.content.Intent
 import android.os.Bundle
-import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import com.adriandery.catatpelanggaran.LoginActivity
-import com.adriandery.catatpelanggaran.SharedPreferences
+import androidx.fragment.app.Fragment
 import com.catatpelanggaran.orangtua.R
+import com.catatpelanggaran.orangtua.dashboard.pelanggaran.PelanggaranActivity
+import com.catatpelanggaran.orangtua.dashboard.penghargaan.PenghargaanActivity
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.fragment_dashboard.*
 
-class DashboardFragment : Fragment() {
+class DashboardFragment : Fragment(), View.OnClickListener {
 
     lateinit var nis: String
 
@@ -31,20 +31,46 @@ class DashboardFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         nis = activity?.intent?.getStringExtra("NIS").toString()
 
+        button_pelanggaran.setOnClickListener(this)
+        button_penghargaan.setOnClickListener(this)
+
         getData(nis)
     }
 
     private fun getData(nis: String) {
         val database = FirebaseDatabase.getInstance().reference
-        database.child("Siswa").addListenerForSingleValueEvent(object : ValueEventListener {
+        database.addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                val namaKelas = snapshot.child(nis).child("nama_siswa").value.toString()
-                nama_siswa.text = namaKelas
-                nis_siswa.text = nis
+                val nama = snapshot.child("Siswa").child(nis).child("nama_siswa").value.toString()
+                val kelas = snapshot.child("Siswa").child(nis).child("id_kelas").value.toString()
+                val tingkat = snapshot.child("kelas").child(kelas).child("tingkat").value.toString()
+                val jurusan = snapshot.child("kelas").child(kelas).child("jurusan").value.toString()
+                val rombel = snapshot.child("kelas").child(kelas).child("kelas").value.toString()
+                nama_siswa.text = nama
+                nis_siswa.text = "$tingkat $jurusan $rombel"
             }
 
             override fun onCancelled(error: DatabaseError) {}
 
         })
+    }
+
+    override fun onClick(view: View) {
+
+        lateinit var pindah: Intent
+
+        when (view.id) {
+            R.id.button_pelanggaran -> {
+                pindah = Intent(context, PelanggaranActivity::class.java)
+                pindah.putExtra(PelanggaranActivity.NIS_SISWA, nis)
+            }
+            R.id.button_penghargaan -> {
+                pindah = Intent(context, PenghargaanActivity::class.java)
+                pindah.putExtra(PenghargaanActivity.NIS_SISWA, nis)
+            }
+
+        }
+
+        startActivity(pindah)
     }
 }

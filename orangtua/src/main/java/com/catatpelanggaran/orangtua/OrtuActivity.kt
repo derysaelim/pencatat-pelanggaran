@@ -3,6 +3,7 @@ package com.catatpelanggaran.orangtua
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.Gravity
 import android.view.MenuItem
 import android.widget.Toast
 import androidx.appcompat.app.ActionBarDrawerToggle
@@ -56,7 +57,7 @@ class OrtuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun getData(nis: String) {
         val database = FirebaseDatabase.getInstance().reference
-        database.child("Orang_Tua").addListenerForSingleValueEvent(object : ValueEventListener {
+        database.child("Orang_Tua").addValueEventListener(object : ValueEventListener {
             override fun onCancelled(error: DatabaseError) {
                 Toast.makeText(this@OrtuActivity, "Error", Toast.LENGTH_SHORT).show()
             }

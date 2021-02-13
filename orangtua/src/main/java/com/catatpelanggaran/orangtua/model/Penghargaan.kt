@@ -4,8 +4,8 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-data class Ortu(
-    val nis: String? = null,
-    val nama: String? = null,
-    val nohp: String? = null
+data class Penghargaan(
+    val id_penghargaan: String? = null,
+    val namaPenghargaan: String? = null,
+    val poin: Int? = null
 ) : Parcelable

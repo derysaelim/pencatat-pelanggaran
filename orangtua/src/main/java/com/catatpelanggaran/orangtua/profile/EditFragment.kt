@@ -39,7 +39,7 @@ class EditFragment : Fragment() {
         val database = FirebaseDatabase.getInstance().reference
         database.child("Orang_Tua").child(nis).addValueEventListener(object : ValueEventListener {
             override fun onDataChange(snapshot: DataSnapshot) {
-                input_nis.setText(snapshot.child("nip").value.toString())
+                input_nis.setText(snapshot.child("nis").value.toString())
                 input_nama.setText(snapshot.child("nama").value.toString())
                 input_nohp.setText(snapshot.child("nohp").value.toString())
             }

@@ -5,7 +5,7 @@ import kotlinx.android.parcel.Parcelize
 
 @Parcelize
 data class Login(
-    val nip: String? = null,
+    val nis: String? = null,
     val password: String? = null,
     val role: String? = null
 ) : Parcelable
