@@ -84,7 +84,7 @@ class AdminActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelect
         when (item.itemId) {
             R.id.nav_dashboard -> {
                 fragment = DashboardFragment()
-                title = "Dashbpard"
+                title = "Dashboard"
             }
             R.id.nav_edit -> {
                 fragment = EditFragment()

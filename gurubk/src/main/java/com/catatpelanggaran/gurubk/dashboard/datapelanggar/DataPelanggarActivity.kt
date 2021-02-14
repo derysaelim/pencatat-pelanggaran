@@ -14,6 +14,7 @@ import com.catatpelanggaran.gurubk.adapter.AdapterDataPelanggar
 import com.catatpelanggaran.gurubk.adapter.AdapterSiswa
 import com.catatpelanggaran.gurubk.dashboard.catat.CatatPelanggaranActivity
 import com.catatpelanggaran.gurubk.model.Catat
+import com.catatpelanggaran.gurubk.model.Pelanggaran
 import com.catatpelanggaran.gurubk.model.Siswa
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
@@ -31,10 +32,11 @@ class DataPelanggarActivity : AppCompatActivity() {
         const val DATA_PELANGGAR = "dataCatat"
     }
 
+    var listPelanggaran: ArrayList<Pelanggaran>? = null
     var listSiswa: ArrayList<Catat>? = null
 
-    lateinit var searchManager: SearchManager
-    lateinit var searchView: SearchView
+    lateinit var nis: String
+    lateinit var data: String
     lateinit var dataCatat: Catat
 
     override fun onCreate(savedInstanceState: Bundle?) {
