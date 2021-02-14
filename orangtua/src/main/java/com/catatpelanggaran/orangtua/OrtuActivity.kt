@@ -55,6 +55,11 @@ class OrtuActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     }
 
+    override fun onResume() {
+        super.onResume()
+        getData(nis)
+    }
+
     private fun getData(nis: String) {
         val database = FirebaseDatabase.getInstance().reference
 
